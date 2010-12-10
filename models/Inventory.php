@@ -2,7 +2,6 @@
 namespace chowly\models;
 
 class Inventory extends \lithium\data\Model{
-	
 	/**
 	 * 
 	 * Reserve a inventory item for a limited duration.
@@ -13,14 +12,14 @@ class Inventory extends \lithium\data\Model{
 	public static function reserve($customer_id, $offer_id){
 		
 		$command = array(
-			'findAndModify' => 'inventory', 
+			'findAndModify' => 'offers', 
 			'query' => array(
 				'offer_id' => new \MongoId($offer_id),
 				'state' => 'available'
 			), 
 			'update'=> array(
 				'$set' => array(
-					'state'=> 'taken',
+					'state'=> 'reserved',
 					'customer_id' => $customer_id,
 					'expires' => new \MongoDate(time() + 15 * 60) // 15 minutes to buy the offer
 				)

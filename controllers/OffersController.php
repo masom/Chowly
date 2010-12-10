@@ -2,7 +2,6 @@
 namespace chowly\controllers;
 
 use chowly\models\Offer;
-use chowly\models\Inventory;
 
 class OffersController extends \lithium\action\Controller{
 
@@ -37,9 +36,10 @@ class OffersController extends \lithium\action\Controller{
 		}
 		
 	}
+	
 	public function add(){
 		$offer = Offer::create();
-		if($offer->save(array('venue_id' => 'bleh', 'offer'=>'40$ off at Lithium', 'starts' => new \MongoDate(), 'ends'=> new \MongoDate(time() + 60 * 60)))){
+		if($offer->save(array('offer_id'=> new \MongoId('bleh'), 'state'=>'available', 'venue_id' => 'bleh', 'offer'=>'40$ off at Lithium', 'starts' => new \MongoDate(time() - 15 * 60), 'ends'=> new \MongoDate(time() + 60 * 60)))){
 			$this->redirect(array('Offers::index', 'id' => $offer->_id));
 		}
 		$this->redirect(array('Offers::index'));

@@ -10,7 +10,7 @@
 <html>
 <head>
 	<?php echo $this->html->charset();?>
-	<title>Application > <?php echo $this->title(); ?></title>
+	<title>Application &gt; <?php echo $this->title(); ?></title>
 	<?php echo $this->html->style(array('debug', 'lithium')); ?>
 	<?php echo $this->scripts(); ?>
 	<?php echo $this->html->link('Icon', null, array('type' => 'icon')); ?>
@@ -24,9 +24,24 @@
 					Pick. Eat. Save.
 				</h2>
 			</div>
-			<h3><?=$crumbs;?></h3>
+			<?php if(isset($breadCrumbs)):?>
+				<h3><?php echo $this->html->link('Home', array('Pages::view', 'args'=> array('home')));?>
+					<?php foreach($breadCrumbs as $crumb):?>
+					&gt; <?php echo $crumb ?>
+					<?php endforeach;?>
+				</h3>
+			<?php endif;?>
 		</div>
 		<div id="content">
+			<?php if(isset($messages) && !empty($messages)):?>
+				<div class="message-center">
+					<?php foreach($messages as $message):?>
+						<div class="message <?php echo $message['class'];?>">
+							<?=$message['message'];?>
+						</div>
+					<?php endforeach;?>
+				</div>
+			<?php endif;?>
 			<?php echo $this->content(); ?>
 		</div>
 	</div>
