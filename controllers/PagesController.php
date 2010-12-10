@@ -1,6 +1,6 @@
 <?php
 
-namespace app\controllers;
+namespace chowly\controllers;
 
 class PagesController extends \lithium\action\Controller {
 

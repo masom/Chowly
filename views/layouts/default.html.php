@@ -15,13 +15,16 @@
 	<?php echo $this->scripts(); ?>
 	<?php echo $this->html->link('Icon', null, array('type' => 'icon')); ?>
 </head>
-<body class="app">
+<body>
 	<div id="container">
 		<div id="header">
-			<h1>Application</h1>
-			<h2>
-				Powered by <?php echo $this->html->link('Lithium', 'http://lithify.me/'); ?>.
-			</h2>
+			<div id="logo">
+				<h1>Chowly</h1>
+				<h2>
+					Pick. Eat. Save.
+				</h2>
+			</div>
+			<h3><?=$crumbs;?></h3>
 		</div>
 		<div id="content">
 			<?php echo $this->content(); ?>
