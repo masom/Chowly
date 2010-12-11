@@ -19,6 +19,9 @@
 	<div id="container">
 		<div id="header">
 			<div id="logo">
+				<div class="info">
+					About Us | Your Restaurant Here | Contact Us
+				</div>
 				<h1>Chowly</h1>
 				<h2>
 					Pick. Eat. Save.
@@ -43,6 +46,14 @@
 				</div>
 			<?php endif;?>
 			<?php echo $this->content(); ?>
+		</div>
+		<div id="footer">
+			<strong>Unbeatable Deals for Local Dining</strong>
+			<p>Chowly is an easy way to get discounts while discovering restaurants in ottawa.</p>
+			<div id="copyright">
+			
+			</div>
+			&copy; 2010 Chowly Inc. All Rights Reserved.
 		</div>
 	</div>
 </body>

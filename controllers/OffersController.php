@@ -6,7 +6,7 @@ use chowly\models\Offer;
 class OffersController extends \lithium\action\Controller{
 
 	public function index(){
-		$offers = Offer::all();
+		$offers = Offer::current();
 		return compact('offers');
 	}
 	public function view(){
@@ -25,21 +25,27 @@ class OffersController extends \lithium\action\Controller{
 		}
 		
 		//TODO: Actual customer identification... php session id to start?
-		$item = Inventory::reserve('testaccount', $this->request->id);
+		$item = Offer::reserve('testaccount', $this->request->id);
 		if($item['ok']){
 			//TODO: Payments logic
 			die("OK");
 		}else{
-			//TODO: Error message explaining the item could be out of stock/non-existent
-			nl2br(print_r($item));
-			die;
+			die(print_r($item));
 		}
 		
 	}
 	
 	public function add(){
 		$offer = Offer::create();
-		if($offer->save(array('offer_id'=> new \MongoId('bleh'), 'state'=>'available', 'venue_id' => 'bleh', 'offer'=>'40$ off at Lithium', 'starts' => new \MongoDate(time() - 15 * 60), 'ends'=> new \MongoDate(time() + 60 * 60)))){
+		$offer->venue_id = new \MongoId("test");
+		$offer->state = Offer::defaultState();
+		$offer->name = "40$ off at Lithium";
+		$offer->cost = 2000;
+		$offer->starts = new \MongoDate(time() - 15 * 60);
+		$offer->ends = new \MongoDate(time() + 15 * 60);
+		$offer->availability = 100;
+		
+		if($offer->save()){
 			$this->redirect(array('Offers::index', 'id' => $offer->_id));
 		}
 		$this->redirect(array('Offers::index'));

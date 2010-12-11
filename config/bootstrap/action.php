@@ -21,7 +21,9 @@ use lithium\core\Libraries;
 use lithium\net\http\Router;
 use lithium\core\Environment;
 use lithium\action\Dispatcher;
+use lithium\util\collection\Filters;
 
+use \MongoDate;
 /**
  * This filter intercepts the `run()` method of the `Dispatcher`, and first passes the `'request'`
  * parameter (an instance of the `Request` object) to the `Environment` class to detect which
@@ -51,5 +53,17 @@ Dispatcher::applyFilter('run', function($self, $params, $chain) {
 	}
 	return $chain->next($self, $params, $chain);
 });
+
+Filters::apply('chowly\models\Offer', 'save', function($self, $params, $chain){
+	$params['entity']->created = new \MongoDate(time());
+	
+	$states = $self::states();
+	if(!in_array($params['entity']->state, $states)){
+		$params['entity']->state = $states[0];
+	}
+	
+	return $chain->next($self, $params, $chain);
+});
+
 
 ?>

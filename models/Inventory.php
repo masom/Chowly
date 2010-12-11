@@ -10,16 +10,15 @@ class Inventory extends \lithium\data\Model{
 	 * @todo Add indexes to inventory
 	 */
 	public static function reserve($customer_id, $offer_id){
-		
 		$command = array(
-			'findAndModify' => 'offers', 
+			'findAndModify' => 'inventories', 
 			'query' => array(
 				'offer_id' => new \MongoId($offer_id),
 				'state' => 'available'
 			), 
 			'update'=> array(
 				'$set' => array(
-					'state'=> 'reserved',
+					'state'=> 'taken',
 					'customer_id' => $customer_id,
 					'expires' => new \MongoDate(time() + 15 * 60) // 15 minutes to buy the offer
 				)
@@ -27,12 +26,11 @@ class Inventory extends \lithium\data\Model{
 		);
 		
 		$result = static::_connection()->connection->command($command);
-		if($result){
-			return $result;
-		}else{
+		
+		if(!$result || !isset($result['ok'])){
 			return false;
 		}
-		
+		return $result['ok'];
 	}
 }
 ?>
