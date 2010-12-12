@@ -5,14 +5,16 @@ use chowly\models\Venue;
 
 class VenuesController extends \lithium\action\Controller{
 	public function index(){
-		$venues = Venue::all();
+		$conditions = array('state' => 'published');
+		$venues = Venue::all(compact('conditions'));
 		return compact('venues');
 	}
 	public function view(){
 		if(!$this->request->id){
 			$this->redirect(array('Venues::index'));
 		}
-		$venue = Venue::first($this->request->id);
+		$conditions = array('_id'=>$this->request->id, 'state'=>'published');
+		$venue = Venue::first(compact('conditions'));
 		return compact('venue');
 	}
 	public function add() {
@@ -20,11 +22,8 @@ class VenuesController extends \lithium\action\Controller{
 		if (($this->request->data)){
 			$success = $venue->save($this->request->data);
 			if($success){
-				debug($success);
-				die;
 				$this->redirect(array('Venues::view', 'id' => $venue->_id));
 			}
-			
 		}
 		$this->_render['template'] = 'edit';
 		return compact('venue');

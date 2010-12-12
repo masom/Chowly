@@ -15,10 +15,12 @@ class Image extends \lithium\data\Model{
 		$md5 = md5_file($data['file']['tmp_name']);
 		$image = static::first(array('conditions'=>array('md5'=>$md5), 'fields'=>array('_id')));
 		if($image){
-			return $image->_id;
+			return $image;
 		}
 		unset($data['error']);
 		$entity->set($data);
+		$entity->type = $data['file']['type'];
+		
 		return parent::save($entity, null, $options);
 	}
 }
