@@ -94,4 +94,10 @@ require __DIR__ . '/bootstrap/media.php';
  * This files configures error handling
  */
 require __DIR__ . '/bootstrap/error.php';
-?>
+
+function debug($data){
+	$calledFrom = debug_backtrace();
+	echo '<pre><strong>' . substr(str_replace(ROOT, '', $calledFrom[0]['file']), 1) . '</strong>';
+	echo ' (line <strong>' . $calledFrom[0]['line'] . '</strong>)';
+	echo "\n". str_replace('<', '&lt;', str_replace('>', '&gt;', print_r($data, true))) . "\n</pre>\n";
+}

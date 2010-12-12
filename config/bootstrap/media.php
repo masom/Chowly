@@ -55,5 +55,10 @@ Dispatcher::applyFilter('_callable', function($self, $params, $chain) {
 	}
 	return $chain->next($self, $params, $chain);
 });
-
+Media::type('jpg', 'image/jpeg', array('cast' => false, 'encode' => function($data) {
+	return $data['photo']->file->getBytes();
+}));
+Media::type('gif', 'image/gif', array('cast' => false, 'encode' => function($data) {
+	return $data['photo']->file->getBytes();
+}));
 ?>

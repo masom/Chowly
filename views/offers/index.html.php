@@ -19,7 +19,7 @@
 <ul class="offers">
 	<?php foreach($offers as $offer):?>
 		<li>
-			<h4><?php echo $this->html->link($offer->name, array('Offers::view', 'id'=> $offer->_id));?></h4>
+			<h4><?=$this->html->link($offer->name, array('Offers::view', 'id'=> $offer->_id));?></h4>
 		</li>
 	<?php endforeach;?>
 </ul>

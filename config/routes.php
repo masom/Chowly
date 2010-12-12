@@ -21,7 +21,7 @@ Router::connect('/images/{:id:[0-9a-f]{24}}.(jpg|png)', array(), function($reque
 		die;
 	}
 	return new Response(array(
-		'headers' => array('Content-type' => $image->contentType),
+		'headers' => array('Content-type' => $image->type),
 		'body' => $image->file->getBytes()
 	));
 });
