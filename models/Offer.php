@@ -55,5 +55,8 @@ class Offer extends \lithium\data\Model{
 			return array('successfull'=>false, 'error'=>'sold_out');
 		}
 	}
+	public function save($entity, $data = null, array $options = array()) {
+		return parent::save($entity, null, $options);
+	}
 }
 ?>

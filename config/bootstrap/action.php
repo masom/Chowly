@@ -54,16 +54,33 @@ Dispatcher::applyFilter('run', function($self, $params, $chain) {
 	return $chain->next($self, $params, $chain);
 });
 
-Filters::apply('chowly\models\Offer', 'save', function($self, $params, $chain){
-	$params['entity']->created = new \MongoDate(time());
-	
+/**
+ * Adds created and modified dates.
+ * Updates modified if created is present.
+ */
+$insureDate = function($self, $params, $chain){
+	$date = new \MongoDate(time());
+	if(!$params['entity']->created){
+		$params['entity']->created = $date;
+	}
+	$params['entity']->modified = $date;
+	return $chain->next($self, $params, $chain);
+};
+/**
+ * Add the default state to the document.
+ * static::defaultState() must be defined.
+ */
+$insureDefaultState = function($self, $params, $chain){
 	$states = $self::states();
 	if(!in_array($params['entity']->state, $states)){
-		$params['entity']->state = $states[0];
+		$params['entity']->state = $self::defaultState();
 	}
-	
 	return $chain->next($self, $params, $chain);
-});
-
-
+};
+Filters::apply('chowly\models\Venue', 'save', $insureDate);
+Filters::apply('chowly\models\Venue', 'save', $insureDefaultState);
+Filters::apply('chowly\models\Inventory', 'save', $insureDate );
+Filters::apply('chowly\models\Inventory', 'save', $insureDefaultState );
+Filters::apply('chowly\models\Offer', 'save', $insureDate);
+Filters::apply('chowly\models\Offer', 'save', $insureDefaultState);
 ?>

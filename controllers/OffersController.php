@@ -38,7 +38,6 @@ class OffersController extends \lithium\action\Controller{
 	public function add(){
 		$offer = Offer::create();
 		$offer->venue_id = new \MongoId("test");
-		$offer->state = Offer::defaultState();
 		$offer->name = "40$ off at Lithium";
 		$offer->cost = 2000;
 		$offer->starts = new \MongoDate(time() - 15 * 60);
@@ -46,7 +45,7 @@ class OffersController extends \lithium\action\Controller{
 		$offer->availability = 100;
 		
 		if($offer->save()){
-			$this->redirect(array('Offers::index', 'id' => $offer->_id));
+			$this->redirect(array('Offers::index'));
 		}
 		$this->redirect(array('Offers::index'));
 	}
