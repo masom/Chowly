@@ -8,6 +8,23 @@
 
 use lithium\net\http\Router;
 use lithium\core\Environment;
+use chowly\models\Image;
+use lithium\action\Response;
+
+
+Router::connect('/images/{:id:[0-9a-f]{24}}.(jpg|png)', array(), function($request) {
+
+	$image = Image::first($request->id);
+	if(!$image){	
+		header("Status: 404 Not Found");
+		header("HTTP/1.0 404 Not Found");
+		die;
+	}
+	return new Response(array(
+		'headers' => array('Content-type' => $image->contentType),
+		'body' => $image->file->getBytes()
+	));
+});
 
 /**
  * Here, we are connecting '/' (base path) to controller called 'Pages',

@@ -36,6 +36,7 @@ class OffersController extends \lithium\action\Controller{
 	}
 	
 	public function add(){
+		
 		$offer = Offer::create();
 		$offer->venue_id = new \MongoId("test");
 		$offer->name = "40$ off at Lithium";

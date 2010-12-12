@@ -1,4 +1,5 @@
-<?php /**
+<?php
+/**
  * First, import the relevant Lithium core classes.
  */
 use \lithium\core\ErrorHandler;
@@ -39,7 +40,7 @@ $render = function($template, $content) {
 ErrorHandler::config(array(
     array(
         'type' => 'Exception',
-        'message' => '/(^Template not found|^Controller \w+ not found)/',
+        'message' => "/(^Template not found|^Controller '\w+' not found)/",
         'handler' => function($info) use ($render) {
             $render('404', $info);
         }
