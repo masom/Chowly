@@ -385,8 +385,12 @@ div.venue-offers{
 	width: 300px;
 	overflow: hidden;
 }
-div.venu-offers ul{
+div.venue-offers ul{
 	list-style: none;
+	margin:0;
+	padding: 0;
+}
+div.venue-offers h3{
 	margin:0;
 	padding: 0;
 }

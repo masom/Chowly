@@ -1,6 +1,6 @@
 <div id="content-header">
 	<?php if($venue->_id):?>
-		<h1>Modifying venue <?=$venue->name;?></h1>
+		<h1>Modifying Venue: <?=$venue->name;?></h1>
 	<?php else:?>
 		<h1>New Venue</h1>
 	<?php endif;?>

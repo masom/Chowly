@@ -13,9 +13,9 @@ class Offer extends \lithium\data\Model{
 		'_id' => array('type'=>'id'),
 		'venue_id' => array('type'=>'id'),
 		'state' => array('type'=>'string'),
-		'name' => array('type'=>'string','default'=>'undefined'),
-		'starts' => array('type'=>'date','default'=>0),
-		'ends'=>array('type'=>'date','default'=>0),
+		'name' => array('type'=>'string','null'=>false),
+		'starts' => array('type'=>'date','null'=>false),
+		'ends'=>array('type'=>'date','null'=>false),
 		'availability' => array('type'=>'number'),
 		'created'=>array('type'=>'date'),
 	);
@@ -56,6 +56,13 @@ class Offer extends \lithium\data\Model{
 		}
 	}
 	public function save($entity, $data = null, array $options = array()) {
+		$offer = Offer::create();
+		$offer->venue_id = new \MongoId("test");
+		$offer->name = "40$ off at Lithium";
+		$offer->cost = 2000;
+		$offer->starts = new \MongoDate(time() - 15 * 60);
+		$offer->ends = new \MongoDate(time() + 15 * 60);
+		$offer->availability = 100;
 		return parent::save($entity, null, $options);
 	}
 }

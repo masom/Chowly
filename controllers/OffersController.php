@@ -2,6 +2,7 @@
 namespace chowly\controllers;
 
 use chowly\models\Offer;
+use chowly\models\Venue;
 
 class OffersController extends \lithium\action\Controller{
 
@@ -36,19 +37,45 @@ class OffersController extends \lithium\action\Controller{
 	}
 	
 	public function add(){
-		
 		$offer = Offer::create();
-		$offer->venue_id = new \MongoId("test");
-		$offer->name = "40$ off at Lithium";
-		$offer->cost = 2000;
-		$offer->starts = new \MongoDate(time() - 15 * 60);
-		$offer->ends = new \MongoDate(time() + 15 * 60);
-		$offer->availability = 100;
-		
-		if($offer->save()){
+		if (($this->request->data)){
+			$success = $offer->save($this->request->data);
+			if($success){
+				$this->redirect(array('Offer::view', 'id' => $venue->_id));
+			}
+		}
+		$conditions = array();
+		if($this->request->id){
+			//in this case, request->id is the venue id.
+			$conditions = array('_id' => $this->request->id);
+		}elseif ($this->request->data['venue_id']){
+			$conditions = array('_id' => $this->request->data['venue_id']);
+		}
+		if(!$conditions){
 			$this->redirect(array('Offers::index'));
 		}
-		$this->redirect(array('Offers::index'));
+		$venue = Venue::first(compact('conditions'));
+		
+		if(!$venue){
+			$this->redirect(array('Offers::index'));
+		}
+		
+		$this->_render['template'] = 'edit';
+		
+		$publishOptions = $offer->states();
+		
+		return compact('venue', 'offer', 'publishOptions');
+	}
+	public function edit(){
+		$offer = Offer::create();
+		if (($this->request->data)){
+			$success = $offer->save($this->request->data);
+			if($success){
+				$this->redirect(array('Offer::view', 'id' => $venue->_id));
+			}
+		}
+		$publishOptions = $offer->states();
+		return compact('venue','publishOptions');
 	}
 }
 ?>

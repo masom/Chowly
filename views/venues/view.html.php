@@ -19,8 +19,8 @@
 		</ul>
 	</div>
 	<p style="width: 400px; margin-left: 30px; margin-bottom: 30px; min-height: 300px; text-align: justify; float: left;">
-	<?=$this->html->image("/images/{$venue->logo}.jpg", array('style'=>'float:left; display: inline;'));?>
-	<?php echo nl2br($venue->description);?>
+		<?=$this->html->image("/images/{$venue->logo}.jpg", array('style'=>'float:left; display: inline;'));?>
+		<?php echo nl2br($venue->description);?>
 	</p>
 	<br style="clear: both;" />
 </div>
