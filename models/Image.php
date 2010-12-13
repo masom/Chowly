@@ -15,7 +15,8 @@ class Image extends \lithium\data\Model{
 		$md5 = md5_file($data['file']['tmp_name']);
 		$image = static::first(array('conditions'=>array('md5'=>$md5), 'fields'=>array('_id')));
 		if($image){
-			return $image;
+			$entity->set($image->data());
+			return true;
 		}
 		unset($data['error']);
 		$entity->set($data);

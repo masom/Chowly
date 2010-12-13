@@ -14,14 +14,24 @@
 		~Chowly
 	</p>
 	<?php endif;?>
-	<ul class="venues">
+	<ul class="venues-listing">
 	<?php foreach($venues as $venue):?>
-		<li>
-			<?=$this->html->image("/images/{$venue->logo}.gif");?>
-			<h4><?=$this->html->link($venue->name, array('Venues::view', 'id'=> $venue->_id));?></h4>
+		<li id="<?=$venue->_id;?>" class="venue-listing">
+			<?php if($venue->logo):?>
+				<?=$this->html->image("/images/{$venue->logo}.gif");?>
+			<?php endif;?>
+			<h4><?=$venue->name;?></h4>
 			<p class="venue-informations"><?=$venue->address;?></p>
 			<p class="venue-informations"><?=$venue->phone?></p>
 		</li>
 	<?php endforeach;?>
-</ul>
+	</ul>
+	<br style="clear: both;" />
 </div>
+<script type="text/javascript">
+$('.venue-listing').each(function(i){
+	$(this).bind('click', function(){ 
+		window.location = '/venues/view/' + this.id;
+	});
+});
+</script>

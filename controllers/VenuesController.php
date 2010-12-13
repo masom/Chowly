@@ -2,7 +2,7 @@
 namespace chowly\controllers;
 
 use chowly\models\Venue;
-
+use chowly\models\Offer;
 class VenuesController extends \lithium\action\Controller{
 	public function index(){
 		$conditions = array('state' => 'published');
@@ -15,6 +15,9 @@ class VenuesController extends \lithium\action\Controller{
 		}
 		$conditions = array('_id'=>$this->request->id, 'state'=>'published');
 		$venue = Venue::first(compact('conditions'));
+		
+		$conditions = array('venue_id' => $this->request->id, 'state'=>'published', 'availability' => array('$gt'=> 0));
+		$offers = Offer::all(compact('conditions'));
 		return compact('venue');
 	}
 	public function add() {
@@ -26,7 +29,10 @@ class VenuesController extends \lithium\action\Controller{
 			}
 		}
 		$this->_render['template'] = 'edit';
-		return compact('venue');
+		
+		$publishedOptions = $venue->states();
+		
+		return compact('venue','publishedOptions');
 	}
 
 	public function edit() {
@@ -38,6 +44,8 @@ class VenuesController extends \lithium\action\Controller{
 		if (($this->request->data) && $venue->save($this->request->data)) {
 			$this->redirect(array('Venues::view', 'id' => $venue->_id));
 		}
-		return compact('venue');
+		
+		$publishedOptions = $venue->states();
+		return compact('venue','publishedOptions');
 	}
 }
