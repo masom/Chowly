@@ -1,30 +1,56 @@
 <?php
 namespace chowly\models;
 
-use \lithium\data\collection\DocumentSet;
+use \lithium\util\Validator;
 use chowly\models\Inventory;
 
 class Offer extends \lithium\data\Model{
-	
-	//protected $_meta = array('source'=>'fs.files');
-	
 	protected static $_states = array('published', 'unpublished');
+	public $validates = array(
+		'name' => array(
+			array('notEmpty','message'=>'Please enter a name'),
+			array('lengthBetween', 'min'=>1,'max'=>255, 'message' => 'Please enter a name that is between 1 and 255')
+		),
+		'state' => array(
+			array('inList', 'list' => array('published', 'unpublished'))
+		),
+		'starts' => array(
+			array('notEmpty','message'=>'The publication start date cannot be empty')
+		),
+		'ends' => array(
+			array('notEmpty', 'message' => 'The publication end date cannot be empty')
+		),
+		'availability' => array(
+			array('numeric', 'message'=>'Please enter a number.'),
+			array('inRange', 'upper'=>255,'lower'=>1,'message'=>'Please enter a number between 1 and 255')
+		),
+		'venue_id' => array(
+			array('notEmpty', 'message'=>'There is a relationship problem...')
+		),
+		'cost' => array(
+			array('money')
+		)
+	);
+	
 	protected $_schema = array(
 		'_id' => array('type'=>'id'),
 		'venue_id' => array('type'=>'id'),
 		'state' => array('type'=>'string'),
 		'name' => array('type'=>'string','null'=>false),
-		'starts' => array('type'=>'date','null'=>false),
-		'ends'=>array('type'=>'date','null'=>false),
+		'starts' => array('type'=>'string','null'=>false),
+		'ends'=>array('type'=>'string','null'=>false),
 		'availability' => array('type'=>'number'),
 		'created'=>array('type'=>'date'),
 	);
+	
 	public static function states(){
 		return array_values(static::$_states);
 	}
+	
 	public static function defaultState(){
 		return 'unpublished';
 	}
+
 	public static function current(){
 		$conditions = array(
 			'starts' => array('$lt' => new \MongoDate()),
@@ -54,16 +80,6 @@ class Offer extends \lithium\data\Model{
 		}else{
 			return array('successfull'=>false, 'error'=>'sold_out');
 		}
-	}
-	public function save($entity, $data = null, array $options = array()) {
-		$offer = Offer::create();
-		$offer->venue_id = new \MongoId("test");
-		$offer->name = "40$ off at Lithium";
-		$offer->cost = 2000;
-		$offer->starts = new \MongoDate(time() - 15 * 60);
-		$offer->ends = new \MongoDate(time() + 15 * 60);
-		$offer->availability = 100;
-		return parent::save($entity, null, $options);
 	}
 }
 ?>

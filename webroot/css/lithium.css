@@ -394,3 +394,7 @@ div.venue-offers h3{
 	margin:0;
 	padding: 0;
 }
+div.error{
+	margin: 10px;
+	color: #990000;
+}

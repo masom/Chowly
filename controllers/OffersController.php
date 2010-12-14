@@ -39,11 +39,14 @@ class OffersController extends \lithium\action\Controller{
 	public function add(){
 		$offer = Offer::create();
 		if (($this->request->data)){
-			$success = $offer->save($this->request->data);
+			debug($this->request->data);die;
+			$offer->set($this->request->data);
+			$success = $offer->save();
 			if($success){
-				$this->redirect(array('Offer::view', 'id' => $venue->_id));
+				$this->redirect(array('Offer::view', 'id' => $offer->_id));
 			}
 		}
+		
 		$conditions = array();
 		if($this->request->id){
 			//in this case, request->id is the venue id.
@@ -59,7 +62,6 @@ class OffersController extends \lithium\action\Controller{
 		if(!$venue){
 			$this->redirect(array('Offers::index'));
 		}
-		
 		$this->_render['template'] = 'edit';
 		
 		$publishOptions = $offer->states();

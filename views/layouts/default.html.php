@@ -11,8 +11,8 @@
 <head>
 	<?php echo $this->html->charset();?>
 	<title>Application &gt; <?php echo $this->title(); ?></title>
-	<?php echo $this->html->style(array('debug', 'lithium')); ?>
-	<?php echo $this->html->script('jquery-1.4.4.min'); ?>
+	<?php echo $this->html->style(array('debug', 'lithium', 'cupertino/jquery-ui-1.8.7.custom')); ?>
+	<?php echo $this->html->script(array('jquery-1.4.4.min', 'jquery-ui-1.8.7.custom.min')); ?>
 	<?php echo $this->html->link('Icon', null, array('type' => 'icon')); ?>
 </head>
 <body>
