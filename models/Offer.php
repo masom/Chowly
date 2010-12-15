@@ -14,12 +14,6 @@ class Offer extends \lithium\data\Model{
 		'state' => array(
 			array('inList', 'list' => array('published', 'unpublished'))
 		),
-		'starts' => array(
-			array('datetime', 'message'=>'The publication start date must be valid.')
-		),
-		'ends' => array(
-			array('datetime', 'message'=>'The publication end date must be valid.')
-		),
 		'availability' => array(
 			array('numeric', 'message'=>'Please enter a number.'),
 			array('inRange', 'upper'=>255,'lower'=>1,'message'=>'Please enter a number between 1 and 255')
@@ -37,9 +31,9 @@ class Offer extends \lithium\data\Model{
 		'venue_id' => array('type'=>'id'),
 		'state' => array('type'=>'string'),
 		'name' => array('type'=>'string','null'=>false),
-		'starts' => array('type'=>'string','null'=>false),
-		'ends'=>array('type'=>'string','null'=>false),
-		'availability' => array('type'=>'number'),
+		'starts' => array('type'=>'date','null'=>false),
+		'ends'=>array('type'=>'date','null'=>false),
+		'availability' => array('type'=>'integer'),
 		'created'=>array('type'=>'date'),
 	);
 	
@@ -55,7 +49,8 @@ class Offer extends \lithium\data\Model{
 		$conditions = array(
 			'starts' => array('$lt' => new \MongoDate()),
 			'ends' => array('$gt' => new \MongoDate()),
-			'availability' => array('$gt' => 0)
+			'availability' => array('$gt' => 0),
+			'state'=> 'published'
 		);
 		return static::all(compact('conditions'));
 	}
@@ -80,6 +75,13 @@ class Offer extends \lithium\data\Model{
 		}else{
 			return array('successfull'=>false, 'error'=>'sold_out');
 		}
+	}
+	
+	public function save($entity, $data = array(), array $options = array()){
+		
+		$entity->set($data);
+		
+		return parent::save($entity,null,$options);
 	}
 }
 ?>

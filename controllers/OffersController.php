@@ -8,7 +8,19 @@ class OffersController extends \lithium\action\Controller{
 
 	public function index(){
 		$offers = Offer::current();
-		return compact('offers');
+		$venues = array();
+		$venues_id = array();
+		foreach($offers as $offer){
+			$venues_id[(string)$offer->venue_id] = (string)$offer->venue_id;
+		}
+		
+		if(!empty($venues_id)){
+			$conditions = array('_id' => array_keys($venues_id));
+			Venue::meta('title', 'logo');
+			$venues = Venue::find('list', compact('conditions','fields'));
+			debug($venues);
+		}
+		return compact('offers', 'venues');
 	}
 	public function view(){
 		if(!$this->request->id){
@@ -43,7 +55,7 @@ class OffersController extends \lithium\action\Controller{
 
 			$success = $offer->save();
 			if($success){
-				$this->redirect(array('Offer::view', 'id' => $offer->_id));
+				$this->redirect(array('Offers::view', 'id' => $offer->_id));
 			}
 		}
 		

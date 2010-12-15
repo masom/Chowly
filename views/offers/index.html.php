@@ -20,6 +20,12 @@
 	<?php foreach($offers as $offer):?>
 		<li>
 			<h4><?=$this->html->link($offer->name, array('Offers::view', 'id'=> $offer->_id));?></h4>
+			<?php if($offer->venue_id):?>
+				<?=$this->html->image("/images/{$venues[(string)$offer->venue_id]}.jpg");?>
+			<?php endif;?>
+			
+			<p><em>Since</em> <?=date('Y-m-d H:i:s', $offer->starts->sec);?></p>
+			<p><em>Ends</em> <?=date('Y-m-d H:i:s', $offer->ends->sec);?></p>
 		</li>
 	<?php endforeach;?>
 </ul>
