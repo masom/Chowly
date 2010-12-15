@@ -398,3 +398,14 @@ div.error{
 	margin: 10px;
 	color: #990000;
 }
+ul.time-picker{
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+ul.time-picker li{
+	float :left;
+	margin-right: 15px;
+	padding-right: 10px;
+	width: 100px;
+}

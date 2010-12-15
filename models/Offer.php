@@ -1,11 +1,11 @@
 <?php
 namespace chowly\models;
 
-use \lithium\util\Validator;
+
 use chowly\models\Inventory;
 
 class Offer extends \lithium\data\Model{
-	protected static $_states = array('published', 'unpublished');
+	protected static $_states = array('published'=>'published', 'unpublished'=>'unpublished');
 	public $validates = array(
 		'name' => array(
 			array('notEmpty','message'=>'Please enter a name'),
@@ -15,10 +15,10 @@ class Offer extends \lithium\data\Model{
 			array('inList', 'list' => array('published', 'unpublished'))
 		),
 		'starts' => array(
-			array('notEmpty','message'=>'The publication start date cannot be empty')
+			array('datetime', 'message'=>'The publication start date must be valid.')
 		),
 		'ends' => array(
-			array('notEmpty', 'message' => 'The publication end date cannot be empty')
+			array('datetime', 'message'=>'The publication end date must be valid.')
 		),
 		'availability' => array(
 			array('numeric', 'message'=>'Please enter a number.'),
@@ -28,7 +28,7 @@ class Offer extends \lithium\data\Model{
 			array('notEmpty', 'message'=>'There is a relationship problem...')
 		),
 		'cost' => array(
-			array('money')
+			array('numeric','message'=>'Must be a monetary amount (ex: 33.00)')
 		)
 	);
 	
@@ -44,7 +44,7 @@ class Offer extends \lithium\data\Model{
 	);
 	
 	public static function states(){
-		return array_values(static::$_states);
+		return static::$_states;
 	}
 	
 	public static function defaultState(){

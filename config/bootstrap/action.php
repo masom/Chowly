@@ -22,7 +22,7 @@ use lithium\net\http\Router;
 use lithium\core\Environment;
 use lithium\action\Dispatcher;
 use lithium\util\collection\Filters;
-
+use \lithium\util\Validator;
 use \MongoDate;
 /**
  * This filter intercepts the `run()` method of the `Dispatcher`, and first passes the `'request'`
@@ -77,6 +77,7 @@ $insureDefaultState = function($self, $params, $chain){
 	}
 	return $chain->next($self, $params, $chain);
 };
+
 Filters::apply('chowly\models\Venue', 'save', $insureDate);
 Filters::apply('chowly\models\Venue', 'save', $insureDefaultState);
 Filters::apply('chowly\models\Inventory', 'save', $insureDate );

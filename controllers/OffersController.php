@@ -39,8 +39,8 @@ class OffersController extends \lithium\action\Controller{
 	public function add(){
 		$offer = Offer::create();
 		if (($this->request->data)){
-			debug($this->request->data);die;
 			$offer->set($this->request->data);
+
 			$success = $offer->save();
 			if($success){
 				$this->redirect(array('Offer::view', 'id' => $offer->_id));
