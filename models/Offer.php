@@ -29,7 +29,7 @@ class Offer extends \lithium\data\Model{
 	protected $_schema = array(
 		'_id' => array('type'=>'id'),
 		'venue_id' => array('type'=>'id'),
-		'state' => array('type'=>'string'),
+		'state' => array('type'=>'string', 'default' => 'unpublished'),
 		'name' => array('type'=>'string','null'=>false),
 		'starts' => array('type'=>'date','null'=>false),
 		'ends'=>array('type'=>'date','null'=>false),
@@ -75,13 +75,6 @@ class Offer extends \lithium\data\Model{
 		}else{
 			return array('successfull'=>false, 'error'=>'sold_out');
 		}
-	}
-	
-	public function save($entity, $data = array(), array $options = array()){
-		
-		$entity->set($data);
-		
-		return parent::save($entity,null,$options);
 	}
 }
 ?>

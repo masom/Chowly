@@ -18,7 +18,6 @@ class OffersController extends \lithium\action\Controller{
 			$conditions = array('_id' => array_keys($venues_id));
 			Venue::meta('title', 'logo');
 			$venues = Venue::find('list', compact('conditions','fields'));
-			debug($venues);
 		}
 		return compact('offers', 'venues');
 	}
@@ -47,7 +46,23 @@ class OffersController extends \lithium\action\Controller{
 		}
 		
 	}
-	
+	public function preview(){
+		$offer = Offer::first($this->request->id);
+		if(!$offer){
+			$this->redirect(array('Offers::index'));
+		}
+		$conditions = array('_id'=> $offer->venue_id);
+		$venue = Venue::first(compact('conditions'));
+		return compact('venue','offer');
+	}
+	public function publish(){
+		$offer = Offer::first($this->request->id);
+		if(!$offer){
+			$this->redirect(array('Offers::index'));
+		}
+		$offer->publish();
+		$this->redirect(array('Offers::view','id'=>$offer->_id));
+	}
 	public function add(){
 		$offer = Offer::create();
 		if (($this->request->data)){
@@ -55,7 +70,7 @@ class OffersController extends \lithium\action\Controller{
 
 			$success = $offer->save();
 			if($success){
-				$this->redirect(array('Offers::view', 'id' => $offer->_id));
+				$this->redirect(array('Offers::preview', 'id' => $offer->_id));
 			}
 		}
 		
@@ -76,9 +91,7 @@ class OffersController extends \lithium\action\Controller{
 		}
 		$this->_render['template'] = 'edit';
 		
-		$publishOptions = $offer->states();
-		
-		return compact('venue', 'offer', 'publishOptions');
+		return compact('venue', 'offer');
 	}
 	public function edit(){
 		$offer = Offer::create();

@@ -22,7 +22,7 @@
 				<div class="info">
 					About Us | Your Restaurant Here | Contact Us
 				</div>
-				<h1>Chowly</h1>
+				<?=$this->html->image('logo.png');?>
 				<h2>
 					Pick. Eat. Save.
 				</h2>
