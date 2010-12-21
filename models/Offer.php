@@ -51,7 +51,10 @@ class Offer extends \lithium\data\Model{
 			'ends' => array('$gt' => new \MongoDate()),
 			'state'=> 'published'
 		);
-		return static::all(compact('conditions'));
+		$order = array(
+			'ends'=>'ASC'
+		);
+		return static::all(compact('conditions','order'));
 	}
 	
 	/**

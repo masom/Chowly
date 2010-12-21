@@ -22,7 +22,7 @@
 				<div class="info">
 					About Us | Your Restaurant Here | Contact Us
 				</div>
-				<?=$this->html->image('logo.png');?>
+				<?=$this->html->image('logo.png', array('width' =>'150px;'));?>
 				<h2>
 					Pick. Eat. Save.
 				</h2>

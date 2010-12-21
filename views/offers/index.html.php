@@ -16,22 +16,20 @@
 		~Chowly
 	</p>
 <?php endif;?>
-<ul class="offers">
-	<?php foreach($offers as $offer):?>
-		<li>
-			<h4><?=$this->html->link($offer->name, array('Offers::view', 'id'=> $offer->_id));?></h4>
-			<?php if($offer->venue_id):?>
-				<?=$this->html->image("/images/{$venues[(string)$offer->venue_id]}.jpg");?>
-			<?php endif;?>
-			<?php if($offer->availability > 0):?>
-				<p>Only <?=$offer->availability;?> left!</p>
-			<?php else:?>
-				<p>Out of Stock!</p>
-			<?php endif;?>
-			<p id = "offer-countdown-<?php echo $offer->_id;?>"></p>		
-		</li>
-	<?php endforeach;?>
-</ul>
+	<div class="offers">
+		<?php foreach($offers as $offer):?>
+			<div style="float:left; background-color: #fff; border: 2px solid #2E4A21; border-radius: 9px; margin: 5px; padding: 5px;">
+				<h4><?=$this->html->link($offer->name, array('Offers::view', 'id'=> $offer->_id));?></h4>
+				<?php if($offer->venue_id):?>
+					<?=$this->html->image("/images/{$venues[(string)$offer->venue_id]}.jpg");?>
+				<?php endif;?>
+				<div class="footer">
+					<span><?=($offer->availability)? "Only {$offer->availability} left!" : 'Out of Stock!' ;?></span>
+					<span style="float:right;" id="offer-countdown-<?php echo $offer->_id;?>" class="countdown"></span>
+				</div>		
+			</div>
+		<?php endforeach;?>
+	</div>
 </div>
 <script type="text/javascript">
 	<?php foreach($offers as $offer):?>

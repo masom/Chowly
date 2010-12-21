@@ -29,7 +29,9 @@ class OffersController extends \lithium\action\Controller{
 		if(!$offer){
 			$this->redirect(array("Offers::index", "args"=>array("reason"=>"non-existent")));
 		}
-		return compact('offer');
+		$conditions = array('_id' => $offer->venue_id);
+		$venue = Venue::first(compact('conditions'));
+		return compact('offer','venue');
 	}
 	public function buy(){
 		if(!$this->request->id){
