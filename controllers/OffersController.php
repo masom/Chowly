@@ -39,14 +39,12 @@ class OffersController extends \lithium\action\Controller{
 		}
 		
 		//TODO: Actual customer identification... php session id to start?
-		$item = Offer::reserve($this->request->id, 'test account');
-		if($item['ok']){
-			//TODO: Payments logic
-			die("OK");
+		$reserved = Offer::reserve($this->request->id, 'test account');
+		if($reserved['successfull']){
+			$this->redirect(array('Offers::confirmation', 'id'=> $this->request->id));
 		}else{
-			die(print_r($item));
+			$this->redirect($this->request->referer());
 		}
-		
 	}
 	public function preview(){
 		$offer = Offer::first($this->request->id);

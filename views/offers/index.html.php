@@ -18,7 +18,7 @@
 <?php endif;?>
 	<div class="offers">
 		<?php foreach($offers as $offer):?>
-			<div style="float:left; background-color: #fff; border: 2px solid #2E4A21; border-radius: 9px; margin: 5px; padding: 5px;">
+			<div style="float:left; background-color: #fff; border-radius: 9px; margin: 5px; padding: 5px;">
 				<h4><?=$this->html->link($offer->name, array('Offers::view', 'id'=> $offer->_id));?></h4>
 				<?php if($offer->venue_id):?>
 					<?=$this->html->image("/images/{$venues[(string)$offer->venue_id]}.jpg");?>

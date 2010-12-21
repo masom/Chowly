@@ -67,6 +67,7 @@ class Offer extends \lithium\data\Model{
 		$conditions = array(
 			'starts' => array('$lt' => new \MongoDate()),
 			'ends' => array('$gt' => new \MongoDate()),
+			'_id' => $offer_id
 		);
 		$offer = static::first(array('conditions'=> $conditions));
 		if(!$offer){
@@ -74,9 +75,14 @@ class Offer extends \lithium\data\Model{
 		}
 		if(Inventory::reserve($customer_id,$offer_id)){
 			$offer->availability--;
-			$offer->save();
+			if($offer->availability <= 0){
+				$offer->availability = 0;
+			}
+			$offer->save(null,array('validate'=>false));
 			return array('successfull'=>true);
 		}else{
+			$offer->availability = 0;
+			$offer->save(null, array('validate' => false));
 			return array('successfull'=>false, 'error'=>'sold_out');
 		}
 	}

@@ -46,6 +46,7 @@
 				</div>
 			<?php endif;?>
 			<?php echo $this->content(); ?>
+			<br style="clear:both;"/>
 		</div>
 		<div id="footer">
 			<strong>Unbeatable Deals for Local Dining</strong>

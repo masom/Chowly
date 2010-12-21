@@ -369,7 +369,11 @@ p.venue-informations{
 	font-style: Italic;
 }
 div.venue-infocard{
-margin-left: 30px; margin-bottom: 30px;
+	margin-left: 30px; margin-bottom: 30px;
+	padding: 10px;
+	background-color: #fff;
+	text-align: justify;
+	border-radius: 9px;
 }
 div.venue-infocard ul{
 	list-style: none;
@@ -395,6 +399,11 @@ div.venue-offers h3{
 div.error{
 	margin: 10px;
 	color: #990000;
+}
+div.offer-informations{
+	background-color: #fff;
+	border-radius: 9px;
+	padding: 10px;
 }
 ul.time-picker{
 	list-style: none;
