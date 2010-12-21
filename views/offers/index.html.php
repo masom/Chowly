@@ -23,10 +23,22 @@
 			<?php if($offer->venue_id):?>
 				<?=$this->html->image("/images/{$venues[(string)$offer->venue_id]}.jpg");?>
 			<?php endif;?>
-			
-			<p><em>Since</em> <?=date('Y-m-d H:i:s', $offer->starts->sec);?></p>
-			<p><em>Ends</em> <?=date('Y-m-d H:i:s', $offer->ends->sec);?></p>
+			<?php if($offer->availability > 0):?>
+				<p>Only <?=$offer->availability;?> left!</p>
+			<?php else:?>
+				<p>Out of Stock!</p>
+			<?php endif;?>
+			<p id = "offer-countdown-<?php echo $offer->_id;?>"></p>		
 		</li>
 	<?php endforeach;?>
 </ul>
 </div>
+<script type="text/javascript">
+	<?php foreach($offers as $offer):?>
+		$(function () {
+			var couponEnd = new Date();
+			couponEnd = new Date(<?php echo $offer->ends->sec * 1000;?>);
+			$("#offer-countdown-<?php echo $offer->_id;?>").countdown({until: couponEnd, layout: 'Ends in {dn} {dl}, {hnn}{sep}{mnn}{sep}{snn}'});
+		});
+	<?php endforeach;?>
+</script>

@@ -5,7 +5,7 @@ use chowly\models\Offer;
 use chowly\models\Venue;
 
 class OffersController extends \lithium\action\Controller{
-
+	
 	public function index(){
 		$offers = Offer::current();
 		$venues = array();
@@ -37,7 +37,7 @@ class OffersController extends \lithium\action\Controller{
 		}
 		
 		//TODO: Actual customer identification... php session id to start?
-		$item = Offer::reserve('testaccount', $this->request->id);
+		$item = Offer::reserve($this->request->id, 'test account');
 		if($item['ok']){
 			//TODO: Payments logic
 			die("OK");
@@ -60,7 +60,18 @@ class OffersController extends \lithium\action\Controller{
 		if(!$offer){
 			$this->redirect(array('Offers::index'));
 		}
-		$offer->publish();
+		$retval = $offer->publish();
+		if($retval['success']){
+			//TODO: HANDLE SUCCESS / FAILURE MESSAGE
+		}
+		$this->redirect(array('Offers::view','id'=>$offer->_id));
+	}
+	public function unpublish(){
+		$offer = Offer::first($this->request->id);
+		if(!$offer){
+			$this->redirect(array('Offers::index'));
+		}
+		$offer->unpublish();
 		$this->redirect(array('Offers::view','id'=>$offer->_id));
 	}
 	public function add(){

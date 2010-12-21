@@ -2,6 +2,20 @@
 namespace chowly\models;
 
 class Inventory extends \lithium\data\Model{
+	protected $_schema = array(
+		'_id' => array('type'=>'id'),
+		'offer_id' => array('type'=>'id'),
+		'customer_id' => array('type'=>'_id'),
+		'state' => array('type'=>'string', 'default' => 'available'),
+	);
+	protected static $_states = array('available'=>'available', 'reserved'=>'reserved', 'purchased'=>'purchased');
+	public static function states(){
+		return static::$_states;
+	}
+	
+	public static function defaultState(){
+		return 'unpublished';
+	}
 	/**
 	 * 
 	 * Reserve a inventory item for a limited duration.
@@ -31,6 +45,20 @@ class Inventory extends \lithium\data\Model{
 			return false;
 		}
 		return $result['ok'];
+	}
+	public static function createForOffer($offer_id){
+		$inventory = static::create();
+		$inventory->state = 'available';
+		$inventory->offer_id = $offer_id;
+		return $inventory->save();
+	}
+	
+	public static function deleteForOffer($offer_id){
+		$conditions = array(
+			'offer_id' => $offer_id,
+			'state' => array('available', 'reserved')
+		);
+		return static::remove($conditions);
 	}
 }
 ?>

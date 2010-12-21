@@ -49,32 +49,78 @@ class Offer extends \lithium\data\Model{
 		$conditions = array(
 			'starts' => array('$lt' => new \MongoDate()),
 			'ends' => array('$gt' => new \MongoDate()),
-			'availability' => array('$gt' => 0),
 			'state'=> 'published'
 		);
 		return static::all(compact('conditions'));
 	}
+	
 	/**
 	 * 
 	 * @param var $customer_id
 	 * @param var $offer_id
 	 * @todo Add indexes to inventory
 	 */
-	public static function reserve($customer_id, $offer_id){
+	public static function reserve($offer_id,$customer_id){
 		$conditions = array(
 			'starts' => array('$lt' => new \MongoDate()),
 			'ends' => array('$gt' => new \MongoDate()),
-			'availability' => array('$gt' => 0)
 		);
 		$offer = static::first(array('conditions'=> $conditions));
 		if(!$offer){
 			return array('successfull'=>false, 'error'=>'not_found');
 		}
 		if(Inventory::reserve($customer_id,$offer_id)){
+			$offer->availability--;
+			$offer->save();
 			return array('successfull'=>true);
 		}else{
 			return array('successfull'=>false, 'error'=>'sold_out');
 		}
+	}
+	
+	public function publish($entity){
+		$retval = array('success'=>false,'errors'=>array(),'count'=>0);
+		if(!$entity->_id){
+			$retval['errors'][] = 'The offer could not be found';
+			return $retval;
+		}
+		
+		if($entity->state == 'published'){
+			$retval['errors'][] = 'The offer is already published.';
+			return $retval;
+		}
+		
+		$entity->state = 'published';
+		
+		$created = 0;
+		for($i = 0; $i < $entity->availability; $i++){
+			if(Inventory::createForOffer($entity->_id)){
+				$created++;
+			}
+		}
+		
+		if($created != $entity->availability){
+			$retval['errors'][] = "Only {$created} inventory items where created.";
+		}
+		if($entity->save()){
+			$retval['success'] = true;
+		}else{
+			Inventory::deleteForOffer($entity->_id);
+			$retval['success'] = false;
+			$retval['errors'][] = 'The offer could not be published.';
+		}
+		return $retval;
+	}
+	
+	public function unpublish($entity){
+		$retval = array('success'=>false,'errors'=>array(),'count'=>0);
+		if(!$entity->_id){
+			$retval['errors'][] = 'The offer could not be found';
+			return $retval;
+		}
+		Inventory::deleteForOffer($entity->_id);
+		$entity->state = 'unpublished';
+		return $entity->save();
 	}
 }
 ?>

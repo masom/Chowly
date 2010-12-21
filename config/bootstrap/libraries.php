@@ -51,9 +51,16 @@ Libraries::add('lithium');
  */
 Libraries::add('chowly', array('default' => true));
 
+
 /**
  * Add some plugins
  */
 // Libraries::add('li3_docs');
+
+Libraries::add("tcpdf", array(
+    "prefix" => false,
+    "includePath" => true,
+    "transform" => function($class) { return str_replace("_", "/", $class) . ".php"; }
+));
 
 ?>
