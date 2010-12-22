@@ -105,15 +105,19 @@ class OffersController extends \lithium\action\Controller{
 		return compact('venue', 'offer');
 	}
 	public function edit(){
-		$offer = Offer::create();
+		$conditions = array(
+			'_id' => $this->request->id
+		);
+		$offer = Offer::first(compact('conditions'));
 		if (($this->request->data)){
 			$success = $offer->save($this->request->data);
 			if($success){
-				$this->redirect(array('Offer::view', 'id' => $venue->_id));
+				$this->redirect(array('Offers::view', 'id' => $venue->_id));
 			}
 		}
+		
 		$publishOptions = $offer->states();
-		return compact('venue','publishOptions');
+		return compact('offer','publishOptions');
 	}
 }
 ?>

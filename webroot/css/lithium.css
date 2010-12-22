@@ -346,6 +346,7 @@ ul.venues-listing{
 	text-align: left;
 }
 li.venue-listing{
+	background-color: #fff;
 	border: 1px solid #eee;
 	-moz-box-shadow: 0 0 3px rgba(0,0,0,.4);
 	-webkit-box-shadow: 0 0 3px rgba(0,0,0,.4);
@@ -361,31 +362,23 @@ li.venue-listing{
 	float: left;
 	min-height: 250px;
 }
-li.venue-listing:hover{
-
-	border: 2px solid #99ff99;
-}
 p.venue-informations{
 	font-style: Italic;
 }
-div.venue-infocard{
-	margin-left: 30px; margin-bottom: 30px;
+div.whitebox{
+	margin: 10px;
 	padding: 10px;
 	background-color: #fff;
 	text-align: justify;
 	border-radius: 9px;
 }
-div.venue-infocard ul{
+div.whitebox ul{
 	list-style: none;
 	margin: 0;
 	padding: 0;
-}
-div.venue-offers{
-	float: right;
 	margin-left: 30px;
 	margin-bottom: 30px;
 	width: 300px;
-	overflow: hidden;
 }
 div.venue-offers ul{
 	list-style: none;
@@ -399,11 +392,6 @@ div.venue-offers h3{
 div.error{
 	margin: 10px;
 	color: #990000;
-}
-div.offer-informations{
-	background-color: #fff;
-	border-radius: 9px;
-	padding: 10px;
 }
 ul.time-picker{
 	list-style: none;

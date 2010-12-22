@@ -2,7 +2,7 @@
 	<h1><?=$offer->name;?></h1>
 </div>
 <div id="content-panel" style="margin-left: auto; margin-right: auto; width: 800px">
-	<div class="offer-informations" style="float:left; width:400px;">
+	<div class="whitebox" style="float:left; width:400px;">
 		<?php if($offer->availability > 0):?>
 			<p>Only <?=$offer->availability;?> left!</p>
 		<?php else:?>
@@ -19,7 +19,7 @@
 		<?php endif;?>
 		<p><?php echo nl2br($offer->description);?></p>
 	</div>
-	<div class="venue-infocard" style="width: 300px; float:left;">
+	<div class="whitebox" style="width: 300px; float:left;">
 		<?php if($venue->logo):?>
 			<?=$this->html->image("/images/{$venue->logo}.jpg")?>
 		<?php endif;?>
