@@ -40,11 +40,13 @@ class Inventory extends \lithium\data\Model{
 		);
 		
 		$result = static::_connection()->connection->command($command);
-		
 		if(!$result || !isset($result['ok'])){
 			return false;
 		}
-		return $result['ok'];
+		$inventory = new \lithium\data\entity\Document();
+		$inventory->set($result['value']);
+		
+		return array($result['ok'], $inventory);
 	}
 	public static function createForOffer($offer_id){
 		$inventory = static::create();

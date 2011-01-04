@@ -24,7 +24,7 @@
 					<?=$this->html->image("/images/{$venues[(string)$offer->venue_id]}.jpg");?>
 				<?php endif;?>
 				<div class="footer">
-					<span><?=($offer->availability)? "Only {$offer->availability} left!" : 'Out of Stock!' ;?></span>
+					<span><?=($offer->availability)? "Only {$offer->availability} left!" : 'Sold Out!' ;?></span>
 					<span style="float:right;" id="offer-countdown-<?php echo $offer->_id;?>" class="countdown"></span>
 				</div>		
 			</div>

@@ -3,6 +3,7 @@ namespace chowly\controllers;
 
 use chowly\models\Offer;
 use chowly\models\Venue;
+use \lithium\storage\Session;
 
 class OffersController extends \lithium\action\Controller{
 	
@@ -37,15 +38,28 @@ class OffersController extends \lithium\action\Controller{
 		if(!$this->request->id){
 			$this->redirect(array("Offers::index", 'args'=>array('reason'=>'not-specified')));
 		}
-		
-		//TODO: Actual customer identification... php session id to start?
-		$reserved = Offer::reserve($this->request->id, 'test account');
+		$reserved = Offer::reserve($this->request->id, 'test');
 		if($reserved['successfull']){
-			$this->redirect(array('Offers::confirmation', 'id'=> $this->request->id));
+			$this->redirect(array('Offers::confirm'));
 		}else{
 			$this->redirect($this->request->referer());
 		}
 	}
+	public function confirm(){
+		if(!$this->request->id){
+			$this->redirect($this->request->referer());
+		}
+		
+		$offer = Offer::first($this->request->id);
+	}
+	
+	
+	
+	/**
+	 * ADMIN FUNCTIONS BELLOW
+	 */
+	
+	
 	public function preview(){
 		$offer = Offer::first($this->request->id);
 		if(!$offer){

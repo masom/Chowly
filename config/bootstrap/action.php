@@ -23,7 +23,7 @@ use lithium\core\Environment;
 use lithium\action\Dispatcher;
 use lithium\util\collection\Filters;
 use \lithium\util\Validator;
-use \MongoDate;
+use \lithium\storage\Session;
 /**
  * This filter intercepts the `run()` method of the `Dispatcher`, and first passes the `'request'`
  * parameter (an instance of the `Request` object) to the `Environment` class to detect which
@@ -53,7 +53,9 @@ Dispatcher::applyFilter('run', function($self, $params, $chain) {
 	}
 	return $chain->next($self, $params, $chain);
 });
-
+Dispatcher::applyFilter('run', function($self, $params, $chain){
+	
+});
 /**
  * Adds created and modified dates.
  * Updates modified if created is present.

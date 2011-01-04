@@ -6,7 +6,7 @@
 		<?php if($offer->availability > 0):?>
 			<p>Only <?=$offer->availability;?> left!</p>
 		<?php else:?>
-			<p>Out of Stock!</p>
+			<p>Sold Out!</p>
 		<?php endif;?>
 		<p id="offer-countdown" class="countdown"></p>
 		<?php if($offer->availability > 0):?>

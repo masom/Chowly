@@ -14,10 +14,14 @@
 	<?=$this->form->field('cost', array('label' => 'Price in C$', 'id'=>'offer_cost'));?>
 	<ul class="time-picker">
 		<?=$this->form->field('starts', array('value'=>date('Y-m-d H:i:s', ($offer->starts->sec)? $offer->starts->sec : time()),'template'=>'<li{:wrap}>{:label}{:input}{:error}</li>','id'=>'form_offer_start_date'));?>
-		<?=$this->form->field('ends', array('value' => date('Y-m-d H:i:s', ($offer->ends->sec)? $offer->ends->sec : time() + 60 * 60 * 24),'template'=>'<li{:wrap}>{:label}{:input}{:error}</li>','id'=>'form_offer_end_date'));?>
+		<?=$this->form->field('ends', array('value' => date('Y-m-d H:i:s', ($offer->ends->sec)? $offer->ends->sec : time() + 60 * 60 * 24 * 30),'template'=>'<li{:wrap}>{:label}{:input}{:error}</li>','id'=>'form_offer_end_date'));?>
 	</ul>
 	<br style="clear: both;" />
-	<?=$this->form->field('availability', array('id'=>'offer_availability','label'=>'How many coupons?', 'style'=>'width: 100px;'));?>
+	
+	<?php if(!$offer->_id):?>
+		<?=$this->form->field('availability', array('id'=>'offer_availability','label'=>'How many coupons?', 'style'=>'width: 100px;'));?>
+	<?php endif;?>
+	
 	<?=$this->form->hidden('venue_id', array('value' => $venue->_id));?>
 	<button id="form_offer_save" onclick="return false;">Save</button>
 	<button id="form_offer_cancel" onclick="return false;">Cancel</button>

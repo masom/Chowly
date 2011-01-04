@@ -52,7 +52,8 @@ class Offer extends \lithium\data\Model{
 			'state'=> 'published'
 		);
 		$order = array(
-			'ends'=>'ASC'
+			'ends'=>'ASC',
+			'availability' => 'DESC'
 		);
 		return static::all(compact('conditions','order'));
 	}
@@ -73,7 +74,8 @@ class Offer extends \lithium\data\Model{
 		if(!$offer){
 			return array('successfull'=>false, 'error'=>'not_found');
 		}
-		if(Inventory::reserve($customer_id,$offer_id)){
+		$inventory = Inventory::reserve($customer_id,$offer_id);
+		if(is_array($inventory)){
 			$offer->availability--;
 			if($offer->availability <= 0){
 				$offer->availability = 0;
@@ -129,7 +131,7 @@ class Offer extends \lithium\data\Model{
 		}
 		Inventory::deleteForOffer($entity->_id);
 		$entity->state = 'unpublished';
-		return $entity->save();
+		return $entity->save(null,array('validate'=>false,'whitelist'=>array('state')));
 	}
 }
 ?>
