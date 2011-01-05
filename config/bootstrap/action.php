@@ -54,7 +54,7 @@ Dispatcher::applyFilter('run', function($self, $params, $chain) {
 	return $chain->next($self, $params, $chain);
 });
 Dispatcher::applyFilter('run', function($self, $params, $chain){
-	
+	return $chain->next($self, $params, $chain);	
 });
 /**
  * Adds created and modified dates.
