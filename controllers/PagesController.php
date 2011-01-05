@@ -8,7 +8,7 @@ class PagesController extends \lithium\action\Controller {
 		$path = func_get_args();
 
 		if (empty($path)) {
-			$path = array('home');
+			$path = array('about');
 		}
 		$this->render(array('template' => join('/', $path)));
 	}
