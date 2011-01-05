@@ -44,7 +44,7 @@ class OffersController extends \lithium\action\Controller{
 		}
 
 		$cart = Cart::get();
-		if(isset($cart['$this->request->id'])){
+		if(isset($cart[$this->request->id])){
 			$this->redirect(array('Checkouts::confirm'));
 		}
 		
