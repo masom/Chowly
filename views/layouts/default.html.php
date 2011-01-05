@@ -1,16 +1,8 @@
-<?php
-/**
- * Lithium: the most rad php framework
- *
- * @copyright     Copyright 2010, Union of RAD (http://union-of-rad.org)
- * @license       http://opensource.org/licenses/bsd-license.php The BSD License
- */
-?>
 <!doctype html>
 <html>
 <head>
 	<?php echo $this->html->charset();?>
-	<title>Application &gt; <?php echo $this->title(); ?></title>
+	<title>Chowly | Pick. Eat. Save.</title>
 	<?php echo $this->html->style(array('debug', 'lithium', 'cupertino/jquery-ui-1.8.7.custom')); ?>
 	<?php echo $this->html->script(array('jquery-1.4.4.min', 'jquery-ui-1.8.7.custom.min', 'jquery.numeric','jquery.countdown.min')); ?>
 	<?php echo $this->html->link('Icon', null, array('type' => 'icon')); ?>
@@ -22,7 +14,7 @@
 				<div class="info">
 					About Us | Your Restaurant Here | Contact Us
 				</div>
-				<?=$this->html->image('logo.png', array('width' =>'150px;'));?>
+				<?php echo $this->html->link($this->html->image('logo.png', array('width' =>'150px;','alt'=>'Logo')), array('Offers::index'),array('escape'=>false));?>
 				<h2>
 					Pick. Eat. Save.
 				</h2>
@@ -36,15 +28,7 @@
 			<?php endif;?>
 		</div>
 		<div id="content">
-			<?php if(isset($messages) && !empty($messages)):?>
-				<div class="message-center">
-					<?php foreach($messages as $message):?>
-						<div class="message <?php echo $message['class'];?>">
-							<?=$message['message'];?>
-						</div>
-					<?php endforeach;?>
-				</div>
-			<?php endif;?>
+			<?=$this->flashMessage->output(); ?>
 			<?php echo $this->content(); ?>
 			<br style="clear:both;"/>
 		</div>

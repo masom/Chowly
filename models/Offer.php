@@ -3,6 +3,7 @@ namespace chowly\models;
 
 
 use chowly\models\Inventory;
+use \lithium\storage\Session;
 
 class Offer extends \lithium\data\Model{
 	protected static $_states = array('published'=>'published', 'unpublished'=>'unpublished');

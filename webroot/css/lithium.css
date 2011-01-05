@@ -33,7 +33,7 @@ h6 { font-size: 1em; }
 p { margin-bottom: 1em; }
 strong { font-weight: bold; }
 em { font-style: italic; }
-a { text-decoration: none; color: #666; border-bottom: 1px dashed #00bbff; }
+a { text-decoration: none; color: #666;}
 a, h1 a, h2 a { text-decoration: none; }
 a:hover { color: #00bbff; }
 a:visited:hover { color: #ff59ff; }
@@ -392,6 +392,24 @@ div.venue-offers h3{
 div.error{
 	margin: 10px;
 	color: #990000;
+}
+div.flash-message{
+	margin: 10px;
+	padding: 10px;
+	
+	margin-left: auto;
+	margin-right: auto;
+	border: 1px solid #eee;
+	
+	-moz-box-shadow: 0 0 3px rgba(0,0,0,.4);
+	-webkit-box-shadow: 0 0 3px rgba(0,0,0,.4);
+	box-shadow: 0 0 3px rgba(0,0,0,.4);
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	
+	text-align: center;
+	width: 50%;
+	background-color: #fff;
 }
 ul.time-picker{
 	list-style: none;
