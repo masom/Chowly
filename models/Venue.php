@@ -52,3 +52,4 @@ class Venue extends \lithium\data\Model{
 	}
 
 }
+?>

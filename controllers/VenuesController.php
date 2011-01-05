@@ -55,3 +55,4 @@ class VenuesController extends \lithium\action\Controller{
 		return compact('venue','publishedOptions');
 	}
 }
+?>

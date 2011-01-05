@@ -42,28 +42,19 @@ class OffersController extends \lithium\action\Controller{
 			FlashMessage::set("Missing data.");
 			$this->redirect(array("Offers::index"));
 		}
+		
+		$cart = Cart::get();
+		if(isset($this->request->id,$cart)){
+			$this->redirect(array('Checkouts::confirm'));
+		}
+		
 		$reserved = Offer::reserve($this->request->id, 'test');
 		if($reserved['successfull']){
-			Cart::add($this->request->id);
-			$this->redirect(array('Offers::confirm'));
+			Cart::add($this->request->id, $reserved['inventory_id']);
+			$this->redirect(array('Checkouts::confirm'));
 		}else{
 			$this->redirect($this->request->referer());
 		}
-	}
-	public function confirm(){
-		//some cart cleanup...
-		$cart = Cart::get();		
-		if(empty($cart)){
-			FlashMessage::set("Empty Cart!");
-			$this->redirect($this->request->referer());
-		}
-		
-		$conditions = array(
-			'_id' => array_keys($cart)
-		);
-		$offers = Offer::all(compact('conditions'));
-		
-		return compact('offers');
 	}
 	
 	
@@ -157,3 +148,4 @@ class OffersController extends \lithium\action\Controller{
 		return compact('offer','publishOptions');
 	}
 }
+?>

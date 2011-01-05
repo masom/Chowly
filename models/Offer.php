@@ -82,7 +82,7 @@ class Offer extends \lithium\data\Model{
 				$offer->availability = 0;
 			}
 			$offer->save(null,array('validate'=>false));
-			return array('successfull'=>true);
+			return array('successfull'=>true, 'inventory_id' => $inventory->_id);
 		}else{
 			$offer->availability = 0;
 			$offer->save(null, array('validate' => false));

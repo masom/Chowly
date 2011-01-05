@@ -25,3 +25,4 @@ class Image extends \lithium\data\Model{
 		return parent::save($entity, null, $options);
 	}
 }
+?>

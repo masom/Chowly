@@ -43,31 +43,15 @@ class Cart extends \lithium\data\Model{
 	public static function get() {
 		$storage = static::$_storage;
 		
-		
-		foreach($cart as $offer => $attr){
-			if($attr['expires'] < $time){
-				Cart::clear($offer);
-			}
-		}
-		
-		return $storage::read("Cart", array('name' => 'ChowlyCart'));
-	}
-	
-	/**
-	 * Count the cart content. Cleanup old items
-	 * @return integer
-	 */
-	public static function count(){
-		$storage = static::$_storage;
-		
 		$time = time();
+		$cart = $storage::read("Cart", array('name' => 'ChowlyCart'));
 		foreach($cart as $offer => $attr){
 			if($attr['expires'] < $time){
 				Cart::clear($offer);
+				unset($cart[$offer]);
 			}
 		}
-		
-		return count($storage::read("Cart", array('name'=>'ChowlyCart')));
+		return $cart; 
 	}
 	/**
 	 * Clears one or all items from the storage.
@@ -84,3 +68,4 @@ class Cart extends \lithium\data\Model{
 		$storage::delete($sessionKey, array('name' => 'ChowlyCart'));
 	}
 }
+?>
