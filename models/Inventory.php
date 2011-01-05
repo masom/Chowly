@@ -32,9 +32,9 @@ class Inventory extends \lithium\data\Model{
 			), 
 			'update'=> array(
 				'$set' => array(
-					'state'=> 'taken',
+					'state'=> 'reserved',
 					'customer_id' => $customer_id,
-					'expires' => new \MongoDate(time() + 15 * 60) // 15 minutes to buy the offer
+					'expires' => new \MongoDate(time() + 20 * 60) // 15 minutes to buy the offer at the UI, 5 minutes buffer
 				)
 			)
 		);
@@ -47,6 +47,44 @@ class Inventory extends \lithium\data\Model{
 		$inventory->set($result['value']);
 		
 		return array($result['ok'], $inventory);
+	}
+	public static function secure($inventory_id){
+		$command = array(
+			'findAndModify' => 'inventories', 
+			'query' => array(
+				'_id' => new \MongoId($inventory_id),
+			), 
+			'update'=> array(
+				'$set' => array(
+					'expires' => new \MongoDate(time() + 15 * 60) //15 minutes of "security"
+				)
+			)
+		);
+		
+		$result = static::_connection()->connection->command($command);
+		if(!$result || !isset($result['ok'])){
+			return false;
+		}		
+		return true;
+	}
+	public static function purchase($inventory_id){
+		$command = array(
+			'findAndModify' => 'inventories', 
+			'query' => array(
+				'_id' => new \MongoId($inventory_id),
+			), 
+			'update'=> array(
+				'$set' => array(
+					'state' => 'purchased'
+				)
+			)
+		);
+		
+		$result = static::_connection()->connection->command($command);
+		if(!$result || !isset($result['ok'])){
+			return false;
+		}		
+		return true;
 	}
 	public static function createForOffer($offer_id){
 		$inventory = static::create();

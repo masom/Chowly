@@ -40,7 +40,7 @@ $render = function($template, $content) {
 ErrorHandler::config(array(
     array(
         'type' => 'Exception',
-        'message' => "/(^Template not found|^Controller '\w+' not found)/",
+        'message' => "/(^Template not found|^Controller '\w+' not found|^Action '\w+' not found)/",
         'handler' => function($info) use ($render) {
             $render('404', $info);
         }

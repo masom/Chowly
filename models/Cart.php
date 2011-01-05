@@ -21,6 +21,19 @@ class Cart extends \lithium\data\Model{
 		static::$_storage = static::$_classes['session'];
 	}
 	
+	
+	public static function freeze(){
+		$storage = static::$_storage;
+		return $storage::write("CartFreeze",true, array('name'=>'ChowlyCart'));
+	}
+	
+	public static function unfreeze(){
+		$storage = static::$_storage;
+		if($storage::check("CartFreeze", array('name'=>'ChowlyCart'))){
+			return $storage::delete("CartFreeze", array('name'=>'ChowlyCart'));
+		}
+		return true;
+	}
 	/**
 	 * Add a cart item
 	 * @param var $offer_id
@@ -28,6 +41,10 @@ class Cart extends \lithium\data\Model{
 	 */
 	public static function add($offer_id){
 		$storage = static::$_storage;
+		
+		if($storage::read("CartFreeze", array('name'=>'ChowlyCart'))){
+			return false;
+		}
 		
 		if($storage::check("Cart.{$offer_id}", array('name'=>'ChowlyCart'))){
 			return true;
@@ -42,9 +59,13 @@ class Cart extends \lithium\data\Model{
 	 */
 	public static function get() {
 		$storage = static::$_storage;
+		$cart = $storage::read("Cart", array('name' => 'ChowlyCart'));
+		
+		if($storage::read("CartFreeze", array('name'=>'ChowlyCart'))){
+			return $cart;
+		}
 		
 		$time = time();
-		$cart = $storage::read("Cart", array('name' => 'ChowlyCart'));
 		foreach($cart as $offer => $attr){
 			if($attr['expires'] < $time){
 				Cart::clear($offer);
@@ -61,6 +82,11 @@ class Cart extends \lithium\data\Model{
 	 */
 	public static function clear($key = '') {
 		$storage = static::$_storage;
+		
+		if($storage::read("CartFreeze", array('name'=>'ChowlyCart'))){
+			return false;
+		}
+		
 		$sessionKey = 'Cart';
 		if (!empty($key)) {
 			$sessionKey .= ".{$key}"; 

@@ -1,4 +1,5 @@
 <?php
+namespace chowly\controllers;
 
 use li3_flash_message\extensions\storage\FlashMessage;
 use chowly\models\Cart;
@@ -19,27 +20,45 @@ class CheckoutsController extends \lithium\action\Controller{
 			'_id' => array_keys($cart)
 		);
 		$offers = Offer::all(compact('conditions'));
-		
 		return compact('offers', 'cart');
 	}
 	public function checkout(){
-		$cart = Cart::get();
+		
+		Cart::freeze();
+		$cart = Cart::get();		
 		if(empty($cart)){
 			FlashMessage::set("Empty Cart!");
 			$this->redirect($this->referer());
 		}
+
+		//Secure inventory so it does not expire while in checkout.
+		foreach($cart as $offer_id => $attr){
+			Inventory::secure($attr['inventory_id']);
+		}
 		
 		//TODO: Credit Card data processing...
 		if($this->request->data){
+			//TODO: Send email
+			//TODO: Log transaction for history/accounting
 			//TODO: HERE BE CC Processing
 			$transaction = array('id'=>'234DCDAA', 'time' => time(), 'auth'=>'DeC22A335z', 'status'=>'complete');
 			
-			if($transaction['status'] == 'complete'){
-				foreach($cart as $offer_id => $attr){
-					
-				}
+			if($transaction['status'] != 'complete'){
+				FlashMessage::set("Some processing errors occured.");
+				return compact('transaction');
 			}
+			
+			foreach($cart as $offer_id => $attr){
+				//TODO: Add logs of a failure...
+				// A few concurency errors is acceptable.
+				Inventory::purchase($attr['inventory_id']);
+			}
+			Cart::unfreeze();
+			Cart::clear();
+			$this->redirect("Checkouts::success");
 		}
+		
 	}
+	public function success(){}
 }
 ?>

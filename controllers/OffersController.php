@@ -56,6 +56,7 @@ class OffersController extends \lithium\action\Controller{
 			$this->redirect($this->request->referer());
 		}
 	}
+
 	
 	
 	
