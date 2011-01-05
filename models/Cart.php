@@ -11,6 +11,9 @@ class Cart extends \lithium\data\Model{
 	protected static $_classes = array(
 		'session' => '\lithium\storage\Session'
 	);
+	protected static $_options = array(
+		'name'=>'ChowlyCart'
+	);
 	
 	/**
 	 * Initializes the session class.
@@ -21,16 +24,36 @@ class Cart extends \lithium\data\Model{
 		static::$_storage = static::$_classes['session'];
 	}
 	
-	
+	public static function lock(){
+		$storage = static::$_storage;
+		return $storage::write("CartLock", true, static::$_options);
+	}
+	public static function unlock(){
+		$storage = static::$_storage;
+		if($storage::check("CartLock", static::$_options)){
+			return $storage::delete("CartLock", static::$_options);
+		}
+		return true;
+	}
 	public static function freeze(){
 		$storage = static::$_storage;
-		return $storage::write("CartFreeze",true, array('name'=>'ChowlyCart'));
+		
+		if($storage::read("CartLock", static::$_options)){
+			return false;
+		}
+		
+		return $storage::write("CartFreeze",true, static::$_options);
 	}
 	
 	public static function unfreeze(){
 		$storage = static::$_storage;
-		if($storage::check("CartFreeze", array('name'=>'ChowlyCart'))){
-			return $storage::delete("CartFreeze", array('name'=>'ChowlyCart'));
+		
+		if($storage::read("CartLock", static::$_options)){
+			return false;
+		}
+		
+		if($storage::check("CartFreeze", static::$_options)){
+			return $storage::delete("CartFreeze", static::$_options);
 		}
 		return true;
 	}
@@ -42,15 +65,20 @@ class Cart extends \lithium\data\Model{
 	public static function add($offer_id, $inventory_id){
 		$storage = static::$_storage;
 
-		if($storage::read("CartFreeze", array('name'=>'ChowlyCart'))){
+		
+		if($storage::read("CartLock", static::$_options)){
 			return false;
 		}
 		
-		if($storage::check("Cart.{$offer_id}", array('name'=>'ChowlyCart'))){
+		if($storage::read("CartFreeze", static::$_options)){
+			return false;
+		}
+		
+		if($storage::check("Cart.{$offer_id}", static::$_options)){
 			return true;
 		}
 		
-		return $storage::write("Cart.{$offer_id}", array('inventory_id'=>$inventory_id,'expires'=> time() + 15 * 60), array('name' => 'ChowlyCart'));
+		return $storage::write("Cart.{$offer_id}", array('inventory_id'=>$inventory_id,'expires'=> time() + 15 * 60), static::$_options);
 	}
 	
 	/**
@@ -59,9 +87,12 @@ class Cart extends \lithium\data\Model{
 	 */
 	public static function get() {
 		$storage = static::$_storage;
-		$cart = $storage::read("Cart", array('name' => 'ChowlyCart'));
+		$cart = $storage::read("Cart", static::$_options);
 		
-		if($storage::read("CartFreeze", array('name'=>'ChowlyCart'))){
+		if($storage::read("CartLock", static::$_options)){
+			return false;
+		}
+		if($storage::read("CartFreeze", static::$_options)){
 			return $cart;
 		}
 		
@@ -82,16 +113,23 @@ class Cart extends \lithium\data\Model{
 	 */
 	public static function clear($key = '') {
 		$storage = static::$_storage;
-		
-		if($storage::read("CartFreeze", array('name'=>'ChowlyCart'))){
+
+		if($storage::read("CartLock", static::$_options)){
+			return false;
+		}
+
+		if($storage::read("CartFreeze", static::$_options)){
 			return false;
 		}
 		
 		$sessionKey = 'Cart';
-		if (!empty($key)) {
-			$sessionKey .= ".{$key}"; 
+		if (empty($key)) {
+			$storage::write("Cart", array(), static::$_options);
+		}else{
+			$sessionKey .= ".{$key}";
+			$storage::delete($sessionKey, static::$_options);
 		}
-		$storage::delete($sessionKey, array('name' => 'ChowlyCart'));
+		
 	}
 }
 ?>

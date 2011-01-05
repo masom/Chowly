@@ -1,6 +1,8 @@
 <?php
 namespace chowly\models;
 
+use chowly\extensions\data\InventoryException;
+
 class Inventory extends \lithium\data\Model{
 	protected $_schema = array(
 		'_id' => array('type'=>'id'),
@@ -40,13 +42,17 @@ class Inventory extends \lithium\data\Model{
 		);
 		
 		$result = static::_connection()->connection->command($command);
-		if(!$result || !isset($result['ok'])){
-			return false;
+		
+		if(!$result || !$result['ok']){
+			throw new InventoryException();
 		}
+		
+		debug($result);die;
+
 		$inventory = new \lithium\data\entity\Document();
 		$inventory->set($result['value']);
-		
-		return array($result['ok'], $inventory);
+
+		return $inventory;
 	}
 	public static function secure($inventory_id){
 		$command = array(
@@ -63,7 +69,7 @@ class Inventory extends \lithium\data\Model{
 		
 		$result = static::_connection()->connection->command($command);
 		if(!$result || !isset($result['ok'])){
-			return false;
+			throw new InventoryException($inventory_id);
 		}		
 		return true;
 	}
@@ -82,8 +88,8 @@ class Inventory extends \lithium\data\Model{
 		
 		$result = static::_connection()->connection->command($command);
 		if(!$result || !isset($result['ok'])){
-			return false;
-		}		
+			throw new InventoryException($inventory_id);
+		}	
 		return true;
 	}
 	public static function createForOffer($offer_id){

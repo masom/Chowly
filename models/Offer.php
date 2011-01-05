@@ -3,7 +3,8 @@ namespace chowly\models;
 
 
 use chowly\models\Inventory;
-use \lithium\storage\Session;
+use chowly\extensions\data\InventoryException;
+use chowly\extensions\data\OfferException;
 
 class Offer extends \lithium\data\Model{
 	protected static $_states = array('published'=>'published', 'unpublished'=>'unpublished');
@@ -73,21 +74,23 @@ class Offer extends \lithium\data\Model{
 		);
 		$offer = static::first(array('conditions'=> $conditions));
 		if(!$offer){
-			return array('successfull'=>false, 'error'=>'not_found');
+			throw new OfferException("Offer not found.");
 		}
-		$inventory = Inventory::reserve($customer_id,$offer_id);
-		if(is_array($inventory)){
+		
+		try{
+			$inventory = Inventory::reserve($customer_id,$offer_id);
 			$offer->availability--;
 			if($offer->availability <= 0){
 				$offer->availability = 0;
 			}
 			$offer->save(null,array('validate'=>false));
-			return array('successfull'=>true, 'inventory_id' => $inventory->_id);
-		}else{
+		}catch(InventoryException $e){
 			$offer->availability = 0;
 			$offer->save(null, array('validate' => false));
-			return array('successfull'=>false, 'error'=>'sold_out');
+			throw $e;
 		}
+		
+		return $inventory->_id;
 	}
 	
 	public function publish($entity){

@@ -6,6 +6,7 @@ use chowly\models\Cart;
 use chowly\models\Inventory;
 use chowly\models\Venue;
 use chowly\models\Offer;
+use chowly\extensions\data\InventoryException;
 
 class CheckoutsController extends \lithium\action\Controller{
 	public function confirm(){
@@ -32,12 +33,18 @@ class CheckoutsController extends \lithium\action\Controller{
 		}
 
 		//Secure inventory so it does not expire while in checkout.
-		foreach($cart as $offer_id => $attr){
-			Inventory::secure($attr['inventory_id']);
+		try{
+			foreach($cart as $offer_id => $attr){
+				Inventory::secure($attr['inventory_id']);
+			}
+		}catch(InventoryException $e){
+			//TODO:Log failure
+			//TODO: Do we fail at that point or still sell the item?
 		}
 		
 		//TODO: Credit Card data processing...
 		if($this->request->data){
+			Cart::lock();
 			//TODO: Send email
 			//TODO: Log transaction for history/accounting
 			//TODO: HERE BE CC Processing
@@ -53,6 +60,7 @@ class CheckoutsController extends \lithium\action\Controller{
 				// A few concurency errors is acceptable.
 				Inventory::purchase($attr['inventory_id']);
 			}
+			Cart::unlock();
 			Cart::unfreeze();
 			Cart::clear();
 			$this->redirect("Checkouts::success");
