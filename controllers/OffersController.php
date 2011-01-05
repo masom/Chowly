@@ -42,9 +42,9 @@ class OffersController extends \lithium\action\Controller{
 			FlashMessage::set("Missing data.");
 			$this->redirect(array("Offers::index"));
 		}
-		
+
 		$cart = Cart::get();
-		if(isset($this->request->id,$cart)){
+		if(isset($cart['$this->request->id'])){
 			$this->redirect(array('Checkouts::confirm'));
 		}
 		

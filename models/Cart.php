@@ -39,9 +39,9 @@ class Cart extends \lithium\data\Model{
 	 * @param var $offer_id
 	 * @return bool
 	 */
-	public static function add($offer_id){
+	public static function add($offer_id, $inventory_id){
 		$storage = static::$_storage;
-		
+
 		if($storage::read("CartFreeze", array('name'=>'ChowlyCart'))){
 			return false;
 		}
@@ -50,7 +50,7 @@ class Cart extends \lithium\data\Model{
 			return true;
 		}
 		
-		return $storage::write("Cart.{$offer_id}", array('expires'=> time() + 15 * 60), array('name' => 'ChowlyCart'));
+		return $storage::write("Cart.{$offer_id}", array('inventory_id'=>$inventory_id,'expires'=> time() + 15 * 60), array('name' => 'ChowlyCart'));
 	}
 	
 	/**

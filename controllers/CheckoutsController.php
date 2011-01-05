@@ -28,7 +28,7 @@ class CheckoutsController extends \lithium\action\Controller{
 		$cart = Cart::get();		
 		if(empty($cart)){
 			FlashMessage::set("Empty Cart!");
-			$this->redirect($this->referer());
+			$this->redirect($this->request->referer());
 		}
 
 		//Secure inventory so it does not expire while in checkout.
