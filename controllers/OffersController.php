@@ -51,11 +51,13 @@ class OffersController extends \lithium\action\Controller{
 		}
 	}
 	public function confirm(){
-		$cart = Cart::get();
+		//some cart cleanup...
+		$cart = Cart::get();		
 		if(empty($cart)){
 			FlashMessage::set("Empty Cart!");
 			$this->redirect($this->request->referer());
 		}
+		
 		$conditions = array(
 			'_id' => array_keys($cart)
 		);
