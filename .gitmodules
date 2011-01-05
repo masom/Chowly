@@ -1,0 +1,3 @@
+[submodule "libraries/li3_flash_message"]
+	path = libraries/li3_flash_message
+	url = code@rad-dev.org:li3_flash_message.git
