@@ -12,6 +12,7 @@ use \lithium\net\http\Router;
 class CheckoutsController extends \chowly\extensions\action\Controller{
 	protected function _init(){
 		parent::_init();
+		/** lets wait before requiring this
 		if(!$this->request->is('ssl')){
 			$this->redirect(Router::match(
 				$this->request->params,
@@ -19,18 +20,16 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 				array('absolute' => true, 'scheme'=>'https://')
 				)
 			);
-		}
+		}*/
 	}
 	public function confirm(){
-		//some cart cleanup...
-		$cart = Cart::get();
-		if(empty($cart)){
+		if(Cart::isEmpty()){
 			FlashMessage::set("Empty Cart!");
 			$this->redirect("Offers::index");
 		}
 		
 		$conditions = array(
-			'_id' => array_keys($cart)
+			'_id' => array_keys(Cart::get())
 		);
 		$offers = Offer::all(compact('conditions'));
 		return compact('offers', 'cart');
@@ -38,20 +37,23 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 	public function checkout(){
 		
 		Cart::freeze();
-		$cart = Cart::get();		
-		if(empty($cart)){
+		if(Cart::isEmpty()){
+			Cart::unfreeze();
 			FlashMessage::set("Empty Cart!");
 			$this->redirect("Offers::index");
 		}
-
+		
+		Cart::freeze();
+		$cart = Cart::get();
+		
 		//Secure inventory so it does not expire while in checkout.
-		try{
-			foreach($cart as $offer_id => $attr){
+		foreach($cart as $offer_id => $attr){
+			try{
 				Inventory::secure($attr['inventory_id']);
+			}catch(InventoryException $e){
+				//TODO:Log failure
+				//TODO: Do we fail at that point or still sell the item?
 			}
-		}catch(InventoryException $e){
-			//TODO:Log failure
-			//TODO: Do we fail at that point or still sell the item?
 		}
 		
 		//TODO: Credit Card data processing...
@@ -68,16 +70,18 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			}
 			
 			foreach($cart as $offer_id => $attr){
-				//TODO: Add logs of a failure...
-				// A few concurency errors is acceptable.
-				Inventory::purchase($attr['inventory_id']);
+				try{
+					Inventory::purchase($attr['inventory_id']);
+				}catch(InventoryException $e){
+					//TODO: Add logs of a failure...
+				}
 			}
+			
 			Cart::unlock();
 			Cart::unfreeze();
 			Cart::clear();
 			$this->redirect("Checkouts::success");
 		}
-		
 	}
 	public function success(){}
 }

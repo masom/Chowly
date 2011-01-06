@@ -57,6 +57,13 @@ class Cart extends \lithium\data\Model{
 		}
 		return true;
 	}
+	
+	public static function contain($offer_id){
+		$storage = static::$_storage;
+		static::clean();
+		return $storage::check("Cart.{$offer_id}", static::$_options);
+	}
+	
 	/**
 	 * Add a cart item
 	 * @param var $offer_id
@@ -64,7 +71,6 @@ class Cart extends \lithium\data\Model{
 	 */
 	public static function add($offer_id, $inventory_id){
 		$storage = static::$_storage;
-
 		
 		if($storage::read("CartLock", static::$_options)){
 			return false;
@@ -74,10 +80,9 @@ class Cart extends \lithium\data\Model{
 			return false;
 		}
 		
-		if($storage::check("Cart.{$offer_id}", static::$_options)){
+		if(static::contain($offer_id)){
 			return true;
 		}
-		
 		return $storage::write("Cart.{$offer_id}", array('inventory_id'=>$inventory_id,'expires'=> time() + 15 * 60), static::$_options);
 	}
 	
@@ -87,23 +92,40 @@ class Cart extends \lithium\data\Model{
 	 */
 	public static function get() {
 		$storage = static::$_storage;
-		$cart = $storage::read("Cart", static::$_options);
-		
+
 		if($storage::read("CartLock", static::$_options)){
-			return false;
+			return $storage::read("Cart", static::$_options);
 		}
 		if($storage::read("CartFreeze", static::$_options)){
-			return $cart;
+			return $storage::read("Cart", static::$_options);
 		}
 		
-		$time = time();
-		foreach($cart as $offer => $attr){
+		static::clean();
+		return $storage::read("Cart", static::$_options);
+	}
+	
+	public static function clean(){
+		$storage	= static::$_storage;
+		$time		= time();
+		
+		foreach($storage::read("Cart", static::$_options) as $offer => $attr){
 			if($attr['expires'] < $time){
-				Cart::clear($offer);
-				unset($cart[$offer]);
+				static::clear($offer);
 			}
 		}
-		return $cart; 
+	}
+	public static function isEmpty(){
+		$storage = static::$_storage;
+
+		if($storage::read("CartLock", static::$_options)){
+			return ($storage::read("Cart", static::$_options))? false : true;
+		}
+		if($storage::read("CartFreeze", static::$_options)){
+			return ($storage::read("Cart", static::$_options))? false : true;
+		}
+		
+		static::clean();
+		return ($storage::read("Cart", static::$_options))? false : true;
 	}
 	/**
 	 * Clears one or all items from the storage.

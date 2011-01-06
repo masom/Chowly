@@ -44,10 +44,7 @@ class OffersController extends \chowly\extensions\action\Controller{
 			FlashMessage::set("Missing data.");
 			$this->redirect(array("Offers::index"));
 		}
-		$cart = Cart::get();
-		debug($cart);
-		
-		if(isset($cart[$this->request->id])){
+		if(Cart::contain($this->request->id) ){
 			$this->redirect(array('Checkouts::confirm'));
 		}
 		try{
