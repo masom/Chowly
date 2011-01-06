@@ -7,14 +7,26 @@ use chowly\models\Inventory;
 use chowly\models\Venue;
 use chowly\models\Offer;
 use chowly\extensions\data\InventoryException;
+use \lithium\net\http\Router;
 
-class CheckoutsController extends \lithium\action\Controller{
+class CheckoutsController extends \chowly\extensions\action\Controller{
+	protected function _init(){
+		parent::_init();
+		if(!$this->request->is('ssl')){
+			$this->redirect(Router::match(
+				$this->request->params,
+				$this->request,
+				array('absolute' => true, 'scheme'=>'https://')
+				)
+			);
+		}
+	}
 	public function confirm(){
 		//some cart cleanup...
 		$cart = Cart::get();
 		if(empty($cart)){
 			FlashMessage::set("Empty Cart!");
-			$this->redirect($this->request->referer());
+			$this->redirect("Offers::index");
 		}
 		
 		$conditions = array(
@@ -29,7 +41,7 @@ class CheckoutsController extends \lithium\action\Controller{
 		$cart = Cart::get();		
 		if(empty($cart)){
 			FlashMessage::set("Empty Cart!");
-			$this->redirect($this->request->referer());
+			$this->redirect("Offers::index");
 		}
 
 		//Secure inventory so it does not expire while in checkout.

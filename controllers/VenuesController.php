@@ -5,7 +5,7 @@ use chowly\models\Venue;
 use chowly\models\Offer;
 use li3_flash_message\extensions\storage\FlashMessage;
 
-class VenuesController extends \lithium\action\Controller{
+class VenuesController extends \chowly\extensions\action\Controller{
 	public function index(){
 		$conditions = array('state' => 'published');
 		$venues = Venue::all(compact('conditions'));

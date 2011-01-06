@@ -6,16 +6,16 @@
  * @license       http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
-use lithium\net\http\Router;
-use lithium\core\Environment;
+use \lithium\net\http\Router;
+use \lithium\core\Environment;
 use chowly\models\Image;
-use lithium\action\Response;
+use \lithium\action\Response;
 
 
 Router::connect('/images/{:id:[0-9a-f]{24}}.(jpe?g|png|gif)', array(), function($request) {
 
 	$image = Image::first($request->id);
-	if(!$image){	
+	if(!$image || !$image->file){	
 		header("Status: 404 Not Found");
 		header("HTTP/1.0 404 Not Found");
 		die;

@@ -8,7 +8,7 @@ use chowly\extensions\data\InventoryException;
 use chowly\extensions\data\OfferException;
 use li3_flash_message\extensions\storage\FlashMessage;
 
-class OffersController extends \lithium\action\Controller{
+class OffersController extends \chowly\extensions\action\Controller{
 	
 	public function index(){
 		$offers = Offer::current();
@@ -63,9 +63,6 @@ class OffersController extends \lithium\action\Controller{
 		$this->redirect(array('Checkouts::confirm'));
 	}
 
-	
-	
-	
 	/**
 	 * ADMIN FUNCTIONS BELLOW
 	 */

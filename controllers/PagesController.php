@@ -2,7 +2,7 @@
 
 namespace chowly\controllers;
 
-class PagesController extends \lithium\action\Controller {
+class PagesController extends \chowly\extensions\action\Controller {
 
 	public function view() {
 		$path = func_get_args();
