@@ -44,8 +44,9 @@ class OffersController extends \lithium\action\Controller{
 			FlashMessage::set("Missing data.");
 			$this->redirect(array("Offers::index"));
 		}
-		Cart::clear();
 		$cart = Cart::get();
+		debug($cart);
+		
 		if(isset($cart[$this->request->id])){
 			$this->redirect(array('Checkouts::confirm'));
 		}
@@ -58,7 +59,6 @@ class OffersController extends \lithium\action\Controller{
 			FlashMessage::set("Sorry, The item could not be added to your cart for the following reason: {$e->getMessage()}");
 			$this->redirect($this->request->referer());
 		}
-		debug($reserved);die;
 		Cart::add($this->request->id, $reserved);
 		$this->redirect(array('Checkouts::confirm'));
 	}

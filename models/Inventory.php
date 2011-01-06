@@ -46,8 +46,6 @@ class Inventory extends \lithium\data\Model{
 		if(!$result || !$result['ok']){
 			throw new InventoryException();
 		}
-		
-		debug($result);die;
 
 		$inventory = new \lithium\data\entity\Document();
 		$inventory->set($result['value']);
