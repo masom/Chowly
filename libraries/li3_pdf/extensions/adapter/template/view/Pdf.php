@@ -1,9 +1,11 @@
 <?php
-namespace li3_pdf\extensions\template\view\adapter;
+namespace li3_pdf\extensions\adapter\template\view;
 
 use \lithium\util\String;
 use \lithium\core\Libraries;
 use \lithium\template\TemplateException;
+use li3_pdf\extensions\PdfWrapper;
+
 
 /**
  * 5:52 < nateabele> masom: You *could* have the layout be a file that returns an 
@@ -64,10 +66,15 @@ class Pdf extends \lithium\template\view\Renderer implements \ArrayAccess {
 	protected $_classes = array(
 		'router' => 'lithium\net\http\Router',
 		'media'  => 'lithium\net\http\Media',
+		'pdf' => 'li3_pdf\extensions\template\PdfWrapper'
 	);
 
+	protected $Pdf = null;
+	
 	public function __construct(array $config = array()) {
 		$defaults = array('classes' => array(), 'compile' => false, 'extract' => true);
+		
+		$this->Pdf = new PdfWrapper();
 		parent::__construct($config + $defaults);
 	}
 

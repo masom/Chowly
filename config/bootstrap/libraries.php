@@ -57,6 +57,7 @@ Libraries::add('chowly', array('default' => true));
  */
 Libraries::add('li3_flash_message');
 Libraries::add('tcpdf', array('bootstrap' => false));
+Libraries::add('li3_pdf');
 // Libraries::add('li3_docs');
 
 ?>
