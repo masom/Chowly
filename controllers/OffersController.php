@@ -58,8 +58,7 @@ class OffersController extends \chowly\extensions\action\Controller{
 				'type' => 'pdf',
 				'layout' =>'offers'
 			)
-		);
-		die;
+		);die;
 		return compact('offer','venue');
 	}
 	public function buy(){

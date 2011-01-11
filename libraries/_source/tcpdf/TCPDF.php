@@ -3843,6 +3843,7 @@ class TCPDF {
 		$this->setPageMark();
 		// print page header
 		$this->setHeader();
+		
 		// restore graphic settings
 		$this->setGraphicVars($gvars);
 		// mark this point
@@ -4109,6 +4110,7 @@ class TCPDF {
 				$this->SetXY($this->original_lMargin, $this->header_margin);
 			}
 			$this->SetFont($this->header_font[0], $this->header_font[1], $this->header_font[2]);
+			
 			$this->Header();
 			//restore position
 			if ($this->rtl) {

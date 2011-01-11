@@ -7,19 +7,19 @@ class PdfWrapper extends \tcpdf\TCPDF{
     private $__footer = null;
     
     public function Header(){
-    	$this->__header();
+    	call_user_func($this->__header);
     } 
-
     public function Footer() {
-    	$this->__footer();
+    	call_user_func($this->__footer);
     }
-    public function setHeader($header){
-    	if( $header instanceof Closure){
+    public function setCustomHeader(&$header){
+    	if(is_callable($header)){
     		$this->__header = $header;
     	}
+    	
     }
-    public function setFooter($footer){
-    	if($footer instanceof Closure){
+    public function setCustomFooter(&$footer){
+    	if(is_callable($footer)){
     		$this->__footer = $footer;
     	}
     }

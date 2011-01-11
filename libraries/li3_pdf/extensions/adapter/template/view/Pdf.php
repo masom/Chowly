@@ -46,7 +46,7 @@ class Pdf extends \lithium\template\view\Renderer implements \ArrayAccess {
 	protected $_classes = array(
 		'router' => 'lithium\net\http\Router',
 		'media'  => 'lithium\net\http\Media',
-		'pdf' => 'li3_pdf\extensions\template\PdfWrapper'
+		'pdf' => 'li3_pdf\extensions\PdfWrapper'
 	);
 
 	protected $Pdf = null;
@@ -66,7 +66,7 @@ class Pdf extends \lithium\template\view\Renderer implements \ArrayAccess {
 	 */
 	public function render($template, $data = array(), array $options = array()) {
 		if(!$this->Pdf){
-			$this->Pdf = new PdfWrapper();
+			$this->Pdf = new PdfWrapper(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		}
 		$defaults = array('context' => array());
 		$options += $defaults;
@@ -81,9 +81,7 @@ class Pdf extends \lithium\template\view\Renderer implements \ArrayAccess {
 		} elseif ($this->_view) {
 			extract((array) $this->_view->outputFilters, EXTR_OVERWRITE);
 		}
-		ob_start();
 		include $template__;
-		return ob_get_clean();
 	}
 
 	/**
