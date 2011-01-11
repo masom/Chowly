@@ -18,5 +18,5 @@ $this->Pdf->setFooter(function(){
 
 echo $this->content;
 
-echo $tcpdf->Output('filename.pdf', 'D');
+echo $this->Pdf->Output('filename.pdf', 'D');
 ?>

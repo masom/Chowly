@@ -42,18 +42,24 @@ class OffersController extends \chowly\extensions\action\Controller{
 		
 		$view  = new View(array(
 			'loader' => 'Pdf',
-			'renderer' => 'Pdf'
+			'renderer' => 'Pdf',
+			'paths' => array(
+				'template' => '{:library}/views/{:controller}/{:template}.{:type}.php',
+       	    	'layout'   => '{:library}/views/layouts/{:layout}.{:type}.php',
+        	)
 		));
+
 		echo $view->render(
 			'all',
 			array('content' => compact('offer','venue')),
 			array(
+				'controller' => 'offers',
 				'template'=>'view',
 				'type' => 'pdf',
 				'layout' =>'offers'
 			)
 		);
-		die();
+		die;
 		return compact('offer','venue');
 	}
 	public function buy(){

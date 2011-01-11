@@ -40,7 +40,7 @@
  * @package com.tecnick.tcpdf
  * @since 2.1.000 (2008-01-08)
 */
-
+namespace tcpdf;
 /**
 * This is a PHP class containing Unicde data for TCPDF library
 * @name TCPDF_UNICODE_DATA

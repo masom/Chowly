@@ -1,16 +1,16 @@
 <?php
-namespace li3_pdf\extensions\template;
-use TCPDF;
+namespace li3_pdf\extensions;
+use \tcpdf\TCPDF;
 
-class PdfWrapper extends TCPDF{
+class PdfWrapper extends \tcpdf\TCPDF{
     private $__header = null;
     private $__footer = null;
     
-    protected function Header(){
+    public function Header(){
     	$this->__header();
     } 
 
-    protected function Footer() {
+    public function Footer() {
     	$this->__footer();
     }
     public function setHeader($header){

@@ -7,26 +7,6 @@ use \lithium\template\TemplateException;
 use li3_pdf\extensions\PdfWrapper;
 
 
-/**
- * 5:52 < nateabele> masom: You *could* have the layout be a file that returns an 
-                   array containing two closures.
-15:52 -!- asper [~asper@2a01:e35:2ee2:9460:6ef0:49ff:fe5e:dc44] has quit [Quit: 
-          http://www.asper.fr]
-15:52 -!- asper [~asper@car75-6-82-238-41-70.fbx.proxad.net] has joined #li3
-15:53 < nateabele> Then you'd just get the name of the layout from a 
-                   File->template() lookup, say $layout = include $layoutFile, 
-                   and then call $layout['header']() and $layout['footer']() 
-                   from your custom class.
-15:54 < nateabele> Then you won't have to have each person write their own 
-                   custom class.
-15:54 < masom> yeah that could work
-15:55 < masom> i'll see what gives, publish it and look for feedback
-15:56 < masom> thanks
- * Enter description here ...
- * @author msamson
- *
- */
-
 class Pdf extends \lithium\template\view\Renderer implements \ArrayAccess {
 
 	/**
@@ -73,8 +53,6 @@ class Pdf extends \lithium\template\view\Renderer implements \ArrayAccess {
 	
 	public function __construct(array $config = array()) {
 		$defaults = array('classes' => array(), 'compile' => false, 'extract' => true);
-		
-		$this->Pdf = new PdfWrapper();
 		parent::__construct($config + $defaults);
 	}
 
@@ -87,6 +65,9 @@ class Pdf extends \lithium\template\view\Renderer implements \ArrayAccess {
 	 * @return string
 	 */
 	public function render($template, $data = array(), array $options = array()) {
+		if(!$this->Pdf){
+			$this->Pdf = new PdfWrapper();
+		}
 		$defaults = array('context' => array());
 		$options += $defaults;
 
@@ -94,7 +75,7 @@ class Pdf extends \lithium\template\view\Renderer implements \ArrayAccess {
 		$this->_data = (array) $data + $this->_vars;
 		$template__ = $template;
 		unset($options, $template, $defaults, $data);
-
+		
 		if ($this->_config['extract']) {
 			extract($this->_data, EXTR_OVERWRITE);
 		} elseif ($this->_view) {

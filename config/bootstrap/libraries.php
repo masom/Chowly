@@ -36,8 +36,6 @@ require LITHIUM_LIBRARY_PATH . '/lithium/template/View.php';
 require LITHIUM_LIBRARY_PATH . '/lithium/template/view/Renderer.php';
 require LITHIUM_LIBRARY_PATH . '/lithium/template/view/Compiler.php';
 require LITHIUM_LIBRARY_PATH . '/lithium/template/view/adapter/File.php';
-require LITHIUM_LIBRARY_PATH . '/lithium/storage/Cache.php';
-require LITHIUM_LIBRARY_PATH . '/lithium/storage/cache/adapter/Apc.php';
 
 /**
  * Add the Lithium core library.  This sets default paths and initializes the autoloader.  You
@@ -56,7 +54,6 @@ Libraries::add('chowly', array('default' => true));
  * Add some plugins
  */
 Libraries::add('li3_flash_message');
-Libraries::add('tcpdf', array('bootstrap' => false));
 Libraries::add('li3_pdf');
 // Libraries::add('li3_docs');
 
