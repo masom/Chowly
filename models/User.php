@@ -1,5 +1,6 @@
 <?php
 namespace chowly\models;
+use \lithium\util\Validator;
 
 class User extends \lithium\data\Model{
 	public $_schema = array(
@@ -28,6 +29,16 @@ class User extends \lithium\data\Model{
 	
 	private $_roles = array('admin','staff','venue','customer');
 	
+	public static function preRegister($data){
+		Validator::add('unique', function($value){
+			
+		});
+		$user = static::create();
+		$data = array_intersect($data, array('email','zip'));
+		debug($data);
+		$user->set($data);
+		return $user->save();
+	}
 	public static function register($data){
 		$user = static::create();
 		$user->set($data);

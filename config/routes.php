@@ -31,21 +31,12 @@ Router::connect('/images/{:id:[0-9a-f]{24}}.(jpe?g|png|gif)', array(), function(
  * its action called 'view', and we pass a param to select the view file
  * to use (in this case, /app/views/pages/home.html.php)...
  */
-Router::connect('/', array('Offers::index'));
+Router::connect('/', array('Landings::pre'));
 
 /**
  * ...and connect the rest of 'Pages' controller's urls.
  */
 Router::connect('/pages/{:args}', 'Pages::view');
-
-/**
- * Connect the testing routes.
- */
-if (!Environment::is('production')) {
-	Router::connect('/test/{:args}', array('controller' => 'lithium\test\Controller'));
-	Router::connect('/test', array('controller' => 'lithium\test\Controller'));
-}
-
 /**
  * Finally, connect the default routes.
  */

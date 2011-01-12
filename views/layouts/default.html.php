@@ -12,20 +12,17 @@
 		<div id="header">
 			<div id="logo">
 				<div class="info">
-					About Us | Your Restaurant Here | Contact Us
+					<?=$this->html->link('About Us',array('Pages::view','args'=>'about'));?>
+					&nbsp;|&nbsp;
+					<?=$this->html->link('Your Restaurant Here', array('Pages::view', 'args'=>'contact'));?>
+					&nbsp;|&nbsp;
+					<?=$this->html->link('Contact Us', array('Pages::view','args'=>'contact'))?>
 				</div>
-				<?php echo $this->html->link($this->html->image('logo.png', array('width' =>'150px;','alt'=>'Logo')), array('Offers::index'),array('escape'=>false));?>
+				<?php echo $this->html->link($this->html->image('logo.png', array('width' =>'150px;','alt'=>'Logo')), array('Landings::pre'),array('escape'=>false));?>
 				<h2>
 					Pick. Eat. Save.
 				</h2>
 			</div>
-			<?php if(isset($breadCrumbs)):?>
-				<h3><?php echo $this->html->link('Home', array('Pages::view', 'args'=> array('home')));?>
-					<?php foreach($breadCrumbs as $crumb):?>
-					&gt; <?php echo $crumb ?>
-					<?php endforeach;?>
-				</h3>
-			<?php endif;?>
 		</div>
 		<div id="content">
 			<?=$this->flashMessage->output(); ?>
