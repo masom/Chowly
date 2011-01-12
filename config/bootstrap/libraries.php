@@ -54,7 +54,6 @@ Libraries::add('chowly', array('default' => true));
  * Add some plugins
  */
 Libraries::add('li3_flash_message');
-Libraries::add('li3_pdf');
 // Libraries::add('li3_docs');
 
 ?>
