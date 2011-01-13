@@ -56,6 +56,9 @@ Dispatcher::applyFilter('run', function($self, $params, $chain) {
 Dispatcher::applyFilter('run', function($self, $params, $chain){
 	return $chain->next($self, $params, $chain);	
 });
+Validator::add('zip', function($value){
+	return preg_match('/^[ABCEGHJKLMNPRSTVXY]\d[A-Z]\s?\d[A-Z]\d$/i',$value);
+});
 /**
  * Adds created and modified dates.
  * Updates modified if created is present.

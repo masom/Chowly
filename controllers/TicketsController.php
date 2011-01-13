@@ -2,6 +2,7 @@
 namespace chowly\controllers;
 
 use chowly\models\Ticket;
+use li3_flash_message\extensions\storage\FlashMessage;
 
 class TicketsController extends \chowly\extensions\action\Controller{
 	public function add(){

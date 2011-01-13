@@ -35,10 +35,6 @@ class User extends \lithium\data\Model{
 			return true;
 		});
 		
-		Validator::add('zip', function($value){
-			return preg_match('/^[ABCEGHJKLMNPRSTVXY]\d[A-Z]\s?\d[A-Z]\d$/i',$value);
-		});
-		
 		$entity->set($data);
 		$entity->role = 'customer';
 		return $entity->save(null,array('whitelist'=>array('email','zip','role')));
