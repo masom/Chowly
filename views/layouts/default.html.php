@@ -9,26 +9,34 @@
 </head>
 <body>
 	<div id="container">
-		<div id="header">
-			<div id="logo">
-				<div class="info">
-					<?=$this->html->link('About Us',array('Pages::view','args'=>'about'));?>
-					&nbsp;|&nbsp;
-					<?=$this->html->link('Your Restaurant Here', array('Pages::view', 'args'=>'contact'));?>
-					&nbsp;|&nbsp;
-					<?=$this->html->link('Contact Us', array('Pages::view','args'=>'contact'))?>
+		<div id="topbar">
+			
+		</div>
+		
+		<div id="content-wrapper">
+			<div id="header">
+				<div id="logo">
+					<div class="info">
+						<?=$this->html->link('About Us',array('Pages::view','args'=>'about'));?>
+						&nbsp;|&nbsp;
+						<?=$this->html->link('Your Restaurant Here', array('Pages::view', 'args'=>'contact'));?>
+						&nbsp;|&nbsp;
+						<?=$this->html->link('Contact Us', array('Pages::view','args'=>'contact'))?>
+					</div>
+					<?php echo $this->html->link($this->html->image('logo.png', array('width' =>'150px;','alt'=>'Logo')), array('Landings::pre'),array('escape'=>false));?>
+					<h2>
+						Pick. Eat. Save.
+					</h2>
 				</div>
-				<?php echo $this->html->link($this->html->image('logo.png', array('width' =>'150px;','alt'=>'Logo')), array('Landings::pre'),array('escape'=>false));?>
-				<h2>
-					Pick. Eat. Save.
-				</h2>
+			</div>
+			<div id="content">
+				<?=$this->flashMessage->output(); ?>
+				<?php echo $this->content(); ?>
 			</div>
 		</div>
-		<div id="content">
-			<?=$this->flashMessage->output(); ?>
-			<?php echo $this->content(); ?>
-			<br style="clear:both;"/>
-		</div>
+		<br style="clear: both;"/>
+	</div>
+	<div id="footer-container">
 		<div id="footer">
 			<strong>Unbeatable Deals for Local Dining</strong>
 			<p>Chowly is an easy way to get discounts while discovering restaurants in ottawa.</p>
