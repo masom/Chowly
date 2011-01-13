@@ -23,9 +23,10 @@ h1, h2, h3, h4, h5, h6 {
 	font-weight:normal;
 	color:#111;
 	line-height: 1;
+	margin: 0.5em 0;
 }
 h1 { font-size: 2.2em; }
-h2, h5 { font-size: 1.8em; color: #666; }
+h2, h5 { font-size: 1.8em; color: #666; margin-top: 2em; }
 h3, h6 { font-size: 1.6em; color: #00a8e6; }
 h4 { font-size: 1.4em; }
 h5 { font-size: 1.2em; }
@@ -89,11 +90,14 @@ dd {
 	width: 817px;
 	margin-left: auto;
 	margin-right: auto;
-	margin-bottom: 10px;
 	clear: both;
+}
+#container{
+	margin-bottom: 50px;
 }
 #content-wrapper{
 	background-color: #fff;
+	padding-bottom: 10px;
 }
 #header, #content{
 	margin: 10px;
@@ -126,6 +130,7 @@ dd {
 #content{
 	background-color: #fff;	
 	min-height: 500px;
+	padding-bottom: 10px;
 }
 #content-header h1{
 	margin:0;
@@ -144,11 +149,12 @@ dd {
 }
 /*-- Footer --*/
 #footer-container{
-	
+	width: 100%;
 	text-align: center;
 	color: #ffffff;
 	background-color: #000;
-	height: 80px;
+	clear: both;
+	min-height: 80px;
 }
 #footer{
 	margin-left: auto;
@@ -218,6 +224,10 @@ input, textarea, button {
 	color: #454545;
 	font-size: 1em;
 	line-height: 1.25em;
+}
+input[type=image]{
+	border: none;
+	padding:0;
 }
 input[type=text], input[type=password], input[type=submit], textarea {
 	clear: both;

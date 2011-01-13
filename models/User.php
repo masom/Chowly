@@ -1,5 +1,6 @@
 <?php
 namespace chowly\models;
+
 use \lithium\util\Validator;
 
 class User extends \lithium\data\Model{
@@ -11,16 +12,12 @@ class User extends \lithium\data\Model{
 		'created' => array('type'=>'date')
 	);
 	public $validates = array(
-		'name' => array(
-			array('notEmpty', 'message' => 'Please enter your name'),
-			array('lenghtBetween', 'min' => 1, 'max' => 255, 'message' => 'Please enter a name between 1 and 255 characters')
-		),
 		'email' => array(
-			array('notEmpty', 'message' => 'Email is empty.'),
-			array('email', 'message' => 'Email is not valid.')
+			array('email', 'message' => 'Email is not valid.'),
+			array('unique', 'message' => 'Email already registered.')
 		),
-		'password' => array(
-			array('notEmpty','message' => 'Password is empty.')
+		'zip' => array(
+			array('zip', 'skipEmpty'=>true, 'message' => 'Invalid Canadian postal code.')
 		),
 		'role' => array(
 			array('inList', 'list' => array('admin','staff','venue', 'customer'))	
@@ -29,15 +26,22 @@ class User extends \lithium\data\Model{
 	
 	private $_roles = array('admin','staff','venue','customer');
 	
-	public static function preRegister($data){
+	public function preRegister($entity, $data){
+		
 		Validator::add('unique', function($value){
-			
+			if(User::first(array('conditions'=>array('email'=>$value)))){
+				return false;
+			}
+			return true;
 		});
-		$user = static::create();
-		$data = array_intersect($data, array('email','zip'));
-		debug($data);
-		$user->set($data);
-		return $user->save();
+		
+		Validator::add('zip', function($value){
+			return preg_match('/^[ABCEGHJKLMNPRSTVXY]\d[A-Z]\s?\d[A-Z]\d$/i',$value);
+		});
+		
+		$entity->set($data);
+		$entity->role = 'customer';
+		return $entity->save(null,array('whitelist'=>array('email','zip','role')));
 	}
 	public static function register($data){
 		$user = static::create();

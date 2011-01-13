@@ -21,7 +21,7 @@
 						&nbsp;|&nbsp;
 						<?=$this->html->link('Your Restaurant Here', array('Pages::view', 'args'=>'contact'));?>
 						&nbsp;|&nbsp;
-						<?=$this->html->link('Contact Us', array('Pages::view','args'=>'contact'))?>
+						<?=$this->html->link('Contact Us', array('Tickets::add'))?>
 					</div>
 					<?php echo $this->html->link($this->html->image('logo.png', array('width' =>'150px;','alt'=>'Logo')), array('Landings::pre'),array('escape'=>false));?>
 					<h2>
@@ -34,7 +34,6 @@
 				<?php echo $this->content(); ?>
 			</div>
 		</div>
-		<br style="clear: both;"/>
 	</div>
 	<div id="footer-container">
 		<div id="footer">
