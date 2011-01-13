@@ -86,26 +86,30 @@ dt {
 dd {
 	margin-left: 1em;
 }
+#container{
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -80px;
+}
 #container, #footer{
 	width: 817px;
 	margin-left: auto;
 	margin-right: auto;
 	clear: both;
 }
-#container{
-	margin-bottom: 50px;
-}
+
 #content-wrapper{
-	background-color: #fff;
+	min-height: 500px;
 	padding-bottom: 10px;
+	margin-bottom: 20px;
+	background-color: #fff;
 }
-#header, #content{
+#content{
 	margin: 10px;
 }
 #header{
 	margin-bottom: 50px;
-	margin-top: 10px;
-	padding-top: 10px;
 }
 #header h1 {
 	font-size: 35px;
@@ -117,26 +121,14 @@ dd {
 	margin:0;
 	color: #888;
 	font-size: 22px;
-	line-height: 28px;
 }
 #header .info{
 	float: right;
 	margin: 0;
 	padding: 0;
 	color: #888;
-	margin-top: 0px;
 }
 /*--- Content ---*/
-#content{
-	background-color: #fff;	
-	min-height: 500px;
-	padding-bottom: 10px;
-}
-#content-header h1{
-	margin:0;
-	padding:0;
-	margin-right: 20px;
-}
 #content-header{
 	text-align: right;
 	margin-left: 10px;
@@ -148,13 +140,17 @@ dd {
 	margin: 10px;
 }
 /*-- Footer --*/
+#footer-container, .push{
+	height: 80px;
+}
 #footer-container{
 	width: 100%;
 	text-align: center;
 	color: #ffffff;
 	background-color: #000;
 	clear: both;
-	min-height: 80px;
+	overflow:hidden;
+	
 }
 #footer{
 	margin-left: auto;

@@ -9,10 +9,6 @@
 </head>
 <body>
 	<div id="container">
-		<div id="topbar">
-			
-		</div>
-		
 		<div id="content-wrapper">
 			<div id="header">
 				<div id="logo">
@@ -34,6 +30,7 @@
 				<?php echo $this->content(); ?>
 			</div>
 		</div>
+		<div class="push"></div> 
 	</div>
 	<div id="footer-container">
 		<div id="footer">
