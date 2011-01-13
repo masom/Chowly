@@ -15,7 +15,7 @@
 					<div class="info">
 						<?=$this->html->link('About Us',array('Pages::view','args'=>'about'));?>
 						&nbsp;|&nbsp;
-						<?=$this->html->link('Your Restaurant Here', array('Pages::view', 'args'=>'contact'));?>
+						<?=$this->html->link('Your Restaurant Here', array('Tickets::add'));?>
 						&nbsp;|&nbsp;
 						<?=$this->html->link('Contact Us', array('Tickets::add'))?>
 					</div>
