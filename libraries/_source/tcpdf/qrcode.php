@@ -77,7 +77,7 @@
  * @author Nicola Asuni
  * @version 1.0.009
  */
-
+namespace tcpdf;
 // definitions
 if (!defined('QRCODEDEFS')) {
 

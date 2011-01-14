@@ -46,6 +46,8 @@
 	* @version 1.0.012
 	* @author Nicola Asuni
 	*/
+
+namespace tcpdf;
 class TCPDFBarcode {
 
 	/**

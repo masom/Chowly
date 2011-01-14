@@ -20,8 +20,25 @@ $this->Pdf->setCustomLayout(array(
 $this->Pdf->SetMargins(10,30,10);
 $this->Pdf->SetAuthor('Chowly: Pick, Eat, Save.');
 $this->Pdf->SetAutoPageBreak(true);
+$this->Pdf->SetTextColor(0,0,0);
+$this->Pdf->SetFillColor(255,255,255);
 
 $this->Pdf->AddPage();
 
-$this->Pdf->Cell(200,200, "TEST", 0, false, 'L');
+$this->Pdf->SetXY(10,20);
+$this->Pdf->Cell(0, 100, '', 1, 'L', 1, 0, '','',true);
+$style = array(
+    'border' => 1,
+    'vpadding' => 'auto',
+    'hpadding' => 'auto',
+    'fgcolor' => array(0,0,0),
+    'bgcolor' => false, //array(255,255,255)
+    'module_width' => 1, // width of a single module in points
+    'module_height' => 1 // height of a single module in points
+);
+$this->Pdf->SetXY(175,22);
+$this->Pdf->write2DBarcode("BLEH", 'QRCODE,H', '', '', 20, 20, $style, 'N');
+$this->Pdf->Ln();
+
+$this->Pdf->Cell(0,8,'The Fine Print');
 ?>

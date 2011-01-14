@@ -38,7 +38,7 @@
  * @author Nicola Asuni
  * @version 1.0.007
  */
-
+namespace tcpdf;
 	/**
 	* PHP class to creates array representations for 2D barcodes to be used with TCPDF (http://www.tcpdf.org).<br>
 	* @name TCPDFBarcode
