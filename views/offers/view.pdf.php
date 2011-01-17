@@ -1,13 +1,6 @@
 <?php
 $pdf =& $this->Pdf;
 $this->Pdf->setCustomLayout(array(
-	'header'=>function() use($pdf){
-		list($r, $g, $b) = array(200,200,200);
-		$pdf->SetFillColor($r, $g, $b);
-		$pdf->SetTextColor(0 , 0, 0);
-		$pdf->Cell(0,15, 'PDF created using Lithium', 0,1,'C', 1);
-		$pdf->Ln();
-	},
 	'footer'=>function() use($pdf){
 		$footertext = sprintf('Copyright © %d Chowly. All rights reserved.', date('Y'));
 		$pdf->SetY(-20);
@@ -17,6 +10,7 @@ $this->Pdf->setCustomLayout(array(
 	}
 ));
 
+$this->Pdf->SetPrintHeader(false);
 $this->Pdf->SetMargins(10,30,10);
 $this->Pdf->SetAuthor('Chowly: Pick, Eat, Save.');
 $this->Pdf->SetAutoPageBreak(true);
@@ -36,9 +30,53 @@ $style = array(
     'module_width' => 1, // width of a single module in points
     'module_height' => 1 // height of a single module in points
 );
+$this->Pdf->SetXY(20,22);
+$this->Pdf->Image(LITHIUM_APP_PATH.DIRECTORY_SEPARATOR.'webroot'.DIRECTORY_SEPARATOR.'img'.DIRECTORY_SEPARATOR.'logo.png');
 $this->Pdf->SetXY(175,22);
-$this->Pdf->write2DBarcode("BLEH", 'QRCODE,H', '', '', 20, 20, $style, 'N');
+$this->Pdf->write2DBarcode((string)$offer->_id, 'QRCODE,H', '', '', 20, 20, $style, 'N');
+
+$this->Pdf->SetXY(20,22);
+$this->Pdf->SetFontSize(14);
+$this->Pdf->MultiCell(140,0, $offer->name,
+	0, 'L', false, 1, '','',true,0,false,true,20
+);
+$this->Ln();
+
+$this->Pdf->SetFontSize(10);
+$this->Pdf->SetXY(20,42);
+$this->Pdf->MultiCell(140,0, $offer->description,
+	0, 'L', false, 1, 20,'',true,0,false,true,50
+);
 $this->Pdf->Ln();
 
+$this->Pdf->SetFont('', 'B');
+$this->Pdf->Text(20, 92, 'Redeem At:');
+
+$this->Pdf->Ln();
+$this->Pdf->SetFont('', '');
+$this->Pdf->MultiCell(0, 0, $venue->name .",\n". $venue->address,
+	0, 'L', false, 1, 20, '', true, 0, false, true, 20);
+$this->Pdf->Ln();
+
+$this->Pdf->SetY(225);
+$this->Pdf->SetFont('', 'B');
 $this->Pdf->Cell(0,8,'The Fine Print');
+$this->Pdf->Ln();
+$finePrint = str_replace("\n",'', "
+General terms applicable to all Vouchers (unless otherwise set forth below, in Chowly's Terms of Sale, or in the Fine Print): Unless prohibited by applicable law the following restrictions also apply. See below for
+further details. If the promotional offer stated on your coupon has expired, applicable law may require the merchant to allow you to redeem your Voucher
+beyond its expiration date for goods/services equal to the amount you paid for it. If you have gone to the merchant and the merchant has refused to redeem the cash value of your expired Voucher, and if applicable
+law entitles you to such redemption, Chowly will refund the purchase price of the Voucher per its Terms of Sale. Partial Redemptions: If you redeem the Voucher for less than its face value, you only will be entitled to
+a credit or cash equal to the difference between the face value and the amount you redeemed from the merchant if applicable law requires it.If you redeem this Voucher for less than the total face value, you
+will not be entitled to receive any credit or cash for the difference between the face value and the amount you redeemed, (unless otherwise required by applicable law). You will only be entitled to a redemption value
+equal to the amount you paid for the Chowly less the amount actually redeemed. Redemption Value: If not redeemed by the discount voucher expiration date, this coupon will continue to have a redemption value
+equal to the amount you paid (C{$offer->cost}$) at the named merchant for the period specified by applicable law. The redemption value will be reduced by the amount of purchases made. This coupon expiration date above,
+the merchant will, in its discretion: (1) allow you to redeem this Voucher for the product or service specified on the Voucher or (2) allow you to redeem the Voucher to purchase other goods or services from the
+merchant for up to the amount you paid (C{$offer->cost}$) for the Voucher. This Voucher can only can be used for making purchases of goods/services at the named merchant. Merchant is solely responsible for Voucher
+redemption. Vouchers cannot be redeemed for cash or applied as payment to any account unless required by applicable law. Neither Chowly, Inc. nor the named merchant shall be responsible for Coupons
+Vouchers that are lost or damaged. Voucher is for promotional purposes. Use of Vouchers are subject to Chowly's Terms of Sale found at http://www.chowly.com/terms
+");
+$this->Pdf->SetFont('','');
+$this->Pdf->SetFontSize(6);
+$this->Pdf->MultiCell(0,0, $finePrint, 0, 'L');
 ?>

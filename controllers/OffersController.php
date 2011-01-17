@@ -51,7 +51,7 @@ class OffersController extends \chowly\extensions\action\Controller{
 
 		echo $view->render(
 			'all',
-			array('content' => compact('offer','venue')),
+			compact('offer','venue'),
 			array(
 				'controller' => 'offers',
 				'template'=>'view',
