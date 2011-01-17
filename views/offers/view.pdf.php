@@ -30,12 +30,14 @@ $style = array(
     'module_width' => 1, // width of a single module in points
     'module_height' => 1 // height of a single module in points
 );
-$this->Pdf->SetXY(20,22);
-$this->Pdf->Image(LITHIUM_APP_PATH.DIRECTORY_SEPARATOR.'webroot'.DIRECTORY_SEPARATOR.'img'.DIRECTORY_SEPARATOR.'logo.png');
-$this->Pdf->SetXY(175,22);
-$this->Pdf->write2DBarcode((string)$offer->_id, 'QRCODE,H', '', '', 20, 20, $style, 'N');
+$this->Pdf->SetXY(170,22);
+$this->Pdf->write2DBarcode((string)$offer->_id, 'QRCODE,H', '', '', 25, 25, $style, 'N');
 
-$this->Pdf->SetXY(20,22);
+$this->Pdf->Image(LITHIUM_APP_PATH.DIRECTORY_SEPARATOR.'webroot'.DIRECTORY_SEPARATOR.'img'.DIRECTORY_SEPARATOR.'logo.png',
+	20,22, 30,0, 'PNG', false, '', true
+);
+
+$this->Pdf->SetXY(20,40);
 $this->Pdf->SetFontSize(14);
 $this->Pdf->MultiCell(140,0, $offer->name,
 	0, 'L', false, 1, '','',true,0,false,true,20
@@ -43,19 +45,28 @@ $this->Pdf->MultiCell(140,0, $offer->name,
 $this->Ln();
 
 $this->Pdf->SetFontSize(10);
-$this->Pdf->SetXY(20,42);
+$this->Pdf->SetXY(20,60);
 $this->Pdf->MultiCell(140,0, $offer->description,
 	0, 'L', false, 1, 20,'',true,0,false,true,50
 );
-$this->Pdf->Ln();
 
 $this->Pdf->SetFont('', 'B');
 $this->Pdf->Text(20, 92, 'Redeem At:');
 
+$this->Pdf->Text(110,92, 'General Conditions:');
 $this->Pdf->Ln();
+
 $this->Pdf->SetFont('', '');
-$this->Pdf->MultiCell(0, 0, $venue->name .",\n". $venue->address,
-	0, 'L', false, 1, 20, '', true, 0, false, true, 20);
+$this->Pdf->MultiCell(80, 0, $venue->name .",\n". $venue->address,
+	0, 'L', false, 0, 20, '', true, 0, true, true, 20
+);
+$conditions = "Not valid for cash back (unless required by law).
+Must use in one visit.
+Doesn't cover tax or gratuity.
+Can't be combined with other offers.";
+
+$this->Pdf->SetFontSize(8);
+$this->Pdf->MultiCell(80,0, $conditions, 0, 'L', false, 0, 110, '', true);	
 $this->Pdf->Ln();
 
 $this->Pdf->SetY(225);
