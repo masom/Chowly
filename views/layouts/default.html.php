@@ -35,11 +35,11 @@
 	<div id="footer-container">
 		<div id="footer">
 			<strong>Unbeatable Deals for Local Dining</strong>
-			<p>Chowly is an easy way to get discounts while discovering restaurants in ottawa.</p>
+			<p>Chowly the easiest way to discover local restaurants.</p>
 			<div id="copyright">
-			
+				&copy; 2010 Chowly Inc. All Rights Reserved.
 			</div>
-			&copy; 2010 Chowly Inc. All Rights Reserved.
+			
 		</div>
 	</div>
 </body>
