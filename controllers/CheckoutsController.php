@@ -6,8 +6,11 @@ use chowly\models\Cart;
 use chowly\models\Inventory;
 use chowly\models\Venue;
 use chowly\models\Offer;
+use chowly\models\Purchase;
+
 use chowly\extensions\data\InventoryException;
 use \lithium\net\http\Router;
+use \lithium\template\View;
 
 class CheckoutsController extends \chowly\extensions\action\Controller{
 	protected function _init(){
@@ -62,16 +65,21 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			//TODO: Send email
 			//TODO: Log transaction for history/accounting
 			//TODO: HERE BE CC Processing
-			$transaction = array('id'=>'234DCDAA', 'time' => time(), 'auth'=>'DeC22A335z', 'status'=>'complete');
 			
-			if($transaction['status'] != 'complete'){
+			$data = array('id'=>'234DCDAA', 'time' => time(), 'auth'=>'DeC22A335z');
+			$data += $this->request->data;
+			
+			$purchase = Purchase::create();
+			$purchase->process($this->request->data);
+			
+			if(!$purchase->isComplete()){
 				FlashMessage::set("Some processing errors occured.");
 				return compact('transaction');
 			}
 			
 			foreach($cart as $offer_id => $attr){
 				try{
-					Inventory::purchase($attr['inventory_id']);
+					Inventory::purchase($transaction['id'], $attr['inventory_id']);
 				}catch(InventoryException $e){
 					//TODO: Add logs of a failure...
 				}
@@ -83,6 +91,8 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			$this->redirect("Checkouts::success");
 		}
 	}
-	public function success(){}
+	public function success(){
+		
+	}
 }
 ?>

@@ -1,5 +1,8 @@
 <?php
 namespace chowly\models;
+
+use \lithium\storage\Session;
+
 class Cart extends \lithium\data\Model{
 	/**
 	 * Holds the instance of the session storage class
