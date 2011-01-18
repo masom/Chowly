@@ -9,36 +9,37 @@
 </head>
 <body>
 	<div id="container">
-		<div id="header">
-			<div id="logo">
-				<div class="info">
-					About Us | Your Restaurant Here | Contact Us
+		<div id="content-wrapper">
+			<div id="header">
+				<div id="logo">
+					<div class="info">
+						<?=$this->html->link('About Us',array('Pages::view','args'=>'about'));?>
+						&nbsp;|&nbsp;
+						<?=$this->html->link('Your Restaurant Here', array('Tickets::add'));?>
+						&nbsp;|&nbsp;
+						<?=$this->html->link('Contact Us', array('Tickets::add'))?>
+					</div>
+					<?php echo $this->html->link($this->html->image('logo.png', array('width' =>'150px;','alt'=>'Logo')), array('Offers::index'),array('escape'=>false));?>
+					<h2>
+						Pick. Eat. Save.
+					</h2>
 				</div>
-				<?php echo $this->html->link($this->html->image('logo.png', array('width' =>'150px;','alt'=>'Logo')), array('Offers::index'),array('escape'=>false));?>
-				<h2>
-					Pick. Eat. Save.
-				</h2>
 			</div>
-			<?php if(isset($breadCrumbs)):?>
-				<h3><?php echo $this->html->link('Home', array('Pages::view', 'args'=> array('home')));?>
-					<?php foreach($breadCrumbs as $crumb):?>
-					&gt; <?php echo $crumb ?>
-					<?php endforeach;?>
-				</h3>
-			<?php endif;?>
+			<div id="content">
+				<?=$this->flashMessage->output(); ?>
+				<?php echo $this->content(); ?>
+			</div>
 		</div>
-		<div id="content">
-			<?=$this->flashMessage->output(); ?>
-			<?php echo $this->content(); ?>
-			<br style="clear:both;"/>
-		</div>
+		<div class="push"></div> 
+	</div>
+	<div id="footer-container">
 		<div id="footer">
 			<strong>Unbeatable Deals for Local Dining</strong>
-			<p>Chowly is an easy way to get discounts while discovering restaurants in ottawa.</p>
+			<p>Chowly the easiest way to discover local restaurants.</p>
 			<div id="copyright">
-			
+				&copy; 2010 Chowly Inc. All Rights Reserved.
 			</div>
-			&copy; 2010 Chowly Inc. All Rights Reserved.
+			
 		</div>
 	</div>
 </body>
