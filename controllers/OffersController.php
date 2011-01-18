@@ -7,7 +7,6 @@ use chowly\models\Cart;
 use chowly\extensions\data\InventoryException;
 use chowly\extensions\data\OfferException;
 use li3_flash_message\extensions\storage\FlashMessage;
-use \lithium\template\View;
 
 class OffersController extends \chowly\extensions\action\Controller{
 	
@@ -39,26 +38,6 @@ class OffersController extends \chowly\extensions\action\Controller{
 		$conditions = array('_id' => $offer->venue_id);
 		$venue = Venue::first(compact('conditions'));
 		
-		
-		$view  = new View(array(
-			'loader' => 'Pdf',
-			'renderer' => 'Pdf',
-			'paths' => array(
-				'template' => '{:library}/views/{:controller}/{:template}.{:type}.php',
-       	    	'layout'   => '{:library}/views/layouts/{:layout}.{:type}.php',
-        	)
-		));
-
-		echo $view->render(
-			'all',
-			compact('offer','venue'),
-			array(
-				'controller' => 'offers',
-				'template'=>'view',
-				'type' => 'pdf',
-				'layout' =>'offers'
-			)
-		);die;
 		return compact('offer','venue');
 	}
 	public function buy(){
