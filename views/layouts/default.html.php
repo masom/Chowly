@@ -13,6 +13,8 @@
 			<div id="header">
 				<div id="logo">
 					<div class="info">
+						<?=$this->html->link('Home',array('Offers::index'));?>
+						&nbsp;|&nbsp;
 						<?=$this->html->link('About Us',array('Pages::view','args'=>'about'));?>
 						&nbsp;|&nbsp;
 						<?=$this->html->link('Your Restaurant Here', array('Tickets::add'));?>
