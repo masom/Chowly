@@ -10,6 +10,6 @@
 	</div>
 	<div class="whitebox">
 		<h3>Transaction Details</h3>
-		<?php debug($transaction);?>
+		<?php debug($purchase);?>
 	</div>
 </div>

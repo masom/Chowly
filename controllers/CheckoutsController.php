@@ -74,7 +74,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			
 			if(!$purchase->isComplete()){
 				FlashMessage::set("Some processing errors occured.");
-				return compact('transaction');
+				return compact('purchase');
 			}
 			
 			foreach($cart as $offer_id => $attr){
@@ -88,11 +88,9 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			Cart::unlock();
 			Cart::unfreeze();
 			Cart::clear();
-			$this->redirect("Checkouts::success");
+			$this->_render['template'] = 'success';
+			return compact('purchase');
 		}
-	}
-	public function success(){
-		
 	}
 }
 ?>
