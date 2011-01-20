@@ -40,7 +40,7 @@
 			<strong>Unbeatable Deals for Local Dining</strong>
 			<p>Chowly the easiest way to discover local restaurants.</p>
 			<div id="copyright">
-				&copy; 2010 Chowly Inc. All Rights Reserved.
+				&copy; 2011 Chowly Inc. All Rights Reserved.
 			</div>
 			
 		</div>

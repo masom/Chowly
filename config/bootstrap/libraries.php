@@ -55,6 +55,10 @@ Libraries::add('chowly', array('default' => true));
  */
 Libraries::add('li3_flash_message');
 Libraries::add('li3_pdf');
+
+Libraries::add('swiftmailer', array(
+	'bootstrap' => 'swift_required.php'
+));
 // Libraries::add('li3_docs');
 
 ?>

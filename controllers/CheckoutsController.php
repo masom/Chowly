@@ -85,6 +85,8 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 				}
 			}
 			
+			//TODO: Send e-mail
+			
 			Cart::unlock();
 			Cart::unfreeze();
 			Cart::clear();
