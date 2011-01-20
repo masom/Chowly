@@ -12,6 +12,10 @@ use chowly\extensions\data\InventoryException;
 use \lithium\net\http\Router;
 use \lithium\template\View;
 
+use \Swift_MailTransport;
+use \Swift_Mailer;
+use \Swift_Message;
+
 class CheckoutsController extends \chowly\extensions\action\Controller{
 	protected function _init(){
 		parent::_init();
@@ -85,7 +89,14 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 				}
 			}
 			
-			//TODO: Send e-mail
+			$transport = Swift_MailTransport::newInstance();
+			$mailer = Swift_Mailer::newInstance($transport);
+			$message = Swift_Message::newInstance();
+			$message->setSubject('Test');
+			$message->setFrom(array('purchases@chowly.com' => 'Chowly'));
+			$message->setTo(array('msamson@chowly.com' => 'Martin Samson'));
+			$message->setBody('Thank you for your purchase at Chowly!');
+			$mailer->send($message);
 			
 			Cart::unlock();
 			Cart::unfreeze();
