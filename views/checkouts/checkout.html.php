@@ -63,6 +63,7 @@ $province = ($purchase->province)? $purchase->province : 'Ontario';
 	<div style="margin-top: 20px; margin-bottom: 40px;">
 		<?=$this->form->field('agreed_tos_privacy', array('template'=>'{:input}', 'type'=>'checkbox', 'value'=>true))?>
 		I agree to the <?=$this->html->link('Terms of Use', array('Pages::view','args'=>'terms'));?> and <?=$this->html->link('Privacy Policy', array('Pages::view','args'=>'privacy'));?>.
+		<?=$this->form->error('agreed_tos_privacy');?>
 	</div>
 	<button id="form_purchase_save" onclick="return false;">Complete Order</button>
 	<button id="form_purchase_cancel" onclick="return false;">Cancel</button>

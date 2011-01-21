@@ -30,7 +30,11 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			);
 		}*/
 	}
-	
+	public function cancel(){
+		Cart::unlock();
+		Cart::unfreeze();
+		$this->redirect(array('Offers::index'));
+	}
 	public function confirm(){
 		if(Cart::isEmpty()){
 			FlashMessage::set("Empty Cart!");
@@ -41,6 +45,8 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			'_id' => array_keys(Cart::get())
 		);
 		$offers = Offer::all(compact('conditions'));
+		
+		$cart = Cart::get();
 		return compact('offers', 'cart');
 	}
 	
@@ -73,6 +79,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			$purchase = Purchase::create();
 			$purchase->status = 'new';
 			$purchase->set($this->request->data);
+			
 			if(!$purchase->validates()){
 				unset($purchase->cc_number, $purchase->cc_sc);
 				return compact('purchase', 'provinces');
