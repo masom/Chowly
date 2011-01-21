@@ -17,6 +17,7 @@ use \Swift_Mailer;
 use \Swift_Message;
 
 class CheckoutsController extends \chowly\extensions\action\Controller{
+		
 	protected function _init(){
 		parent::_init();
 		/** lets wait before requiring this
@@ -29,6 +30,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			);
 		}*/
 	}
+	
 	public function confirm(){
 		if(Cart::isEmpty()){
 			FlashMessage::set("Empty Cart!");
@@ -41,7 +43,9 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		$offers = Offer::all(compact('conditions'));
 		return compact('offers', 'cart');
 	}
+	
 	public function checkout(){
+		$provinces = Purchase::getProvinces();
 		
 		Cart::freeze();
 		if(Cart::isEmpty()){
@@ -65,21 +69,28 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		
 		//TODO: Credit Card data processing...
 		if($this->request->data){
+			
+			$purchase = Purchase::create();
+			$purchase->status = 'new';
+			$purchase->set($this->request->data);
+			if(!$purchase->validates()){
+				unset($purchase->cc_number, $purchase->cc_sc);
+				return compact('purchase', 'provinces');
+			}
+			
 			Cart::lock();
 			//TODO: Send email
 			//TODO: Log transaction for history/accounting
 			//TODO: HERE BE CC Processing
 			
-			$data = array('id'=>'234DCDAA', 'time' => time(), 'auth'=>'DeC22A335z');
-			$data += $this->request->data;
-			
-			$purchase = Purchase::create();
 			$purchase->process($this->request->data);
+			unset($purchase->cc_number, $purchase->cc_sc);
 			
 			if(!$purchase->isComplete()){
 				FlashMessage::set("Some processing errors occured.");
 				return compact('purchase');
 			}
+			
 			
 			foreach($cart as $offer_id => $attr){
 				try{
@@ -89,12 +100,14 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 				}
 			}
 			
+			$to = $purchase->email;
+			
 			$transport = Swift_MailTransport::newInstance();
 			$mailer = Swift_Mailer::newInstance($transport);
 			$message = Swift_Message::newInstance();
-			$message->setSubject('Test');
+			$message->setSubject("Chowly Purchase {:$purchase->-id} confirmation");
 			$message->setFrom(array('purchases@chowly.com' => 'Chowly'));
-			$message->setTo(array('msamson@chowly.com' => 'Martin Samson'));
+			$message->setTo($to);
 			$message->setBody('Thank you for your purchase at Chowly!');
 			$mailer->send($message);
 			
@@ -104,6 +117,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			$this->_render['template'] = 'success';
 			return compact('purchase');
 		}
+		return compact('provinces');
 	}
 }
 ?>

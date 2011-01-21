@@ -12,7 +12,7 @@ class User extends \lithium\data\Model{
 	public $validates = array(
 		'name' => array(
 			array('notEmpty', 'message' => 'Please enter your name'),
-			array('lenghtBetween', 'min' => 1, 'max' => 255, 'message' => 'Please enter a name between 1 and 255 characters')
+			array('lengthBetween', 'min' => 1, 'max' => 255, 'message' => 'Please enter a name between 1 and 255 characters')
 		),
 		'email' => array(
 			array('notEmpty', 'message' => 'Email is empty.'),

@@ -75,11 +75,7 @@ class Cart extends \lithium\data\Model{
 	public static function add($offer_id, $inventory_id){
 		$storage = static::$_storage;
 		
-		if($storage::read("CartLock", static::$_options)){
-			return false;
-		}
-		
-		if($storage::read("CartFreeze", static::$_options)){
+		if($storage::read("CartLock", static::$_options) || $storage::read("CartFreeze", static::$_options)){
 			return false;
 		}
 		
@@ -96,10 +92,7 @@ class Cart extends \lithium\data\Model{
 	public static function get() {
 		$storage = static::$_storage;
 
-		if($storage::read("CartLock", static::$_options)){
-			return $storage::read("Cart", static::$_options);
-		}
-		if($storage::read("CartFreeze", static::$_options)){
+		if($storage::read("CartLock", static::$_options) || $storage::read("CartFreeze", static::$_options)){
 			return $storage::read("Cart", static::$_options);
 		}
 		
@@ -120,10 +113,7 @@ class Cart extends \lithium\data\Model{
 	public static function isEmpty(){
 		$storage = static::$_storage;
 
-		if($storage::read("CartLock", static::$_options)){
-			return ($storage::read("Cart", static::$_options))? false : true;
-		}
-		if($storage::read("CartFreeze", static::$_options)){
+		if($storage::read("CartLock", static::$_options) || $storage::read("CartFreeze", static::$_options)){
 			return ($storage::read("Cart", static::$_options))? false : true;
 		}
 		
@@ -139,11 +129,7 @@ class Cart extends \lithium\data\Model{
 	public static function clear($key = '') {
 		$storage = static::$_storage;
 
-		if($storage::read("CartLock", static::$_options)){
-			return false;
-		}
-
-		if($storage::read("CartFreeze", static::$_options)){
+		if($storage::read("CartLock", static::$_options) || $storage::read("CartFreeze", static::$_options)){
 			return false;
 		}
 		
@@ -155,6 +141,18 @@ class Cart extends \lithium\data\Model{
 			$storage::delete($sessionKey, static::$_options);
 		}
 		
+	}
+	public static function isReadOnly(){
+		$storage = static::$_storage;
+		if($storage::read("CartFreeze", static::$_options)){
+			return 1;
+		}
+		
+		if($storage::read("CartLock", static::$_options)){ 
+			return 2;
+		}
+		
+		return false;
 	}
 }
 ?>

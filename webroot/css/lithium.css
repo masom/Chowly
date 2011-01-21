@@ -236,9 +236,9 @@ input[type=text], input[type=password], input[type=submit], textarea {
 }
 input[type=text], input[type=password], textarea {
 	width: 97%;
-	max-width: 950px;
+	max-width: 700px;
 	margin: .5em 0 1em 0;
-	padding:.5em;
+	padding:.3em;
 }
 input[type=submit], input[type=button], input[type=reset], input[type=file], button {
 	-moz-border-radius: 4px;
@@ -255,6 +255,7 @@ select {
 	clear: both;
 	display: block;
 	margin: .5em 0 1em 0;
+	padding: .3em;
 }
 div.checkbox {
 	clear: both;

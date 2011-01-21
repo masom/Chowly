@@ -45,7 +45,12 @@ class OffersController extends \chowly\extensions\action\Controller{
 			FlashMessage::set("Missing data.");
 			$this->redirect(array("Offers::index"));
 		}
-		if(Cart::contain($this->request->id) ){
+		if(Cart::contain($this->request->id)){
+			$this->redirect(array('Checkouts::confirm'));
+		}
+		$readonly = Cart::isReadOnly();
+		if($readonly){
+			FlashMessage::set("There is currently a transaction in progress on your cart.");
 			$this->redirect(array('Checkouts::confirm'));
 		}
 		try{
