@@ -15,6 +15,7 @@ use \lithium\template\View;
 use \Swift_MailTransport;
 use \Swift_Mailer;
 use \Swift_Message;
+use \Swift_Attachment;
 
 class CheckoutsController extends \chowly\extensions\action\Controller{
 		
@@ -107,15 +108,21 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 				}
 			}
 			
-			$to = $purchase->email;
+			$path = $this->writePdf($purchase->_id, $pdf);
+			if(!$path){
+				//TODO: DERRRR.... errors. What to do now?
+			}
 			
+			$to = $purchase->email;
 			$transport = Swift_MailTransport::newInstance();
 			$mailer = Swift_Mailer::newInstance($transport);
 			$message = Swift_Message::newInstance();
-			$message->setSubject("Chowly Purchase {:$purchase->-id} confirmation");
+			$message->setSubject("Chowly Purchase {:$purchase->_id} confirmation");
 			$message->setFrom(array('purchases@chowly.com' => 'Chowly'));
 			$message->setTo($to);
 			$message->setBody('Thank you for your purchase at Chowly!');
+			$message->attach(Swift_Attachment::fromPath($path));
+			
 			$mailer->send($message);
 			
 			Cart::unlock();
@@ -125,6 +132,21 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			return compact('purchase');
 		}
 		return compact('provinces');
+	}
+	private function writePdf($purchaseId, &$pdf){
+		$path = LITHIUM_APP_PATH.'/resources/purchases/'. $purchaseId.'.pdf';
+		if(file_exists($path)){
+			return true;
+		}
+		$file = fopen($path, 'w');
+		if(!file){
+			throw new \Exception("Cannot create pdf");
+		}
+		if(fwrite($file,$pdf)){
+			return $path;
+		}else{
+			return false;
+		}
 	}
 }
 ?>
