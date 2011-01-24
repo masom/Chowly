@@ -13,9 +13,11 @@
 			<div id="header">
 				<div id="logo">
 					<div class="info">
+						<?=$this->html->link('Home', array('Landings::pre'));?>
+						&nbsp;|&nbsp;
 						<?=$this->html->link('About Us',array('Pages::view','args'=>'about'));?>
 						&nbsp;|&nbsp;
-						<?=$this->html->link('Your Restaurant Here', array('Tickets::add'));?>
+						<?=$this->html->link('Your Restaurant Here', array('Tickets::add','args'=>'restaurants'));?>
 						&nbsp;|&nbsp;
 						<?=$this->html->link('Contact Us', array('Tickets::add'))?>
 					</div>
@@ -35,11 +37,14 @@
 	<div id="footer-container">
 		<div id="footer">
 			<strong>Unbeatable Deals for Local Dining</strong>
-			<p>Chowly the easiest way to discover local restaurants.</p>
+			<div>Chowly the easiest way to discover local restaurants.
+				<?=$this->html->link('Privacy Policy', array('Pages::view','args'=>'privacy'));?>
+				&nbsp;|&nbsp;
+				<?=$this->html->link('Our Promise To You', array('Pages::view','args'=>'guarantee'));?>
+				</div>
 			<div id="copyright">
 				&copy; 2010 Chowly Inc. All Rights Reserved.
 			</div>
-			
 		</div>
 	</div>
 </body>

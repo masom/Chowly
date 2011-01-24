@@ -36,8 +36,9 @@ Router::connect('/', array('Landings::pre'));
 /**
  * ...and connect the rest of 'Pages' controller's urls.
  */
+Router::connect('/contact/{:args}', 'Tickets::add');
 Router::connect('/pages/{:args}', 'Pages::view');
-Router::connect('/contact', 'Tickets::add');
+
 /**
  * Finally, connect the default routes.
  */
