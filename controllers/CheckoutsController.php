@@ -108,11 +108,11 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 				}
 			}
 			
-			$path = $this->writePdf($purchase->_id, $pdf);
+			$path = $this->_writePdf($purchase->_id, $this->_getPdf($purchase));
 			if(!$path){
 				//TODO: DERRRR.... errors. What to do now?
 			}
-			
+
 			$to = $purchase->email;
 			$transport = Swift_MailTransport::newInstance();
 			$mailer = Swift_Mailer::newInstance($transport);
@@ -120,7 +120,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			$message->setSubject("Chowly Purchase {:$purchase->_id} confirmation");
 			$message->setFrom(array('purchases@chowly.com' => 'Chowly'));
 			$message->setTo($to);
-			$message->setBody('Thank you for your purchase at Chowly!');
+			$message->setBody();
 			$message->attach(Swift_Attachment::fromPath($path));
 			
 			$mailer->send($message);
@@ -133,7 +133,27 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		}
 		return compact('provinces');
 	}
-	private function writePdf($purchaseId, &$pdf){
+	private function _getPdf(&$purchase){
+			$view  = new View(array(
+			    'loader' => 'Pdf',
+			    'renderer' => 'Pdf',
+			    'paths' => array(
+			        'template' => '{:library}/views/{:controller}/{:template}.{:type}.php',
+			        'layout'   => '{:library}/views/layouts/{:layout}.{:type}.php',
+			    )
+			));
+			return $view->render(
+			    'all',
+			    array('content' => compact('offer','venue')),
+			    array(
+			        'controller' => 'purchases',
+			        'template'=>'coupon',
+			        'type' => 'pdf',
+			        'layout' =>'coupon'
+			    )
+			);
+	}
+	private function _writePdf($purchaseId, &$pdf){
 		$path = LITHIUM_APP_PATH.'/resources/purchases/'. $purchaseId.'.pdf';
 		if(file_exists($path)){
 			return true;
@@ -142,7 +162,11 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		if(!file){
 			throw new \Exception("Cannot create pdf");
 		}
-		if(fwrite($file,$pdf)){
+		
+		$writen = fwrite($file,$pdf);
+		fclose($file);
+		
+		if($writen){
 			return $path;
 		}else{
 			return false;
