@@ -61,7 +61,6 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			$this->redirect("Offers::index");
 		}
 		
-		Cart::freeze();
 		$cart = Cart::get();
 		
 		//Secure inventory so it does not expire while in checkout.
@@ -78,31 +77,37 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		if($this->request->data){
 			
 			$purchase = Purchase::create();
-			$purchase->status = 'new';
 			$purchase->set($this->request->data);
-			
+			$purchase->status = 'new';
 			if(!$purchase->validates()){
 				unset($purchase->cc_number, $purchase->cc_sc);
+				die(debug($purchase));
 				return compact('purchase', 'provinces');
 			}
 			
 			Cart::lock();
-			//TODO: Send email
-			//TODO: Log transaction for history/accounting
-			//TODO: HERE BE CC Processing
+			$cart = Cart::get();
 			
-			$purchase->process($this->request->data);
+			$conditions = array('_id'=> array_keys($cart));
+			$offers = Offer::all(compact('conditions'));
+			
+			//TODO: Log transaction for history/accounting
+			try{
+				$purchase->process($offers);
+			}catch(\Exception $e){
+				//TODO: Processing error handling
+				die(debug($e));
+			}
 			unset($purchase->cc_number, $purchase->cc_sc);
 			
-			if(!$purchase->isComplete()){
+			if(!$purchase->isCompleted()){
 				FlashMessage::set("Some processing errors occured.");
 				return compact('purchase');
 			}
 			
-			
 			foreach($cart as $offer_id => $attr){
 				try{
-					Inventory::purchase($transaction['id'], $attr['inventory_id']);
+					Inventory::purchase($purchase->_id, $attr['inventory_id']);
 				}catch(InventoryException $e){
 					//TODO: Add logs of a failure...
 				}
@@ -114,13 +119,14 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			}
 
 			$to = $purchase->email;
+			
 			$transport = Swift_MailTransport::newInstance();
 			$mailer = Swift_Mailer::newInstance($transport);
 			$message = Swift_Message::newInstance();
 			$message->setSubject("Chowly Purchase {:$purchase->_id} confirmation");
 			$message->setFrom(array('purchases@chowly.com' => 'Chowly'));
 			$message->setTo($to);
-			$message->setBody();
+			$message->setBody($this->_getEmail($purchase));
 			$message->attach(Swift_Attachment::fromPath($path));
 			
 			$mailer->send($message);
@@ -133,7 +139,26 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		}
 		return compact('provinces');
 	}
-	private function _getPdf(&$purchase){
+	private function _getEmail($purchase){
+			$view  = new View(array(
+			    'loader' => 'File',
+			    'renderer' => 'File',
+			    'paths' => array(
+			        'template' => '{:library}/views/{:controller}/{:template}.{:type}.php'
+			    )
+			));
+			return $view->render(
+			    'template',
+			    array(compact('purchase')),
+			    array(
+			        'controller' => 'purchases',
+			        'template'=>'purchase',
+			        'type' => 'mail',
+			        'layout' => false
+			    )
+			);
+	}
+	private function _getPdf($purchase){
 			$view  = new View(array(
 			    'loader' => 'Pdf',
 			    'renderer' => 'Pdf',
@@ -144,7 +169,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			));
 			return $view->render(
 			    'all',
-			    array('content' => compact('offer','venue')),
+			    array(compact('purchase')),
 			    array(
 			        'controller' => 'purchases',
 			        'template'=>'coupon',

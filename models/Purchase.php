@@ -8,7 +8,9 @@ class Purchase extends \lithium\data\Model{
 		'_id' => array('type'=>'id'),
 		'customer_id' => array('type'=>'_id'),
 		'state' => array('type'=>'string'),
-		'created' => array('type'=>'date')
+		'created' => array('type'=>'date'),
+		'modified' => array('type'=>'date'),
+		'offers' => array('type'=>'array', 'array'=>true)
 	);
 	
 	public $validates = array(
@@ -67,14 +69,33 @@ class Purchase extends \lithium\data\Model{
 		return parent::validates($entity,$options);
 	}
 	
-	public function process($entity, Array $data = array()){
-		$entity->set(data);
-		$entity->status = 'complete';
-		return $entity->save();
+	public function process($entity, $offers){
+		$entity->price = 0.00;
+
+		foreach($offers as $offer){
+			$entity->price += $offer->cost;
+			$entity->offers[$offer->_id] = $offer->cost;
+		}
+
+		//TODO: Actual CC Processing.
+		$entity->status = 'completed';
+		
+		$entity->cc_number = substr($entity->cc_number, -4, 4);
+		unset($entity->cc_sc, $entity->cc_e_month, $entity->cc_e_year);
+		
+		if(!$entity->save(null,array('validate'=>false))){
+			debug($entity);
+			throw new \Exception("Unable to save processed data.");
+		}
+		
+		if($entity->status == 'completed'){
+			return true;
+		}
+		return false;
 	}
 	
-	public function isComplete($entity){
-		return ($entity->status == 'complete')? true : false;
+	public function isCompleted($entity){
+		return ($entity->status == 'completed')? true : false;
 	}
 	public static function getProvinces(){
 		return static::$_provinces;
