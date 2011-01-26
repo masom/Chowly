@@ -86,6 +86,7 @@ class Purchase extends \lithium\data\Model{
 		$entity->status = 'completed';
 		$entity->cc_number = substr($entity->cc_number, -4, 4);
 		unset($entity->cc_sc, $entity->cc_e_month, $entity->cc_e_year);
+		
 		if(!$entity->save(null,array('validate'=>false))){
 			throw new \Exception("Transaction Error");
 		}

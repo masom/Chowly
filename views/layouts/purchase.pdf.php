@@ -1,3 +1,3 @@
 <?php
-$this->Pdf->Output('filename.pdf', 'S');
+echo $this->Pdf->Output('filename.pdf', 'S');
 ?>

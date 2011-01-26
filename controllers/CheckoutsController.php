@@ -59,6 +59,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			Cart::unfreeze();
 			FlashMessage::set("Empty Cart!");
 			$this->redirect("Offers::index");
+			exit();
 		}
 		
 		$cart = Cart::get();
@@ -113,6 +114,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 					die(debug($e));
 				}
 			}
+			
 			try{
 				$path = $this->_writePdf($purchase->_id, $this->_getPdf($purchase));
 			} catch (\Exception $e){
@@ -129,9 +131,12 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			$message->setFrom(array('purchases@chowly.com' => 'Chowly'));
 			$message->setTo($to);
 			$message->setBody($this->_getEmail($purchase));
+			
 			$message->attach(Swift_Attachment::fromPath($path));
 			
-			$mailer->send($message);
+			if(!$mailer->send($message)){
+				//TODO: Email failure...
+			}
 			
 			Cart::unlock();
 			Cart::unfreeze();
