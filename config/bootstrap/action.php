@@ -87,4 +87,5 @@ Filters::apply('chowly\models\Inventory', 'save', $insureDefaultState );
 Filters::apply('chowly\models\Offer', 'save', $insureDate);
 Filters::apply('chowly\models\Offer', 'save', $insureDefaultState);
 Filters::apply('chowly\models\Image', 'save', $insureDate);
+Filters::apply('chowly\models\Purchase', 'save', $insureDate);
 ?>

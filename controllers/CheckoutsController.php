@@ -79,9 +79,9 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			$purchase = Purchase::create();
 			$purchase->set($this->request->data);
 			$purchase->status = 'new';
+			
 			if(!$purchase->validates()){
 				unset($purchase->cc_number, $purchase->cc_sc);
-				die(debug($purchase));
 				return compact('purchase', 'provinces');
 			}
 			
@@ -95,10 +95,10 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			try{
 				$purchase->process($offers);
 			}catch(\Exception $e){
+				unset($purchase->cc_number, $purchase->cc_sc);
 				//TODO: Processing error handling
 				die(debug($e));
 			}
-			unset($purchase->cc_number, $purchase->cc_sc);
 			
 			if(!$purchase->isCompleted()){
 				FlashMessage::set("Some processing errors occured.");
@@ -110,14 +110,16 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 					Inventory::purchase($purchase->_id, $attr['inventory_id']);
 				}catch(InventoryException $e){
 					//TODO: Add logs of a failure...
+					die(debug($e));
 				}
 			}
-			
-			$path = $this->_writePdf($purchase->_id, $this->_getPdf($purchase));
-			if(!$path){
-				//TODO: DERRRR.... errors. What to do now?
+			try{
+				$path = $this->_writePdf($purchase->_id, $this->_getPdf($purchase));
+			} catch (\Exception $e){
+				//TODO: Handle PDF Generation Errors.
+				die(debug($e));
 			}
-
+			
 			$to = $purchase->email;
 			
 			$transport = Swift_MailTransport::newInstance();
@@ -172,9 +174,9 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			    array(compact('purchase')),
 			    array(
 			        'controller' => 'purchases',
-			        'template'=>'coupon',
+			        'template'=>'purchase',
 			        'type' => 'pdf',
-			        'layout' =>'coupon'
+			        'layout' =>'purchase'
 			    )
 			);
 	}
@@ -187,14 +189,13 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		if(!file){
 			throw new \Exception("Cannot create pdf");
 		}
-		
 		$writen = fwrite($file,$pdf);
 		fclose($file);
 		
 		if($writen){
 			return $path;
 		}else{
-			return false;
+			throw new \Exception("File not written");
 		}
 	}
 }

@@ -70,28 +70,26 @@ class Purchase extends \lithium\data\Model{
 	}
 	
 	public function process($entity, $offers){
+		if(empty($offers)){
+			throw new \Exception("There are no offers matching the cart items.");
+		}
+		
 		$entity->price = 0.00;
 
 		foreach($offers as $offer){
 			$entity->price += $offer->cost;
-			$entity->offers[$offer->_id] = $offer->cost;
+			$entity->offers[] = array('_id' => $offer->_id, 'price'=> $offer->cost);
 		}
-
-		//TODO: Actual CC Processing.
-		$entity->status = 'completed';
 		
+		//TODO: Actual CC Processing.
+		
+		$entity->status = 'completed';
 		$entity->cc_number = substr($entity->cc_number, -4, 4);
 		unset($entity->cc_sc, $entity->cc_e_month, $entity->cc_e_year);
-		
 		if(!$entity->save(null,array('validate'=>false))){
-			debug($entity);
-			throw new \Exception("Unable to save processed data.");
+			throw new \Exception("Transaction Error");
 		}
-		
-		if($entity->status == 'completed'){
-			return true;
-		}
-		return false;
+		return true;
 	}
 	
 	public function isCompleted($entity){
@@ -99,9 +97,6 @@ class Purchase extends \lithium\data\Model{
 	}
 	public static function getProvinces(){
 		return static::$_provinces;
-	}
-	public function save($entity, $data = null, Array $options = array()){
-		parent::save($entity, $data, $options);
 	}
 }
 ?>
