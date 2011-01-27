@@ -115,13 +115,20 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 				}
 			}
 			
+			$venuesList = array();
+			foreach($offers as $offer){
+				$venuesList[] = $offer->venue_id;
+			}
+			
+			$conditions = array('_id' => $venuesList);
+			$venues = Venue::find('all', compact('conditions'));
+			
 			try{
-				$path = $this->_writePdf($purchase->_id, $this->_getPdf($purchase));
+				$path = $this->_writePdf($purchase->_id, $this->_getPdf($purchase, $offers, $venues));
 			} catch (\Exception $e){
 				//TODO: Handle PDF Generation Errors.
 				die(debug($e));
 			}
-			
 			$to = $purchase->email;
 			
 			$transport = Swift_MailTransport::newInstance();
@@ -147,43 +154,44 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		return compact('provinces');
 	}
 	private function _getEmail($purchase){
-			$view  = new View(array(
-			    'loader' => 'File',
-			    'renderer' => 'File',
-			    'paths' => array(
-			        'template' => '{:library}/views/{:controller}/{:template}.{:type}.php'
-			    )
-			));
-			return $view->render(
-			    'template',
-			    array(compact('purchase')),
-			    array(
-			        'controller' => 'purchases',
-			        'template'=>'purchase',
-			        'type' => 'mail',
-			        'layout' => false
-			    )
-			);
+		$view  = new View(array(
+		    'loader' => 'File',
+		    'renderer' => 'File',
+		    'paths' => array(
+		        'template' => '{:library}/views/{:controller}/{:template}.{:type}.php'
+		    )
+		));
+		return $view->render(
+		    'template',
+		    compact('purchase'),
+		    array(
+		        'controller' => 'purchases',
+		        'template'=>'purchase',
+		        'type' => 'mail',
+		        'layout' => false
+		    )
+		);
 	}
-	private function _getPdf($purchase){
-			$view  = new View(array(
-			    'loader' => 'Pdf',
-			    'renderer' => 'Pdf',
-			    'paths' => array(
-			        'template' => '{:library}/views/{:controller}/{:template}.{:type}.php',
-			        'layout'   => '{:library}/views/layouts/{:layout}.{:type}.php',
-			    )
-			));
-			return $view->render(
-			    'all',
-			    array(compact('purchase')),
-			    array(
-			        'controller' => 'purchases',
-			        'template'=>'purchase',
-			        'type' => 'pdf',
-			        'layout' =>'purchase'
-			    )
-			);
+	private function _getPdf($purchase, $offers, $venues){
+		$view  = new View(array(
+		    'loader' => 'Pdf',
+		    'renderer' => 'Pdf',
+		    'paths' => array(
+		        'template' => '{:library}/views/{:controller}/{:template}.{:type}.php',
+		        'layout'   => '{:library}/views/layouts/{:layout}.{:type}.php',
+		    )
+		));	
+		
+		return $view->render(
+		    'all',
+		    compact('purchase','offers','venues'),
+		    array(
+		        'controller' => 'purchases',
+		        'template'=>'purchase',
+		        'type' => 'pdf',
+		        'layout' =>'purchase'
+		    )
+		);
 	}
 	private function _writePdf($purchaseId, &$pdf){
 		$path = LITHIUM_APP_PATH.'/resources/purchases/'. $purchaseId.'.pdf';
