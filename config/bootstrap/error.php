@@ -58,3 +58,4 @@ ErrorHandler::config(array(
  * Last but not least, tell the ErrorHandler to start capturing errors.
  */
 ErrorHandler::run();
+?>

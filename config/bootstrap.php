@@ -101,3 +101,4 @@ function debug($data){
 	echo ' (line <strong>' . $calledFrom[0]['line'] . '</strong>)';
 	echo "\n". str_replace('<', '&lt;', str_replace('>', '&gt;', print_r($data, true))) . "\n</pre>\n";
 }
+?>
