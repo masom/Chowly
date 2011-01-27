@@ -134,7 +134,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			$transport = Swift_MailTransport::newInstance();
 			$mailer = Swift_Mailer::newInstance($transport);
 			$message = Swift_Message::newInstance();
-			$message->setSubject("Chowly Purchase {:$purchase->_id} confirmation");
+			$message->setSubject("Chowly Purchase {$purchase->_id} confirmation");
 			$message->setFrom(array('purchases@chowly.com' => 'Chowly'));
 			$message->setTo($to);
 			$message->setBody($this->_getEmail($purchase));
