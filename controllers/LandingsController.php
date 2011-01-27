@@ -12,6 +12,9 @@ class LandingsController extends \chowly\extensions\action\Controller{
 		if($this->request->data){
 			
 			unset($this->request->data['x'],$this->request->data['y']);
+			if(empty($user->zip)){
+				unset($user->zip);
+			}
 			if($user->preRegister($this->request->data)){
 				$this->redirect(array('Pages::view','args'=>'thankyou'));
 			}else{

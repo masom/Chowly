@@ -9,7 +9,20 @@
 </head>
 <body>
 	<div id="container">
+		<div id="header_cta">
+			<div style="padding: 10px; margin-left: 10px; margin-right: 10px; padding-top: 15px;">
+			<span>Get Daily Restaurant Deals in <strong>Ottawa</strong>:</span>
+			<?=$this->form->create($user);?>
+				<?=$this->form->field('email',array('template'=>'{:input}'));?>
+				<input type="hidden" name="zip" value="" />
+				<input type="image" src="/img/subscribe_button.png" alt="Suscribe" />
+			<?=$this->form->end();?>
+			</div>
+		</div>
+		<div style="background-image: url(/img/subscribe_rounded_bottom.png); height: 11px; margin-bottom: 20px;"></div>
+		<div style="height: 11px;background-image: url(/img/main_rounded_top.png);"></div>
 		<div id="content-wrapper">
+			
 			<div id="header">
 				<div id="logo">
 					<div class="info">
@@ -32,6 +45,7 @@
 				<?php echo $this->content(); ?>
 			</div>
 		</div>
+		<div style="height: 11px; margin-bottom:20px; background-image: url(/img/main_rounded_bottom.png);"></div>
 		<div class="push"></div> 
 	</div>
 	<div id="footer-container">
@@ -41,7 +55,7 @@
 				<?=$this->html->link('Privacy Policy', array('Pages::view','args'=>'privacy'));?>
 				&nbsp;|&nbsp;
 				<?=$this->html->link('Our Promise To You', array('Pages::view','args'=>'guarantee'));?>
-				</div>
+			</div>
 			<div id="copyright">
 				&copy; 2010 Chowly Inc. All Rights Reserved.
 			</div>

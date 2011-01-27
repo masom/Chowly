@@ -48,7 +48,7 @@ use lithium\data\Connections;
 Connections::add('default', array(
 	'type' => 'MongoDb',
 	'host' => 'localhost',
-	'database' => 'chowly'
+	'database' => 'chowly_landing'
 ));
 /**
  * Uncomment this configuration to use CouchDB as your default database.

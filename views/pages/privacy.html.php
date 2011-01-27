@@ -2,7 +2,7 @@
 <p>
 NOTE: Please read this disclaimer in its entirety before using our web site.
 </p>
-<p>For the purpose of this disclaimer, Chowly.com will be referred to as "The COMPANY"
+<p>For the purpose of this disclaimer, Chowly.com will be referred to as "The COMPANY"</p>
 
 <p>General Disclaimer of Liability</p>
 
