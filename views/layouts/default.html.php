@@ -52,9 +52,11 @@
 		<div id="footer">
 			<strong>Unbeatable Deals for Local Dining</strong>
 			<div>Chowly the easiest way to discover local restaurants.
+				<?=$this->html->link('Our Promise To You', array('Pages::view','args'=>'guarantee'));?>
+				&nbsp;|&nbsp;
 				<?=$this->html->link('Privacy Policy', array('Pages::view','args'=>'privacy'));?>
 				&nbsp;|&nbsp;
-				<?=$this->html->link('Our Promise To You', array('Pages::view','args'=>'guarantee'));?>
+				<?=$this->html->link('Terms Of Service', array('Pages::view','args'=>'terms'));?>
 			</div>
 			<div id="copyright">
 				&copy; 2010 Chowly Inc. All Rights Reserved.
