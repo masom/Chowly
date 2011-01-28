@@ -9,19 +9,22 @@
 </head>
 <body>
 	<div id="container">
+		<br />
+		<div style="height: 11px;background-image: url(/img/main_rounded_top.png);"></div>
 		<div id="content-wrapper">
+			
 			<div id="header">
 				<div id="logo">
 					<div class="info">
-						<?=$this->html->link('Home',array('Offers::index'));?>
+						<?=$this->html->link('Home', array('Landings::pre'));?>
 						&nbsp;|&nbsp;
 						<?=$this->html->link('About Us',array('Pages::view','args'=>'about'));?>
 						&nbsp;|&nbsp;
-						<?=$this->html->link('Your Restaurant Here', array('Tickets::add'));?>
+						<?=$this->html->link('Your Restaurant Here', array('Tickets::add','args'=>'restaurants'));?>
 						&nbsp;|&nbsp;
 						<?=$this->html->link('Contact Us', array('Tickets::add'))?>
 					</div>
-					<?php echo $this->html->link($this->html->image('logo.png', array('width' =>'150px;','alt'=>'Logo')), array('Offers::index'),array('escape'=>false));?>
+					<?php echo $this->html->link($this->html->image('logo.png', array('width' =>'150px;','alt'=>'Logo')), array('Landings::pre'),array('escape'=>false));?>
 					<h2>
 						Pick. Eat. Save.
 					</h2>
@@ -33,16 +36,22 @@
 			</div>
 			<div style="clear: both;"></div>
 		</div>
+		<div style="height: 11px; margin-bottom:20px; background-image: url(/img/main_rounded_bottom.png);"></div>
 		<div class="push"></div> 
 	</div>
 	<div id="footer-container">
 		<div id="footer">
 			<strong>Unbeatable Deals for Local Dining</strong>
-			<p>Chowly the easiest way to discover local restaurants.</p>
-			<div id="copyright">
-				&copy; 2011 Chowly Inc. All Rights Reserved.
+			<div>Chowly the easiest way to discover local restaurants.
+				<?=$this->html->link('Our Promise To You', array('Pages::view','args'=>'guarantee'));?>
+				&nbsp;|&nbsp;
+				<?=$this->html->link('Privacy Policy', array('Pages::view','args'=>'privacy'));?>
+				&nbsp;|&nbsp;
+				<?=$this->html->link('Terms Of Service', array('Pages::view','args'=>'terms'));?>
 			</div>
-			
+			<div id="copyright">
+				&copy; 2010 Chowly Inc. All Rights Reserved.
+			</div>
 		</div>
 	</div>
 <script type="text/javascript">
