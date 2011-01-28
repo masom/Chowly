@@ -21,7 +21,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		
 	protected function _init(){
 		parent::_init();
-		/** lets wait before requiring this
+		/** TODO: lets wait before requiring this
 		if(!$this->request->is('ssl')){
 			$this->redirect(Router::match(
 				$this->request->params,
