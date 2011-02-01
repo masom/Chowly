@@ -97,13 +97,15 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 				$purchase->process($offers);
 			}catch(\Exception $e){
 				unset($purchase->cc_number, $purchase->cc_sc);
-				//TODO: Processing error handling
-				die(debug($e));
-			}
-
-			if(!$purchase->isCompleted()){
 				FlashMessage::set("Some processing errors occured.");
-				return compact('purchase');
+				return compact('purchase', 'provinces');
+			}
+			
+			unset($purchase->cc_number, $purchase->cc_sc);
+			
+			if(!$purchase->isCompleted()){
+				FlashMessage::set("The purchase could not be completed.");
+				return compact('purchase', 'provinces');
 			}
 			
 			foreach($cart as $offer_id => $attr){

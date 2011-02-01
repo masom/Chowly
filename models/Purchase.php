@@ -4,6 +4,7 @@ namespace chowly\models;
 
 class Purchase extends \lithium\data\Model{
 	
+	public $error = null;
 	protected $_schema = array(
 		'_id' => array('type'=>'id'),
 		'customer_id' => array('type'=>'_id'),
@@ -71,7 +72,8 @@ class Purchase extends \lithium\data\Model{
 	
 	public function process($entity, $offers){
 		if(empty($offers)){
-			throw new \Exception("There are no offers matching the cart items.");
+			$entity->error = "There are no offers matching the cart items.";
+			throw new \Exception();
 		}
 		if($entity->cc_sc == 999){
 			return false;
@@ -90,7 +92,8 @@ class Purchase extends \lithium\data\Model{
 		unset($entity->cc_sc, $entity->cc_e_month, $entity->cc_e_year);
 		
 		if(!$entity->save(null,array('validate'=>false))){
-			throw new \Exception("Transaction Error");
+			$this->error = "Transaction Error";
+			throw new \Exception();
 		}
 		return true;
 	}

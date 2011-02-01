@@ -22,12 +22,12 @@ endfor;
 
 $province = ($purchase->province)? $purchase->province : 'Ontario';
 ?>
-<div id="content-header">
-	<h1>Checkout</h1>
+<h1>Checkout</h1>
+<?php if(isset($purchases)):?>
+<div>
+	<p><?=$purchase->error;?></p>
 </div>
-
-<div id="content-panel">
-
+<?php endif;?>
 <?=$this->form->create($purchase, array('type' => 'file', 'id'=>'form_purchase')); ?>
 	<h2 style="margin-top: 0;">Contact Information</h2>
 	<div style="margin-bottom: 40px;">
@@ -68,7 +68,6 @@ $province = ($purchase->province)? $purchase->province : 'Ontario';
 	<button id="form_purchase_save" onclick="return false;">Complete Order</button>
 	<button id="form_purchase_cancel" onclick="return false;">Cancel</button>
 <?=$this->form->end(); ?>
-</div>
 <script type="text/javascript">
 $("#form_purchase_save").bind('click',function(){
 	$("#form_purchase").submit();
