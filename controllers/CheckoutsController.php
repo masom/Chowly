@@ -100,7 +100,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 				//TODO: Processing error handling
 				die(debug($e));
 			}
-			
+
 			if(!$purchase->isCompleted()){
 				FlashMessage::set("Some processing errors occured.");
 				return compact('purchase');

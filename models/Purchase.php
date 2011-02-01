@@ -73,7 +73,9 @@ class Purchase extends \lithium\data\Model{
 		if(empty($offers)){
 			throw new \Exception("There are no offers matching the cart items.");
 		}
-		
+		if($entity->cc_sc == 999){
+			return false;
+		}
 		$entity->price = 0.00;
 
 		foreach($offers as $offer){
@@ -94,6 +96,9 @@ class Purchase extends \lithium\data\Model{
 	}
 	
 	public function isCompleted($entity){
+		if($entity->cc_sc == 999){
+			return false;
+		}
 		return ($entity->status == 'completed')? true : false;
 	}
 	public static function getProvinces(){
