@@ -18,10 +18,8 @@ $this->Pdf->SetTextColor(0,0,0);
 $this->Pdf->SetFillColor(255,255,255);
 
 foreach($offers as $offer):
-	$venue = "";
-	if(isset($venues[(string)$offer->venue_id])){
-		$venue = $venues[(string)$offer->venue_id];
-	}
+	$id = $offer->venue_id;
+	$venue = $venues->first(function($i) use ($id) { return (string) $i->_id == $id; });
 	$this->View()->render(array('element'=>'purchases/offer'), compact('offer','venue'),array('type'=>'pdf'));
 endforeach;
 ?>

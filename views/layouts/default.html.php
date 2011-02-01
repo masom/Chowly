@@ -16,7 +16,7 @@
 			<div id="header">
 				<div id="logo">
 					<div class="info">
-						<?=$this->html->link('Home', array('Landings::pre'));?>
+						<?=$this->html->link('Home', array('Offers::index'));?>
 						&nbsp;|&nbsp;
 						<?=$this->html->link('About Us',array('Pages::view','args'=>'about'));?>
 						&nbsp;|&nbsp;
@@ -24,7 +24,7 @@
 						&nbsp;|&nbsp;
 						<?=$this->html->link('Contact Us', array('Tickets::add'))?>
 					</div>
-					<?php echo $this->html->link($this->html->image('logo.png', array('width' =>'150px;','alt'=>'Logo')), array('Landings::pre'),array('escape'=>false));?>
+					<?php echo $this->html->link($this->html->image('logo.png', array('width' =>'150px;','alt'=>'Logo')), array('Offers::index'),array('escape'=>false));?>
 					<h2>
 						Pick. Eat. Save.
 					</h2>

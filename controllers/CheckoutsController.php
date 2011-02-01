@@ -39,7 +39,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 	public function confirm(){
 		if(Cart::isEmpty()){
 			FlashMessage::set("Empty Cart!");
-			$this->redirect("Offers::index");
+			return $this->redirect("Offers::index");
 		}
 		
 		$conditions = array(
@@ -56,10 +56,10 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		
 		Cart::freeze();
 		if(Cart::isEmpty()){
+			Cart::unlock();
 			Cart::unfreeze();
 			FlashMessage::set("Empty Cart!");
-			$this->redirect("Offers::index");
-			exit();
+			return $this->redirect("Offers::index");
 		}
 		
 		$cart = Cart::get();
@@ -127,7 +127,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 				$path = $this->_writePdf($purchase->_id, $this->_getPdf($purchase, $offers, $venues));
 			} catch (\Exception $e){
 				//TODO: Handle PDF Generation Errors.
-				die(debug($e));
+				die(debug($e->getMessage()));
 			}
 			$to = $purchase->email;
 			
