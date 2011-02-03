@@ -12,7 +12,7 @@
 		<div id="header_cta">
 			<div style="padding: 10px; margin-left: 10px; margin-right: 10px; padding-top: 15px;">
 			<span>Get Daily Restaurant Deals in <strong>Ottawa</strong>:</span>
-			<?=$this->form->create($user);?>
+			<?=$this->form->create($user,array('url'=>'Landings::pre'));?>
 				<?=$this->form->field('email',array('template'=>'{:input}'));?>
 				<input type="hidden" name="zip" value="" />
 				<input type="image" src="/img/subscribe_button.png" alt="Suscribe" />
