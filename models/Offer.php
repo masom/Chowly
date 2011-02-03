@@ -6,6 +6,8 @@ use chowly\models\Inventory;
 use chowly\extensions\data\InventoryException;
 use chowly\extensions\data\OfferException;
 
+use \lithium\analysis\Logger;
+
 class Offer extends \lithium\data\Model{
 	protected static $_states = array('published'=>'published', 'unpublished'=>'unpublished');
 	public $validates = array(
@@ -27,7 +29,7 @@ class Offer extends \lithium\data\Model{
 			array('numeric','message'=>'Must be a monetary amount (ex: 33.00)')
 		)
 	);
-	
+
 	protected $_schema = array(
 		'_id' => array('type'=>'id'),
 		'venue_id' => array('type'=>'id'),
@@ -38,25 +40,29 @@ class Offer extends \lithium\data\Model{
 		'availability' => array('type'=>'integer'),
 		'created'=>array('type'=>'date'),
 	);
-	
+
 	public static function states(){
 		return static::$_states;
 	}
-	
+
 	public static function defaultState(){
 		return 'unpublished';
 	}
 
 	public static function current(){
+
+		$date = new \MongoDate();
 		$conditions = array(
-			'starts' => array('$lt' => new \MongoDate()),
-			'ends' => array('$gt' => new \MongoDate()),
+			'starts' => array('$lt' => $date),
+			'ends' => array('$gt' => $date),
 			'state'=> 'published'
 		);
+
 		$order = array(
 			'ends'=>'ASC',
 			'availability' => 'DESC'
 		);
+
 		return static::all(compact('conditions','order'));
 	}
 	
@@ -64,19 +70,20 @@ class Offer extends \lithium\data\Model{
 	 * 
 	 * @param var $customer_id
 	 * @param var $offer_id
-	 * @todo Add indexes to inventory
 	 */
 	public static function reserve($offer_id,$customer_id){
+		$date = new \MongoDate();
 		$conditions = array(
-			'starts' => array('$lt' => new \MongoDate()),
-			'ends' => array('$gt' => new \MongoDate()),
+			'starts' => array('$lt' => $date),
+			'ends' => array('$gt' => $date),
 			'_id' => $offer_id
 		);
+
 		$offer = static::first(array('conditions'=> $conditions));
 		if(!$offer){
 			throw new OfferException("Offer not found.");
 		}
-		
+
 		try{
 			$inventory = Inventory::reserve($customer_id,$offer_id);
 			$offer->availability--;
@@ -89,50 +96,43 @@ class Offer extends \lithium\data\Model{
 			$offer->save(null, array('validate' => false));
 			throw $e;
 		}
-		
+
 		return $inventory->_id;
 	}
 	
 	public function publish($entity){
-		$retval = array('success'=>false,'errors'=>array(),'count'=>0);
-		if(!$entity->_id){
-			$retval['errors'][] = 'The offer could not be found';
-			return $retval;
-		}
-		
 		if($entity->state == 'published'){
-			$retval['errors'][] = 'The offer is already published.';
-			return $retval;
+			throw new \Exception('The offer is already published.');
 		}
-		
+
 		$entity->state = 'published';
+
+		$conditions = array('offer_id' => $entity->_id);
+		$inventory_count = Inventory::count(compact('conditions'));
+		die(debug($inventory_count));
 		
 		$created = 0;
-		for($i = 0; $i < $entity->availability; $i++){
+		for($i = $inventory_count; $i < $entity->availability; $i++){
 			if(Inventory::createForOffer($entity->_id)){
 				$created++;
+			}else{
+				Logger::write('error', 'Could not create inventory item for {$entity_id}.');
 			}
 		}
-		
-		if($created != $entity->availability){
-			$retval['errors'][] = "Only {$created} inventory items where created.";
-		}
+
 		if($entity->save()){
-			$retval['success'] = true;
+			$count = ($created + $inventory_count);
+			if($count != $entity->availability){
+				throw new \InventoryException("Only {$count} item created.");
+			}
+			return true;
 		}else{
 			Inventory::deleteForOffer($entity->_id);
-			$retval['success'] = false;
-			$retval['errors'][] = 'The offer could not be published.';
+			return false;
 		}
-		return $retval;
 	}
-	
+
 	public function unpublish($entity){
-		$retval = array('success'=>false,'errors'=>array(),'count'=>0);
-		if(!$entity->_id){
-			$retval['errors'][] = 'The offer could not be found';
-			return $retval;
-		}
 		Inventory::deleteForOffer($entity->_id);
 		$entity->state = 'unpublished';
 		return $entity->save(null,array('validate'=>false,'whitelist'=>array('state')));

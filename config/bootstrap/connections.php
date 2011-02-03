@@ -36,7 +36,7 @@
  * @see lithium\core\Environment
  */
 use lithium\data\Connections;
-
+use \lithium\core\Environment;
 /**
  * Uncomment this configuration to use MongoDB as your default database.
  */
@@ -50,6 +50,14 @@ Connections::add('default', array(
 	'host' => 'localhost',
 	'database' => 'chowly'
 ));
+
+if (!Environment::is('production')) {
+	Connections::add('test', array(
+		'type' => 'MongoDb',
+		'host' => 'localhost',
+		'database' => 'test_chowly'
+	));
+}
 /**
  * Uncomment this configuration to use CouchDB as your default database.
  */

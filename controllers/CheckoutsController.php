@@ -11,7 +11,7 @@ use chowly\models\Purchase;
 use chowly\extensions\data\InventoryException;
 use \lithium\net\http\Router;
 use \lithium\template\View;
-
+use \lithium\analysis\Logger;
 use \Swift_MailTransport;
 use \Swift_Mailer;
 use \Swift_Message;
@@ -69,7 +69,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			try{
 				Inventory::secure($attr['inventory_id']);
 			}catch(InventoryException $e){
-				//TODO:Log failure
+				Logger::write('warning', "Could not secure {$attr['inventory_id']} Reason: ". $e->getMessage());
 				//TODO: Do we fail at that point or still sell the item?
 			}
 		}
@@ -97,23 +97,25 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 				$purchase->process($offers);
 			}catch(\Exception $e){
 				unset($purchase->cc_number, $purchase->cc_sc);
+				Logger::write('notice', "Could not process purchase due to: ". $e->getMessage());
 				FlashMessage::set("Some processing errors occured.");
 				return compact('purchase', 'provinces');
 			}
-			
 			unset($purchase->cc_number, $purchase->cc_sc);
 			
+			
 			if(!$purchase->isCompleted()){
+				Logger::write('notice', "Transaction not completed due to : {$purchase->error}");
 				FlashMessage::set("The purchase could not be completed.");
 				return compact('purchase', 'provinces');
 			}
 			
+			Logger::write('info', "Transaction Completed. E[{$purchase->email}] T[{$purchase->_id}] P[{$purchase->price}]");
 			foreach($cart as $offer_id => $attr){
 				try{
 					Inventory::purchase($purchase->_id, $attr['inventory_id']);
 				}catch(InventoryException $e){
-					//TODO: Add logs of a failure...
-					die(debug($e));
+					Logger::write('warning', "Could not mark inventory as purchased. Purchase: {$purchase->_id}. Item: {$attr['inventory_id']} Reason: ". $e->getMessage());
 				}
 			}
 			
@@ -128,8 +130,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			try{
 				$path = $this->_writePdf($purchase->_id, $this->_getPdf($purchase, $offers, $venues));
 			} catch (\Exception $e){
-				//TODO: Handle PDF Generation Errors.
-				die(debug($e->getMessage()));
+				Logger::write('error', "Could not generate pdf due to: ". $e->getMessage());
 			}
 			$to = $purchase->email;
 			
@@ -141,10 +142,12 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			$message->setTo($to);
 			$message->setBody($this->_getEmail($purchase));
 			
-			$message->attach(Swift_Attachment::fromPath($path));
+			if($path){
+				$message->attach(Swift_Attachment::fromPath($path));
+			}
 			
 			if(!$mailer->send($message)){
-				//TODO: Email failure...
+				Logger::write('error', "Could not generate pdf due to: ". $e->getMessage());
 			}
 			
 			Cart::unlock();
@@ -196,21 +199,18 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		);
 	}
 	private function _writePdf($purchaseId, &$pdf){
-		$path = LITHIUM_APP_PATH.'/resources/purchases/'. $purchaseId.'.pdf';
-		if(file_exists($path)){
+		$path = LITHIUM_APP_PATH.'/resources/purchases/';
+		$filepath = $path.DIRECTORY_SEPARATOR. $purchaseId.'.pdf';
+		if(file_exists($filepath)){
 			return true;
 		}
-		$file = fopen($path, 'w');
-		if(!file){
-			throw new \Exception("Cannot create pdf");
+		if(!is_writable($path)){
+			throw new \Exception("File path is not writable.");
 		}
-		$writen = fwrite($file,$pdf);
-		fclose($file);
-		
-		if($writen){
-			return $path;
+		if(file_put_contents($path,$pdf, LOCK_EX)){
+			return true;
 		}else{
-			throw new \Exception("File not written");
+			throw new \Exception("Could not write to file");
 		}
 	}
 }

@@ -10,13 +10,15 @@ class Inventory extends \lithium\data\Model{
 		'customer_id' => array('type'=>'_id'),
 		'state' => array('type'=>'string', 'default' => 'available'),
 	);
+	
 	protected static $_states = array('available'=>'available', 'reserved'=>'reserved', 'purchased'=>'purchased');
+	
 	public static function states(){
 		return static::$_states;
 	}
 	
 	public static function defaultState(){
-		return 'unpublished';
+		return 'available';
 	}
 	/**
 	 * 
@@ -43,7 +45,7 @@ class Inventory extends \lithium\data\Model{
 		
 		$result = static::_connection()->connection->command($command);
 		
-		if(!$result || !$result['ok']){
+		if(isset($result['errmsg'])){
 			throw new InventoryException();
 		}
 
@@ -56,7 +58,7 @@ class Inventory extends \lithium\data\Model{
 		$command = array(
 			'findAndModify' => 'inventories', 
 			'query' => array(
-				'_id' => new \MongoId($inventory_id),
+				'_id' => $inventory_id,
 			), 
 			'update'=> array(
 				'$set' => array(
@@ -66,8 +68,8 @@ class Inventory extends \lithium\data\Model{
 		);
 		
 		$result = static::_connection()->connection->command($command);
-		if(!$result || !isset($result['ok'])){
-			throw new InventoryException($inventory_id);
+		if(isset($result['errmsg'])){
+			throw new InventoryException();
 		}		
 		return true;
 	}
@@ -85,14 +87,15 @@ class Inventory extends \lithium\data\Model{
 		);
 		
 		$result = static::_connection()->connection->command($command);
-		if(!$result || !isset($result['ok'])){
-			throw new InventoryException($inventory_id);
-		}	
+		if(isset($result['errmsg'])){
+			
+			throw new InventoryException($result['errmsg']);
+		}
 		return true;
 	}
 	public static function createForOffer($offer_id){
 		$inventory = static::create();
-		$inventory->state = 'available';
+		$inventory->state = static::defaultState();
 		$inventory->offer_id = $offer_id;
 		return $inventory->save();
 	}

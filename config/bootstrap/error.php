@@ -9,7 +9,9 @@ use \lithium\template\View;
 /**
  * Then, set up a basic logging configuration that will write to a file.
  */
-Logger::config(array('error' => array('adapter' => 'File')));
+Logger::config(array(
+	'error' => array('adapter' => 'File')
+));
 
 /**
  * Configure an error page renderer function that we can use to render 404 and 500 error pages (for
