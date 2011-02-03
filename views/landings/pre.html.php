@@ -1,11 +1,16 @@
-<div style="margin-left: auto; margin-right: auto; width: 550px;">
-	<h2>What Is Chowly?</h2>
-	<p>Chowly is a restaurant deal site that offers great savings on many restaurants.</p>
-	
-	<h2>How do we do it?</h2>
-	<p>We have relationships with restaurants - from the very best local to leading national chains. Chowly helps these restaurants fill additional tables during off peak times that would otherwise go unsold. This means a Chowly customer can get last minute deals for local restaurants at great prices. And unlike other sites, our sevice makes it easy for our customers to pick from a variety of local restaurants and get same day deals. Everybody wins!</p>
+<div style="margin-left: auto; margin-right: auto; width: 90%;">
+	<h1>Sign-Up For Restaurant Deals in Ottawa!</h1>
+	<div id="orange">
+		<h2>What Is Chowly?</h2>
+		<p>Chowly is a restaurant deal site that offers great savings on many restaurants.</p>
+	</div>
+	<div id="apple">
+		<h2>How do we do it?</h2>
+		<p>We have relationships with restaurants - from the very best local to leading national chains. Chowly helps these restaurants fill additional tables during off peak times that would otherwise go unsold. This means a Chowly customer can get last minute deals for local restaurants at great prices. And unlike other sites, our sevice makes it easy for our customers to pick from a variety of local restaurants and get same day deals. Everybody wins!</p>
+
 	<p>Rely on us for the great, last-minute, deals available at Chowly.com.</p>
 	<p>Pick. Eat. Save.</p>
+	</div>	
 </div>
 
 <div style="width: 400px; margin-top: 30px; margin-bottom:10px; margin-left: auto; margin-right: auto;">

@@ -11,7 +11,7 @@ html, body { height: 100%; min-height: 100%; }
 
 /*--- Layout ---*/
 body {
-	font-family: Helvetica, Arial, sans-serif;
+	font-family: Georgia, Arial, sans-serif;
 	font-size: 14px;
 	line-height: 1.5em;
 	color: #0d0d0d;
@@ -27,17 +27,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 h1 { font-size: 2.2em; }
 h2, h5 { font-size: 1.8em; color: #666; margin-top: 2em; }
-h3, h6 { font-size: 1.6em; color: #00a8e6; }
+h3, h6 { font-size: 1.6em; color: #2d4011	; }
 h4 { font-size: 1.4em; }
 h5 { font-size: 1.2em; }
 h6 { font-size: 1em; }
-p { margin-bottom: 1em; }
+p { margin-bottom: 0.7em;  font-family: Arial, Verdana, sans-serif;}
 strong { font-weight: bold; }
 em { font-style: italic; }
 a { text-decoration: none; color: #666;}
 a, h1 a, h2 a { text-decoration: none; }
-a:hover { color: #00a8e6; }
-a:visited:hover { color: #00a8e6; }
+a:hover { color: #8fca37; }
+a:visited:hover { color: #8fca37; }
 a img { border: none; }
 
 /*--- Code ---*/
@@ -121,7 +121,7 @@ thead th, tfoot td {
 form {
 	display: block;
 	clear: both;
-	background: #fafafa;
+	background: #e1ffb5;
 	padding: 1em 2em 2em 2em;
 	border: 1px solid #e6e6e6;
 }
@@ -335,8 +335,9 @@ input, textarea {
 	padding-top: 20px;
 	margin-left: 10px;
 	margin-right: 10px;
-	margin-bottom: 50px;
+	margin-bottom: 30px;
 }
+
 #header h1 {
 	font-size: 35px;
 	color: #00a8e6;
@@ -345,13 +346,12 @@ input, textarea {
 }
 #header h2 {
 	margin:0;
-	color: #888;
-	font-size: 22px;
+	font-size: 24px;
 }
 #header .info{
 	float: right;
 	margin: 0;
-	padding: 0;
+	padding-right: 20px;
 	color: #888;
 }
 /*--- Content ---*/
@@ -364,6 +364,34 @@ input, textarea {
 }
 #content-panel{
 	margin: 10px;
+}
+
+#content h1 {
+	color: #343434;
+	font-size: 24px;
+	font-weight: bold;
+}
+
+#content h2 {
+	color: #343434;
+	font-size: 20px;
+	font-weight: bold;
+}
+
+#orange {
+	background-image: url("/img/question_orange.png");
+	padding-left: 90px;
+	background-repeat: no-repeat;
+	background-position: bottom left;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+#apple {
+	background-image: url("/img/exclamation_apple.png");
+	padding-left: 90px;
+	background-repeat: no-repeat;
+	background-position: left 35px;
 }
 /*-- Footer --*/
 #footer-container, .push{

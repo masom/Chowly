@@ -34,14 +34,14 @@
 						&nbsp;|&nbsp;
 						<?=$this->html->link('Contact Us', array('Tickets::add'))?>
 					</div>
-					<?php echo $this->html->link($this->html->image('logo.png', array('width' =>'150px;','alt'=>'Logo')), array('Landings::pre'),array('escape'=>false));?>
-					<h2>
+					<?php echo $this->html->link($this->html->image('logo.png', array('width' =>'170px;','alt'=>'Logo')), array('Landings::pre'),array('escape'=>false));?>
+					<!--<h2>
 						Pick. Eat. Save.
-					</h2>
+					</h2>-->
 				</div>
 			</div>
 			<div id="content">
-				<?=$this->flashMessage->output(); ?>
+				
 				<?php echo $this->content(); ?>
 			</div>
 		</div>
