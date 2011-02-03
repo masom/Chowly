@@ -1,6 +1,0 @@
-[submodule "libraries/li3_flash_message"]
-	path = libraries/li3_flash_message
-	url = code@rad-dev.org:li3_flash_message.git
-[submodule "libraries/li3_pdf"]
-	path = libraries/li3_pdf
-	url = code@dev.lithify.me:li3_pdf.git
