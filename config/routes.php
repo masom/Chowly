@@ -72,7 +72,6 @@ Router::connect('/venues/add', 'Venues::add');
 Router::connect('/venues/publish', 'Venues::publish');
 Router::connect('/venues/unpublish', 'Venues::unpublish');
 Router::connect('/venues/edit/{:id:[0-9a-f]{24}}', 'Venues::edit');
-*/
 /**
  * ...and connect the rest of 'Pages' controller's urls.
  */
