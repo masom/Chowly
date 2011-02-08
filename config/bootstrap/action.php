@@ -53,9 +53,10 @@ Dispatcher::applyFilter('run', function($self, $params, $chain) {
 	}
 	return $chain->next($self, $params, $chain);
 });
-Dispatcher::applyFilter('run', function($self, $params, $chain){
-	return $chain->next($self, $params, $chain);	
-});
+
+Dispatcher::config(array(
+    'rules' => array('admin' => array('action' => 'admin_{:action}'))
+));
 /**
  * Adds created and modified dates.
  * Updates modified if created is present.

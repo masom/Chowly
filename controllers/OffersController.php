@@ -107,7 +107,7 @@ class OffersController extends \chowly\extensions\action\Controller{
 		}
 		$this->redirect(array('Offers::view','id'=>$offer->_id));
 	}
-	public function add(){
+	public function admin_add(){
 		$offer = Offer::create();
 		if (($this->request->data)){
 			$offer->set($this->request->data);
@@ -138,7 +138,7 @@ class OffersController extends \chowly\extensions\action\Controller{
 		$this->_render['template'] = 'edit';
 		return compact('venue', 'offer');
 	}
-	public function edit(){
+	public function admin_edit(){
 		$conditions = array(
 			'_id' => $this->request->id
 		);

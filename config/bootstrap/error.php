@@ -50,6 +50,7 @@ ErrorHandler::config(array(
     array(
         'type' => 'Exception',
         'handler' => function($info) use ($render) {
+    debug($info);die;
             Logger::write('error', "{$info['file']} : {$info['line']} : {$info['message']}");
             $render('500', $info);
         }

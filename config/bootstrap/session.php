@@ -43,7 +43,11 @@ Auth::config(array(
  	'default' => array(
  		'adapter' => 'Form',
  		'model' => 'User',
- 		'fields' => array('email', 'password')
+ 		'fields' => array('email', 'password'),
+		'session' => array(
+			'options' => array('name' => 'default')
+		),
+		'scope' => array('active' => true)
  	)
 ));
 

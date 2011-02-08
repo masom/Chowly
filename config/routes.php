@@ -8,13 +8,12 @@
 
 use \lithium\net\http\Router;
 use \lithium\core\Environment;
-use chowly\models\Image;
 use \lithium\action\Response;
 
 
 Router::connect('/images/{:id:[0-9a-f]{24}}.(jpe?g|png|gif)', array(), function($request) {
 
-	$image = Image::first($request->id);
+	$image = chowly\models\Image::first($request->id);
 	if(!$image || !$image->file){	
 		header("Status: 404 Not Found");
 		header("HTTP/1.0 404 Not Found");
@@ -27,21 +26,28 @@ Router::connect('/images/{:id:[0-9a-f]{24}}.(jpe?g|png|gif)', array(), function(
 });
 
 /**
- * Here, we are connecting '/' (base path) to controller called 'Pages',
- * its action called 'view', and we pass a param to select the view file
- * to use (in this case, /app/views/pages/home.html.php)...
- */
-Router::connect('/', 'Offers::index');
-
-
-
-/**
  * Connect the testing routes.
  */
 if (!Environment::is('production')) {
 	Router::connect('/test/{:args}', array('controller' => 'lithium\test\Controller'));
 	Router::connect('/test', array('controller' => 'lithium\test\Controller'));
 }
+
+/**
+ * Here, we are connecting '/' (base path) to controller called 'Pages',
+ * its action called 'view', and we pass a param to select the view file
+ * to use (in this case, /app/views/pages/home.html.php)...
+ */
+Router::connect('/', 'Offers::index');
+
+Router::connect('/login', 'Users::login');
+Router::connect('/logout', 'Users::logout');
+Router::connect('/register', 'Users::add');
+
+//TODO: add only when auth
+Router::connect('/settings', 'User::edit');
+
+
 
 /**
  * Finally, connect the default routes.
@@ -64,6 +70,10 @@ Router::connect('/contact/{:args}', 'Tickets::add');
 
 //ADMIN
 //TODO: Move these to user auth only
+
+
+Router::connect('/admin/{:controller}/{:action}/{:args}', array('admin' => true), array('persist' => array('admin', 'controller')));
+
 Router::connect('/offers/add/{:id:[0-9a-f]{24}}', array('controller'=>'Offers','action'=>'add'));
 Router::connect('/offers/publish/{:id:[0-9a-f]{24}}', 'Offers::publish');
 Router::connect('/offers/unpublish/{:id:[0-9a-f]{24}}', 'Offers::unpublish');
