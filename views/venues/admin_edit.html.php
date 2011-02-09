@@ -1,12 +1,11 @@
-<div id="content-header">
-	<?php if($venue->_id):?>
-		<h1>Modifying Venue: <?=$venue->name;?></h1>
-	<?php else:?>
-		<h1>New Venue</h1>
-	<?php endif;?>
-</div>
 
-<div id="content-panel">
+<?php if($venue->_id):?>
+	<h1>Modifying Venue: <?=$venue->name;?></h1>
+<?php else:?>
+	<h1>New Venue</h1>
+<?php endif;?>
+
+
 <?=$this->form->create($venue, array('type' => 'file', 'id'=>'form_venue')); ?>
 	<?=$this->form->field('name'); ?>
 	<?=$this->form->field('description', array('type'=>'textarea')); ?>
@@ -24,7 +23,7 @@
 	<button id="form_venue_save" onclick="return false;">Save</button>
 	<button id="form_venue_cancel" onclick="return false;">Cancel</button>
 <?=$this->form->end(); ?>
-</div>
+
 <script type="text/javascript">
 $("#form_venue_save").bind('click',function(){
 	$("#form_venue").submit();

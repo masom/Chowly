@@ -49,8 +49,8 @@ if(Session::read('user')){
 	Router::connect('/settings', 'Users::edit');
 	
 	if(Session::read('user.role') == 'admin'){
-		Router::connect('/admin/{:controller}/{:action}/{:id:[0-9a-f]{24}}', array('admin' => true), array('persist' => array('admin', 'controller')));
-		Router::connect('/admin/{:controller}/{:action}/{:args}', array('admin' => true), array('persist' => array('admin', 'controller')));
+		Router::connect('/admin/{:controller}/{:action}/{:id:[0-9a-f]{24}}', array('admin' => true), array('persist' => array('controller')));
+		Router::connect('/admin/{:controller}/{:action}/{:args}', array('admin' => true), array('persist' => array('controller')));
 	}
 	if(in_array(Session::read('user.role'), array('admin','venue','staff'))){
 		Router::connect('/offers/add/{:id:[0-9a-f]{24}}', array('controller'=>'Offers','action'=>'add'));

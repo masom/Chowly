@@ -28,7 +28,7 @@
 						<?=$this->html->link('Contact Us', array('Tickets::add'))?>
 
 					</div>
-					<?php echo $this->html->link($this->html->image('logo.png', array('width' =>'150px;','alt'=>'Logo')), array('Offers::index'),array('escape'=>false));?>
+					<?php echo $this->html->link($this->html->image('logo.png', array('width' =>'150px;','alt'=>'Logo')), '/',array('escape'=>false));?>
 					<h2>
 						Pick. Eat. Save.
 					</h2>

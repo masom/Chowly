@@ -38,6 +38,7 @@ class Offer extends \lithium\data\Model{
 		'starts' => array('type'=>'date','null'=>false),
 		'ends'=>array('type'=>'date','null'=>false),
 		'availability' => array('type'=>'integer'),
+		'inventoryCount' => array('type'=>'integer'),
 		'created'=>array('type'=>'date'),
 	);
 
@@ -99,41 +100,32 @@ class Offer extends \lithium\data\Model{
 
 		return $inventory->_id;
 	}
-	
-	public function publish($entity){
-		if($entity->state == 'published'){
-			throw new \Exception('The offer is already published.');
-		}
-
-		$entity->state = 'published';
-
-		$conditions = array('offer_id' => $entity->_id);
-		$inventory_count = Inventory::count(compact('conditions'));
-		die(debug($inventory_count));
+	public function createWithInventory($entity){
+		$entity->inventoryCount = $entity->availability;
 		
+		if(!$entity->save()){
+			return false;
+		}
 		$created = 0;
-		for($i = $inventory_count; $i < $entity->availability; $i++){
+		for($i =0; $i < $entity->inventoryCount; $i++){
 			if(Inventory::createForOffer($entity->_id)){
 				$created++;
 			}else{
-				Logger::write('error', 'Could not create inventory item for {$entity_id}.');
+				Logger::write('error', 'Could not create inventory item for {$entity->_id}.');
 			}
 		}
-
-		if($entity->save()){
-			$count = ($created + $inventory_count);
-			if($count != $entity->availability){
-				throw new \InventoryException("Only {$count} item created.");
-			}
-			return true;
-		}else{
-			Inventory::deleteForOffer($entity->_id);
-			return false;
+		
+		if($created != $entity->inventoryCount){
+			throw new \InventoryException("Only {$created} item created.");
 		}
+		return true;
+	}
+	public function publish($entity){
+		$entity->state = 'published';
+		return $entity->save(null,array('validate'=>false,'whitelist'=>array('state')));
 	}
 
 	public function unpublish($entity){
-		Inventory::deleteForOffer($entity->_id);
 		$entity->state = 'unpublished';
 		return $entity->save(null,array('validate'=>false,'whitelist'=>array('state')));
 	}

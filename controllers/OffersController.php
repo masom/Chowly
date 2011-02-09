@@ -4,7 +4,7 @@ namespace chowly\controllers;
 use chowly\models\Offer;
 use chowly\models\Venue;
 use chowly\models\Cart;
-use chowly\extensions\data\InventoryException;
+
 use chowly\extensions\data\OfferException;
 use li3_flash_message\extensions\storage\FlashMessage;
 
@@ -66,12 +66,11 @@ class OffersController extends \chowly\extensions\action\Controller{
 		$this->redirect(array('Checkouts::confirm'));
 	}
 
-	/**
-	 * ADMIN FUNCTIONS BELLOW
-	 */
-	
-	
-	public function preview(){
+	public function admin_index(){
+		$offers = Offer::all();
+		return compact('offers');
+	}
+	public function admin_preview(){
 		$offer = Offer::first($this->request->id);
 		if(!$offer){
 			$this->redirect(array('Offers::index'));
@@ -80,21 +79,20 @@ class OffersController extends \chowly\extensions\action\Controller{
 		$venue = Venue::first(compact('conditions'));
 		return compact('venue','offer');
 	}
-	public function publish(){
+	public function admin_publish(){
 		$offer = Offer::first($this->request->id);
 		if(!$offer){
 			FlashMessage::set("Offer not found.");
 			$this->redirect(array('Offers::index'));
 		}
-		$retval = $offer->publish();
-		if($retval['success']){
+		if($offer->publish()){
 			FlashMessage::set("Offer published.");
 		}else{
 			FlashMessage::set("The offer could not be published.");
 		}
 		$this->redirect(array('Offers::view','id'=>$offer->_id));
 	}
-	public function unpublish(){
+	public function admin_unpublish(){
 		$offer = Offer::first($this->request->id);
 		if(!$offer){
 			FlashMessage::set("Offer not found");
@@ -111,11 +109,18 @@ class OffersController extends \chowly\extensions\action\Controller{
 		$offer = Offer::create();
 		if (($this->request->data)){
 			$offer->set($this->request->data);
-
-			$success = $offer->save();
+			
+			$success = false;
+			try{
+				$success = $offer->createWithInventory();
+			}catch(\Exception $e){
+				FlashMessage::set($e->getMessage());
+				$this->redirect(array('Offers::index','admin'=>true));
+			}
+			
 			if($success){
 				FlashMessage::set("Offer created.");
-				$this->redirect(array('Offers::preview', 'id' => $offer->_id));
+				$this->redirect(array('Offers::preview', 'id' => $offer->_id, 'admin'=>true));
 			}
 		}
 		
