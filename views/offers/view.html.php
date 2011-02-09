@@ -1,8 +1,7 @@
-<div id="content-header">
+
 	<h1><?=$offer->name;?></h1>
-</div>
-<div id="content-panel" style="margin-left: auto; margin-right: auto; width: 800px">
-	<div class="whitebox" style="float:left; width:400px;">
+
+	<div class="whitebox" style="float:left; width:380px;">
 		<?php if($offer->availability > 0):?>
 			<p>Only <?=$offer->availability;?> left!</p>
 		<?php else:?>
@@ -31,7 +30,7 @@
 		<h3>About the venue</h3>
 		<p style="margin-top: 20px;"><?php echo nl2br($venue->description);?></p>
 	</div>
-</div>
+
 <script type="text/javascript">
 $(function () {
 	var couponEnd = new Date();

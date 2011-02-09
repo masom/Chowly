@@ -75,12 +75,16 @@ class UsersController extends \chowly\extensions\action\Controller{
 	}
 	
 	public function edit(){
-		debug(Session::read());die;
-		$conditions = array('_id' => null);
+		$conditions = array('_id' => Session::read('user._id'));
 		$user = User::first(compact('conditions'));
 		if(!empty($this->request->data)){
-			
+			$user->set($this->request->data);
+			if($user->save($this->request->data,array('whitelist'=>array('name')))){
+				FlashMessage::set("Profile updated.");
+				$this->redirect('/');
+			}
 		}
+		return compact('user');
 	}
 	public function login(){
 		if(!empty($this->request->data)){
@@ -93,34 +97,29 @@ class UsersController extends \chowly\extensions\action\Controller{
 	}
 	public function logout(){
         Auth::clear('user');
+        FlashMessage::set("Your session has been terminated.");
         return $this->redirect('/');
 	}
 	public function add(){
 
 		$user = User::create();
 		if(!empty($this->request->data)){
-			$user->set($this->request->data);
-			$conditions = array('email' => $user->email);
-			if(User::first(compact('conditions'))){
-				FlashMessage::set("This email address is already registered.");
-				return compact($user);
+			try{
+				$user->set($this->request->data);
+				$user->role = 'customer';
+				$saved = $user->register();
+			}catch(\Exception $e){
+				FlashMessage::set($e->getMessage());
+				return compact('user');
 			}
-			if($user->save()){
+			
+			if($saved){
 				Auth::check('user',$this->request->data);
 				$this->redirect('/');
-			}
+			}		
 		}
 		
 		return compact('user');
 	}
 }
-
-User::applyFilter('save', function($self, $params, $chain){
-    $record = $params['entity'];
-    if (!$record->_id) {
-        $record->password = \lithium\util\String::hash($record->password);
-    }
-    $params['entity'] = $record;
-    return $chain->next($self, $params, $chain);
-});
 ?>

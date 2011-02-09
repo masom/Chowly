@@ -8,8 +8,7 @@
 
 use \lithium\net\http\Router;
 use \lithium\core\Environment;
-use \lithium\action\Response;
-
+use \lithium\storage\Session;
 
 Router::connect('/images/{:id:[0-9a-f]{24}}.(jpe?g|png|gif)', array(), function($request) {
 
@@ -19,7 +18,7 @@ Router::connect('/images/{:id:[0-9a-f]{24}}.(jpe?g|png|gif)', array(), function(
 		header("HTTP/1.0 404 Not Found");
 		die;
 	}
-	return new Response(array(
+	return new \lithium\action\Response(array(
 		'headers' => array('Content-type' => $image->type),
 		'body' => $image->file->getBytes()
 	));
@@ -45,9 +44,17 @@ Router::connect('/logout', 'Users::logout');
 Router::connect('/register', 'Users::add');
 
 //TODO: add only when auth
-Router::connect('/settings', 'User::edit');
-
-
+if(Session::read('user')){
+	Router::connect('/settings', 'Users::edit');
+	if(Session::read('user.role') == 'admin'){
+		Router::connect('/admin/{:controller}/{:action}/{:args}', array('admin' => true), array('persist' => array('admin', 'controller')));
+	}
+	if(in_array(Session::read('user.role'), array('admin','venue','staff'))){
+		Router::connect('/offers/add/{:id:[0-9a-f]{24}}', array('controller'=>'Offers','action'=>'add'));
+		Router::connect('/offers/publish/{:id:[0-9a-f]{24}}', 'Offers::publish');
+		Router::connect('/offers/unpublish/{:id:[0-9a-f]{24}}', 'Offers::unpublish');
+	}
+}
 
 /**
  * Finally, connect the default routes.
@@ -55,6 +62,7 @@ Router::connect('/settings', 'User::edit');
 Router::connect('/{:controller}/{:action}/{:id:[0-9a-f]{24}}.{:type}', array('id' => null));
 Router::connect('/{:controller}/{:action}/{:id:[0-9a-f]{24}}');
 Router::connect('/{:controller}/{:action}/{:args}');
+
 */
 Router::connect('/offers/{:id:[0-9a-f]{24}}', 'Offers::view');
 Router::connect('/offers/buy/{:id:[0-9a-f]{24}}', 'Offers::buy');
@@ -63,24 +71,15 @@ Router::connect('/venues', 'Venues::index');
 Router::connect('/venues/{:id:[0-9a-f]{24}}', 'Venues::view');
 
 Router::connect('/confirm', 'Checkouts::confirm');
-Router::connect('/checkout', 'Checkouts::checkout');//controller'=>'Checkouts','action'=>'checkout'));
+Router::connect('/checkout', 'Checkouts::checkout');
 
 Router::connect('/contact/{:args}', 'Tickets::add');
 
-
-//ADMIN
-//TODO: Move these to user auth only
+//TODO: Move these to admin auth only
 
 
-Router::connect('/admin/{:controller}/{:action}/{:args}', array('admin' => true), array('persist' => array('admin', 'controller')));
 
-Router::connect('/offers/add/{:id:[0-9a-f]{24}}', array('controller'=>'Offers','action'=>'add'));
-Router::connect('/offers/publish/{:id:[0-9a-f]{24}}', 'Offers::publish');
-Router::connect('/offers/unpublish/{:id:[0-9a-f]{24}}', 'Offers::unpublish');
 
-Router::connect('/venues/add', 'Venues::add');
-Router::connect('/venues/publish', 'Venues::publish');
-Router::connect('/venues/unpublish', 'Venues::unpublish');
 Router::connect('/venues/edit/{:id:[0-9a-f]{24}}', 'Venues::edit');
 /**
  * ...and connect the rest of 'Pages' controller's urls.

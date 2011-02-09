@@ -40,13 +40,10 @@ Session::config(array(
 
 
 Auth::config(array(
- 	'default' => array(
+ 	'user' => array(
  		'adapter' => 'Form',
  		'model' => 'User',
  		'fields' => array('email', 'password'),
-		'session' => array(
-			'options' => array('name' => 'default')
-		),
 		'scope' => array('active' => true)
  	)
 ));
