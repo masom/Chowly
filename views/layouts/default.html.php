@@ -11,12 +11,13 @@
 	<div id="container">
 		<div id="header_cta">
 			<div style="padding: 10px; margin-left: 10px; margin-right: 10px; padding-top: 15px;">
-			<span>Get Daily Restaurant Deals in <strong>Ottawa</strong>:</span>
-			<?=$this->form->create($user,array('url'=>'Landings::pre'));?>
-				<?=$this->form->field('email',array('template'=>'{:input}'));?>
-				<input type="hidden" name="zip" value="" />
-				<input type="image" src="/img/subscribe_button.png" alt="Suscribe" />
-			<?=$this->form->end();?>
+			Get Daily Restaurant Deals in <strong>Ottawa</strong>:
+				<?=$this->form->create($user,array('url'=>'Landings::pre'));?>
+					<?=$this->form->field('email',array('template'=>'{:input}', 'id'=>'cta_email_field','value'=>'Your email here...'));?>
+					<input type="hidden" name="zip" value="" />
+					<input type="image" src="/img/subscribe_button.png" alt="Suscribe" />
+				<?=$this->form->end();?>
+
 			</div>
 		</div>
 		<div style="background-image: url(/img/subscribe_rounded_bottom.png); height: 11px; margin-bottom: 20px;"></div>
@@ -64,7 +65,13 @@
 		</div>
 	</div>
 <script type="text/javascript">
-
+	(function(){
+		$('#cta_email_field').bind('focus', function(){
+			if($('#cta_email_field').val() == 'Your email here...'){
+				$('#cta_email_field').val('')
+			}
+		});
+	})();
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-20371187-1']);
   _gaq.push(['_setDomainName', '.chowly.com']);
