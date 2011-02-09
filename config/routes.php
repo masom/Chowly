@@ -47,7 +47,9 @@ Router::connect('/register', 'Users::add');
 if(Session::read('user')){
 	Router::connect('/profile', 'Users::view');
 	Router::connect('/settings', 'Users::edit');
+	
 	if(Session::read('user.role') == 'admin'){
+		Router::connect('/admin/{:controller}/{:action}/{:id:[0-9a-f]{24}}', array('admin' => true), array('persist' => array('admin', 'controller')));
 		Router::connect('/admin/{:controller}/{:action}/{:args}', array('admin' => true), array('persist' => array('admin', 'controller')));
 	}
 	if(in_array(Session::read('user.role'), array('admin','venue','staff'))){

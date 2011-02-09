@@ -20,12 +20,14 @@ class User extends \lithium\data\Model{
 			array('notEmpty','message' => 'Password is empty.')
 		),
 		'role' => array(
-			array('inList', 'list' => array('admin','staff','venue', 'customer'))	
+			array('inList', 'list' => array('admin','staff','venue', 'customer'), 'message'=>'Invalid role.')	
 		)
 	);
 	
-	private $_roles = array('admin','staff','venue','customer');
-	
+	private $_roles = array('admin'=>'admin','staff'=>'staff','venue'=>'venue','customer'=>'customer');
+	public function roles(){
+		return $this->_roles;
+	}
 	public function register($entity){
 		
 		$conditions = array('email' => $entity->email);

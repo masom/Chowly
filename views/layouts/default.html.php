@@ -15,6 +15,10 @@
 			<div id="header">
 				<div id="logo">
 					<div class="info">
+						<?php if($this->session->read('user')):?>
+							<?php echo $this->View()->render(array('element'=>'menu'));?>
+							<br />
+						<?php endif;?>
 						<?=$this->html->link('Home', array('Offers::index'));?>
 						&nbsp;|&nbsp;
 						<?=$this->html->link('About Us',array('Pages::view','args'=>'about'));?>
@@ -22,9 +26,7 @@
 						<?=$this->html->link('Your Restaurant Here', array('Tickets::add','args'=>'restaurants'));?>
 						&nbsp;|&nbsp;
 						<?=$this->html->link('Contact Us', array('Tickets::add'))?>
-						<?php if($this->session->read('user')):?>
-							<?php echo $this->View()->render(array('element'=>'menu'));?>
-						<?php endif;?>
+
 					</div>
 					<?php echo $this->html->link($this->html->image('logo.png', array('width' =>'150px;','alt'=>'Logo')), array('Offers::index'),array('escape'=>false));?>
 					<h2>

@@ -6,6 +6,41 @@ use chowly\models\Offer;
 use li3_flash_message\extensions\storage\FlashMessage;
 
 class VenuesController extends \chowly\extensions\action\Controller{
+	public function admin_index(){
+		$venues = Venue::all();
+		return compact('venues');
+	}
+	public function admin_add(){
+		$venue = Venue::create();
+		if (($this->request->data)){
+			$success = $venue->save($this->request->data);
+			if($success){
+				FlashMessage::set("Venue added.");
+				$this->redirect(array('Venues::view', 'id' => $venue->_id));
+			}
+		}
+		$this->_render['template'] = 'admin_edit';
+		
+		$publishedOptions = $venue->states();
+		
+		return compact('venue','publishedOptions');
+	}
+	public function admin_edit(){
+		$venue = Venue::find($this->request->id);
+
+		if (!$venue) {
+			FlashMessage::set("Venue not found.");
+			$this->redirect('Venues::index');
+		}
+		if (($this->request->data) && $venue->save($this->request->data)) {
+			FlashMessage::set("Venue modified.");
+			$this->redirect('Venues::index');
+		}
+		
+		$publishedOptions = $venue->states();
+		return compact('venue','publishedOptions');
+	}
+	
 	public function index(){
 		$conditions = array('state' => 'published');
 		$venues = Venue::all(compact('conditions'));
@@ -22,37 +57,6 @@ class VenuesController extends \chowly\extensions\action\Controller{
 		$conditions = array('venue_id' => $this->request->id, 'state'=>'published', 'availability' => array('$gt'=> 0));
 		$offers = Offer::all(compact('conditions'));
 		return compact('venue');
-	}
-	public function add() {
-		$venue = Venue::create();
-		if (($this->request->data)){
-			$success = $venue->save($this->request->data);
-			if($success){
-				FlashMessage::set("Venue added.");
-				$this->redirect(array('Venues::view', 'id' => $venue->_id));
-			}
-		}
-		$this->_render['template'] = 'edit';
-		
-		$publishedOptions = $venue->states();
-		
-		return compact('venue','publishedOptions');
-	}
-
-	public function edit() {
-		$venue = Venue::find($this->request->id);
-
-		if (!$venue) {
-			FlashMessage::set("Venue not found.");
-			$this->redirect('Venues::index');
-		}
-		if (($this->request->data) && $venue->save($this->request->data)) {
-			FlashMessage::set("Venue modified.");
-			$this->redirect(array('Venues::view', 'id' => $venue->_id));
-		}
-		
-		$publishedOptions = $venue->states();
-		return compact('venue','publishedOptions');
 	}
 }
 ?>

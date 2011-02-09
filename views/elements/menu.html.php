@@ -1,4 +1,15 @@
-&nbsp;|&nbsp;
+<?php $user = $this->session->read('user');?>
+
+<div style="float:right;">
+	<?php if(in_array($user['role'], array('admin','staff'))):?>
+		<?=$this->html->link('Offers', array('Offers::index','admin'=>true));?>
+		&nbsp;|&nbsp;
+		<?=$this->html->link('Users', array('Users::index','admin'=>true));?>
+		&nbsp;|&nbsp;
+		<?=$this->html->link('Venues', array('Venues::index','admin'=>true));?>
+		&nbsp;|&nbsp;
+	<?php endif;?>
 <?=$this->html->link('Your Profile',array('Users::view'));?>
 &nbsp;|&nbsp;
 <?=$this->html->link('Logout',array('Users::logout'));?>
+</div>

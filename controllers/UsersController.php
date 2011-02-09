@@ -17,7 +17,6 @@ class UsersController extends \chowly\extensions\action\Controller{
 		if(!empty($this->request->data)){
 			
 		}
-		$this->_render['template'] = 'edit';
 		return compact('user');
 	}
 	public function admin_edit(){
@@ -27,9 +26,18 @@ class UsersController extends \chowly\extensions\action\Controller{
 		$user = User::first(compact('conditions'));
 		
 		if(!empty($this->request->data)){
-			if($user->save($this->request->data)){
+			
+			$user->set($this->request->data);
+			
+			if(empty($user->password)){
+				unset($user->password);
+			}else{
+				$user->password = \lithium\util\String::hash($user->password);
+			}
+			
+			if($user->save()){
 				FlashMessage::set("User modified.");
-				$this->redirect(array('Users::view',$user->_id));
+				$this->redirect('Users::index');
 			}else{
 				FlashMessage::set("The user could not be modified.");
 			}
