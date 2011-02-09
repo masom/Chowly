@@ -45,6 +45,7 @@ Router::connect('/register', 'Users::add');
 
 //TODO: add only when auth
 if(Session::read('user')){
+	Router::connect('/profile', 'Users::view');
 	Router::connect('/settings', 'Users::edit');
 	if(Session::read('user.role') == 'admin'){
 		Router::connect('/admin/{:controller}/{:action}/{:args}', array('admin' => true), array('persist' => array('admin', 'controller')));

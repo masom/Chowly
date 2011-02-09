@@ -12,7 +12,6 @@
 		<br />
 		<div style="height: 11px;background-image: url(/img/main_rounded_top.png);"></div>
 		<div id="content-wrapper">
-			
 			<div id="header">
 				<div id="logo">
 					<div class="info">
@@ -23,6 +22,9 @@
 						<?=$this->html->link('Your Restaurant Here', array('Tickets::add','args'=>'restaurants'));?>
 						&nbsp;|&nbsp;
 						<?=$this->html->link('Contact Us', array('Tickets::add'))?>
+						<?php if($this->session->read('user')):?>
+							<?php echo $this->View()->render(array('element'=>'menu'));?>
+						<?php endif;?>
 					</div>
 					<?php echo $this->html->link($this->html->image('logo.png', array('width' =>'150px;','alt'=>'Logo')), array('Offers::index'),array('escape'=>false));?>
 					<h2>

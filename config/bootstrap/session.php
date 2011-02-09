@@ -14,7 +14,6 @@ use lithium\storage\Session;
 use lithium\security\Auth;
 
 Session::config(array(
-	'cookie' => array('adapter' => 'Cookie'),
 	'default' => array('adapter' => 'Php'),
 	'flash_message' => array('adapter'=>'Php'),
 	'ChowlyCart' => array('adapter' => 'Php')

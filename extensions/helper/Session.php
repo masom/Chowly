@@ -1,6 +1,6 @@
 <?php
 
-namespace app\extensions\helper;
+namespace chowly\extensions\helper;
 
 class Session extends \lithium\template\Helper {
 
