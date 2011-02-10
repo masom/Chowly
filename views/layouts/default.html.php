@@ -4,7 +4,7 @@
 	<?php echo $this->html->charset();?>
 	<title>Chowly | Pick. Eat. Save.</title>
 	<?php echo $this->html->style(array('debug', 'lithium', 'cupertino/jquery-ui-1.8.7.custom')); ?>
-	<?php echo $this->html->script(array('jquery-1.4.4.min', 'jquery-ui-1.8.7.custom.min', 'jquery.numeric','jquery.countdown.min')); ?>
+	<?php echo $this->html->script(array('jquery-1.4.4.min', 'jquery-ui-1.8.7.custom.min')); ?>
 	<?php echo $this->html->link('Icon', null, array('type' => 'icon')); ?>
 </head>
 <body>
@@ -12,7 +12,7 @@
 		<div id="header_cta">
 			<div style="padding: 10px; margin-left: 10px; margin-right: 10px; padding-top: 15px;">
 			Get Daily Restaurant Deals in <strong>Ottawa</strong>:
-				<?=$this->form->create($user,array('url'=>'Landings::pre'));?>
+				<?=$this->form->create($user,array('url'=>'Landings::pre','style'=>'float:right;'));?>
 					<?=$this->form->field('email',array('template'=>'{:input}', 'id'=>'cta_email_field','value'=>'Your email here...'));?>
 					<input type="hidden" name="zip" value="" />
 					<input type="image" src="/img/subscribe_button.png" alt="Suscribe" />
