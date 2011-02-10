@@ -11,8 +11,8 @@
 	<div id="container">
 		<div id="header_cta">
 			<div style="padding: 10px; margin-left: 10px; margin-right: 10px; padding-top: 15px;">
-			Get Daily Restaurant Deals in <strong>Ottawa</strong>:
-				<?=$this->form->create($user,array('url'=>'Landings::pre','style'=>'float:right;'));?>
+				<div style="float:left;">Get Daily Restaurant Deals in <strong>Ottawa</strong>:</div>
+				<?=$this->form->create($user,array('url'=>'Landings::pre', 'style'=>'float:right; clear:none;'));?>
 					<?=$this->form->field('email',array('template'=>'{:input}', 'id'=>'cta_email_field','value'=>'Your email here...'));?>
 					<input type="hidden" name="zip" value="" />
 					<input type="image" src="/img/subscribe_button.png" alt="Suscribe" />
