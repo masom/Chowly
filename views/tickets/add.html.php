@@ -1,5 +1,5 @@
 <div style="width: 600px; margin-left: auto; margin-right: auto;">
-	<h1>Contact Us</h1>
+	<h2>Contact Us</h2>
 	<?php if($isRestaurant):?>
 		<p>
 			Chowly offers the most efficient and cost-effective way to bring you the one thing you’ve always wanted from advertising—customers! 
