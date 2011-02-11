@@ -1,5 +1,4 @@
-
-<div style="margin-left: auto; margin-right: auto; width: 550px;">
+<div style="margin-left: auto; margin-right: auto; width: 650px;">
 <h2>About Chowly</h2>
 	<p>Chowly.com offers a variety of daily deals on handpicked restaurants. By working with local restaurants,
 	Chowly is able to sell off tables that would otherwise go unused at great discounts. Our mission is
@@ -26,10 +25,22 @@
 	suggestions, ideas, corrections or with just a question. Are you looking for a restaurant that we don’t
 	offer? Contact us to see if we can possibly add your restaurant to our growing list.</p>
 	
-	<p>Restaurants, please contact us to find out how you can add daily deals to Chowly.com.</p>
-	<p>Advertisers and partners, please contact our Marketing Department at marketing@chowly.com</p>
-	<p>Enquire about investing or partnering at investors@chowly.com</p>
-	<p>Media can contact us at media@chowly.com</p>
+	<h3>Restaurants</h3>
+	<p><?=$this->html->link('Contact us', array('Tickets::add','args'=>'restaurants'));?> to find out how you can add daily deals to Chowly.com</p>
 	
-	<p>Team Chowly</p>
+	<h3>Advertisers and Partners</h3>
+	<p>Contact our Marketing Department at <a href='marketing@chowly.com'>marketing@chowly.com</a></p>
+	
+	<h3>Investors</h3>
+	<p>Enquire about investing or partnering at <a href='investors@chowly.com'>investors@chowly.com</a></p>
+	
+	<h3>Media</h3>
+	<p>Contact us at <a href='media@chowly.com'>media@chowly.com</a></p>
+	
+	<br />
+	<p>
+		Team Chowly
+		<br />
+		Pick. Eat. Save.
+	</p>
 </div>

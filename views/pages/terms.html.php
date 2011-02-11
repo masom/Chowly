@@ -10,7 +10,7 @@ Valid for dine in only unless otherwise stated.
 The issuing of restaurant credit is at the sole discretion of the Restaurant unless otherwise required by applicable law.
 Neither Chowly nor the Restaurant is responsible for lost or stolen Vouchers or restaurant Voucher reference numbers.
 Reproduction, sale or trade of a Restaurant-Specific Voucher is prohibited unless done so in compliance with applicable law.
-Any attempted redemption not consistent with these terms & conditions will render the Restaurant-Specific Voucher void.
+Any attempted redemption not consistent with these terms &amp; conditions will render the Restaurant-Specific Voucher void.
 Void to the extent prohibited by law.
 If you redeem the Voucher for less than its face value, you will only be entitled to a credit or cash from the Restaurant, equal to the difference between the face value and the amount you redeemed, if required by applicable law. You will only be entitled to a continuing redemption value as noted above if the amount that you paid for the Voucher exceeds the amount you redeemed. For example, if you paid $20 for a Voucher which entitles you to purchase $50 of product by February 1, 2010 and you make a purchase for $40 on January 30, 2010, you will only be entitled to a credit or cash equal to the difference between the $50 face value and the amount you redeemed from the Merchant (i.e., $10) if required by applicable law. You will not have any redemption value either because the amount you redeemed is more than what you paid for the Voucher.
 All purchases of Vouchers for Restaurants may have statutory limitations on the amount of the Voucher value that can be redeemed for alcoholic beverages. Chowly’s sole role in the transaction is as a marketing agent for the Merchant Voucher, and the applicability and compliance with any relevant statute or code is solely determined and consummated by the Merchant, and Chowly has no role in such determination or action on the part of the Merchant.
@@ -56,7 +56,7 @@ All Vouchers shall be subject to the terms and conditions of Chowly and the part
 <h3>6. Copyright Policy.</h3>
 
 <p>Chowly reserves the right to terminate its agreement with any End User who repeatedly infringes third-party copyright rights upon prompt notification to Chowly by the copyright owner or the copyright owner’s legal agent. Without limiting the foregoing, if you believe that a copyrighted work has been copied and posted via the Site or any Microsite in a way that constitutes copyright infringement, you shall provide Chowly with the following information: (a) an electronic or physical signature of the person authorized to act on behalf of the owner of the copyrighted work; (b) an identification and location on the Site or any Microsite of the copyrighted work that you claim has been infringed; (c) a written statement by you that you have a good faith belief that the disputed use is not authorized by the owner, its agent, or the law; (d) your name and contact information, such as telephone number or e-mail address; and (e) a statement by you that the above information in your notice is accurate and, under penalty of perjury, that you are the copyright owner or authorized to act on the copyright owner’s behalf. Contact information for Chowly’s Copyright Agent for notice of claims of copyright infringement is as follows:</p>
-<pre></pre>
+<pre>
 Chowly, Corp. 
 Attn: Copyright Agent 
 40 The Driveway 

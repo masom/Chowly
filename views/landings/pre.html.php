@@ -6,7 +6,7 @@
 	</div>
 	<div id="apple">
 		<h2>How do we do it?</h2>
-		<p>We have relationships with restaurants - from the very best local to leading national chains. Chowly helps these restaurants fill additional tables during off peak times that would otherwise go unsold. This means a Chowly customer can get last minute deals for local restaurants at great prices. And unlike other sites, our sevice makes it easy for our customers to pick from a variety of local restaurants and get same day deals. Everybody wins!</p>
+		<p>We have relationships with restaurants - from the very best local to leading national chains. Chowly helps these restaurants fill additional tables during off peak times that would otherwise go unsold. This means a Chowly customer can get last minute deals for local restaurants at great prices. And unlike other sites, our service makes it easy for our customers to pick from a variety of local restaurants and get same day deals. Everybody wins!</p>
 
 	<p>Rely on us for the great, last-minute, deals available at Chowly.com.</p>
 	<p>Pick. Eat. Save.</p>
@@ -22,7 +22,7 @@
 		<?=$this->form->field('email', array('label'=>'Email Address'));?>
 		<?=$this->form->field('zip', array('label'=>'Postal Code'));?>
 		<p>
-			<?=$this->html->link('Why do we ask for your postal code.', array('Pages::view','args'=>array('whypostalcode')));?>
+			<?=$this->html->link('Why do we ask for your postal code?', array('Pages::view','args'=>array('whypostalcode')));?>
 		</p>
 		<div style="text-align: center;">
 			<input type="image" src="/img/subscribe_button.png" alt="Suscribe" />

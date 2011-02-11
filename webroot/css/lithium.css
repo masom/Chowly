@@ -35,6 +35,7 @@ p { margin-bottom: 0.7em;  font-family: Arial, Verdana, sans-serif;}
 strong { font-weight: bold; }
 em { font-style: italic; }
 a { text-decoration: none; color: #666;}
+#content a { color: #00a8e6; }
 a, h1 a, h2 a { text-decoration: none; }
 a:hover { color: #8fca37; }
 a:visited:hover { color: #8fca37; }
