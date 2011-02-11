@@ -37,7 +37,7 @@ em { font-style: italic; }
 a { text-decoration: none; color: #666;}
 #content a { color: #00a8e6; }
 a, h1 a, h2 a { text-decoration: none; }
-a:hover { color: #8fca37; }
+a:hover, #content a:hover { color: #8fca37; }
 a:visited:hover { color: #8fca37; }
 a img { border: none; }
 
@@ -287,7 +287,7 @@ input, textarea {
 	height: auto !important;
 	height: 100%;
 	
-	margin: 0 auto -80px;
+	margin: 0 auto -30px;
 
 }
 #container, #footer{
@@ -396,7 +396,7 @@ input, textarea {
 }
 /*-- Footer --*/
 #footer-container, .push{
-	height: 80px;
+	height: 30px;
 }
 #footer-container{
 	width: 100%;

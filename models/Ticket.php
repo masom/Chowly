@@ -18,7 +18,7 @@ class ticket extends \lithium\data\Model{
 			array('notEmpty', 'message'=> 'You must tell us something...')
 		),
 		'email' => array(
-			array('email', 'message' => 'Email is not valid.')
+			array('email', 'message' => 'We need a valid email for us to respond.')
 		),
 		'zip' => array(
 			array('zip', 'skipEmpty'=>true, 'message' => 'Invalid Canadian postal code.')
