@@ -7,7 +7,13 @@ class Purchase extends \lithium\data\Model{
 	public $error = null;
 	protected $_schema = array(
 		'_id' => array('type'=>'id'),
-		'customer_id' => array('type'=>'_id'),
+		'customer_id' => array('type'=>'id'),
+		'name'=>array('type'=>'string'),
+		'address'=>array('type'=>'string'),
+		'city' => array('type'=>'string'),
+		'phone'=>array('type'=>'string'),
+		'postal' => array('type'=>'string'),
+		'cc_number' => array('type'=>'string'),
 		'state' => array('type'=>'string'),
 		'created' => array('type'=>'date'),
 		'modified' => array('type'=>'date'),

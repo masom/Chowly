@@ -2,11 +2,13 @@
 
 <div style="float:right;">
 	<?php if(in_array($user['role'], array('admin','staff'))):?>
-		<?=$this->html->link('Offers', array('Offers::index','admin'=>true));?>
+		<?=$this->html->link('Purchases', array('Purcahses::index',$user['role']=>true));?>
 		&nbsp;|&nbsp;
-		<?=$this->html->link('Users', array('Users::index','admin'=>true));?>
+		<?=$this->html->link('Offers', array('Offers::index',$user['role']=>true));?>
 		&nbsp;|&nbsp;
-		<?=$this->html->link('Venues', array('Venues::index','admin'=>true));?>
+		<?=$this->html->link('Users', array('Users::index',$user['role']=>true));?>
+		&nbsp;|&nbsp;
+		<?=$this->html->link('Venues', array('Venues::index',$user['role']=>true));?>
 		&nbsp;|&nbsp;
 	<?php endif;?>
 <?=$this->html->link('Your Profile',array('Users::view'));?>

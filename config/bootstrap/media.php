@@ -55,4 +55,6 @@ Dispatcher::applyFilter('_callable', function($self, $params, $chain) {
 	}
 	return $chain->next($self, $params, $chain);
 });
+
+Media::type('pdf', 'application/pdf', array());
 ?>
