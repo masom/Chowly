@@ -10,7 +10,7 @@ use li3_flash_message\extensions\storage\FlashMessage;
 
 class OffersController extends \chowly\extensions\action\Controller{
 	
-	public function index(){
+	public function index(){	
 		$offers = Offer::current();
 		$venues = array();
 		$venues_id = array();
@@ -67,13 +67,21 @@ class OffersController extends \chowly\extensions\action\Controller{
 	}
 
 	public function admin_index(){
-		$offers = Offer::all();
-		return compact('offers');
+		
+		$limit = 20;
+		$page = ($this->request->params['page'])? $this->request->params['page'] : 1;
+		$order = array('created' => 'DESC');
+		
+		$total = Offer::count();
+		
+		$offers = Offer::all(compact('order','limit','page'));
+		
+		return compact('offers', 'total', 'page', 'limit');
 	}
 	public function admin_preview(){
 		$offer = Offer::first($this->request->id);
 		if(!$offer){
-			$this->redirect(array('Offers::index'));
+			$this->redirect(array('Offers::index','admin'=>true));
 		}
 		$conditions = array('_id'=> $offer->venue_id);
 		$venue = Venue::first(compact('conditions'));
@@ -90,7 +98,7 @@ class OffersController extends \chowly\extensions\action\Controller{
 		}else{
 			FlashMessage::set("The offer could not be published.");
 		}
-		$this->redirect(array('Offers::view','id'=>$offer->_id));
+		$this->redirect($this->request->referer());
 	}
 	public function admin_unpublish(){
 		$offer = Offer::first($this->request->id);
@@ -103,7 +111,7 @@ class OffersController extends \chowly\extensions\action\Controller{
 		}else{
 			FlashMessage::set("The offer could not be unpublished.");
 		}
-		$this->redirect(array('Offers::view','id'=>$offer->_id));
+		$this->redirect($this->request->referer());
 	}
 	public function admin_add(){
 		$offer = Offer::create();
@@ -132,7 +140,7 @@ class OffersController extends \chowly\extensions\action\Controller{
 			$conditions = array('_id' => $this->request->data['venue_id']);
 		}
 		if(!$conditions){
-			$this->redirect(array('Offers::index'));
+			$this->redirect(array('Offers::index','admin'=>true));
 		}
 		$venue = Venue::first(compact('conditions'));
 		

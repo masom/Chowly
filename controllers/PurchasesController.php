@@ -9,8 +9,15 @@ use li3_flash_message\extensions\storage\FlashMessage;
 class PurchasesController extends \chowly\extensions\action\Controller{
 	
 	public function admin_index(){
-		$purchases = Purchase::all();
-		return compact('purchases');
+		
+		$limit = 20;
+		$page = ($this->request->params['page'])? $this->request->params['page'] : 1;
+		$order = array('created' => 'DESC');
+		
+		$total = Purchase::count();
+		$purchases = Purchase::all(compact('order','limit','page'));
+		
+		return compact('purchases', 'total', 'page', 'limit');
 	}
 	public function admin_view(){
 		

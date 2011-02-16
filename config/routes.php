@@ -49,6 +49,7 @@ if(Session::read('user')){
 	Router::connect('/settings', 'Users::edit');
 	
 	if(Session::read('user.role') == 'admin'){
+		Router::connect('/admin/{:controller}/{:action}/page:{:page:[0-9]+}', array('admin' => true), array('persist' => array('controller')));
 		Router::connect('/admin/{:controller}/{:action}/{:id:[0-9a-f]{24}}.{:type}', array('id' => null, 'admin' => true), array('persist' => array('controller')));
 		Router::connect('/admin/{:controller}/{:action}/{:id:[0-9a-f]{24}}', array('admin' => true), array('persist' => array('controller')));
 		Router::connect('/admin/{:controller}/{:action}/{:args}', array('admin' => true), array('persist' => array('controller')));

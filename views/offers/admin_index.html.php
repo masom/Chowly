@@ -1,7 +1,7 @@
 <h1>Offers</h1>
 <table>
 	<thead>
-		<tr><th>Name</th><th>Starts</th><th>Ends</th></tr>
+		<tr><th>Name</th><th>Starts</th><th>Ends</th><th>Actions</th></tr>
 	</thead>
 <?php foreach($offers as $offer):?>
 	<tr>
@@ -12,3 +12,11 @@
 	</tr>
 <?php endforeach;?>
 </table>
+<div>
+	<?php if($page > 1):?>
+		<?=$this->html->link('< Previous', array('Offers::index', 'admin'=>true, 'page'=> $page - 1));?>
+	<?php endif;?>
+	<?php if($total > ($limit * $page)):?>
+		<?=$this->html->link('Next >', array('Offers::index', 'admin'=>true, 'page'=> $page + 1));?>
+	<?php endif;?>
+</div>
