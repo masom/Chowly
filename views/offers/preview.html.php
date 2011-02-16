@@ -1,5 +1,5 @@
 <h1>Offer Preview</h1>
-<div class="whitebox" style="width: 480px; float: left;">
+<div class="whitebox" style="width: 380px; float: left;">
 	<h1><?=$offer->name;?></h1>
 	<ul>
 		<?php if($offer->image):?>
@@ -11,7 +11,7 @@
 	</ul>
 	<p style="text-align: justify;"><?php echo nl2br($offer->description);?></p>
 </div>
-<div class="whitebox" style="margin-left: 30px; width: 300px; float:left;">
+<div class="whitebox" style="width: 300px; float:left;">
 	<?php if($venue->logo):?>
 		<?=$this->html->image("/images/{$venue->logo}.jpg")?>
 	<?php endif;?>
@@ -23,5 +23,8 @@
 </div>
 <br style="clear: both" />
 <div class="whitebox" style="width: 200px;">
-	<?=$this->html->link('Publish', array('Offers::publish', 'id'=>$offer->_id));?>
+	<?=$this->html->link('Publish', array('Offers::publish', 'id'=>$offer->_id),array('id'=>'publish'));?>
 </div>
+<script type="text/javascript">
+$('#publish').button();
+</script>

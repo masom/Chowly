@@ -85,9 +85,11 @@ class OffersController extends \chowly\extensions\action\Controller{
 		}
 		$conditions = array('_id'=> $offer->venue_id);
 		$venue = Venue::first(compact('conditions'));
+		
+		$this->_render['template'] = 'preview';
 		return compact('venue','offer');
 	}
-	public function admin_publish(){
+	public function publish(){
 		$offer = Offer::first($this->request->id);
 		if(!$offer){
 			FlashMessage::set("Offer not found.");
@@ -100,7 +102,7 @@ class OffersController extends \chowly\extensions\action\Controller{
 		}
 		$this->redirect($this->request->referer());
 	}
-	public function admin_unpublish(){
+	public function unpublish(){
 		$offer = Offer::first($this->request->id);
 		if(!$offer){
 			FlashMessage::set("Offer not found");

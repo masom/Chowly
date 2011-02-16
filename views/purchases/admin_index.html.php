@@ -5,7 +5,7 @@
 	<button onclick="return false;" id="purchase_submit">View</button>
 	<script type="text/javascript">
 		$('#purchase_submit').bind('click',function(){
-			document.location = '<?=$this->html->url(array('Purchases::view','admin'=>true));?>/' + $('#purchase_id').val();
+			document.location = '<?=$this->url(array('Purchases::view','admin'=>true));?>/' + $('#purchase_id').val();
 		});
 	</script>
 </div>
