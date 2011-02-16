@@ -9,8 +9,15 @@ use \lithium\storage\Session;
 class UsersController extends \chowly\extensions\action\Controller{
 
 	public function admin_index(){
-		$users = User::all();
-		return compact('users');
+		
+		$limit = 20;
+		$page = ($this->request->params['page'])? $this->request->params['page'] : 1;
+		$order = array('name' => 'ASC');
+		
+		$total = User::count();
+		$users = User::all(compact('order','limit','page'));
+		
+		return compact('users', 'total', 'page', 'limit');
 	}
 	public function admin_add(){
 		$user = User::create();

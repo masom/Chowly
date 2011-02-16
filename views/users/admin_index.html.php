@@ -17,3 +17,11 @@
 		</tr>
 	<?php endforeach;?>
 </table>
+<div>
+	<?php if($page > 1):?>
+		<?=$this->html->link('< Previous', array('Offers::index', 'admin'=>true, 'page'=> $page - 1));?>
+	<?php endif;?>
+	<?php if($total > ($limit * $page)):?>
+		<?=$this->html->link('Next >', array('Offers::index', 'admin'=>true, 'page'=> $page + 1));?>
+	<?php endif;?>
+</div>
