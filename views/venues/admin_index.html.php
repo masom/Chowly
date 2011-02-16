@@ -15,3 +15,12 @@
 <?php endforeach;?>
 
 </table>
+
+<div>
+	<?php if($page > 1):?>
+		<?=$this->html->link('< Previous', array('Venues::index', 'admin'=>true, 'page'=> $page - 1));?>
+	<?php endif;?>
+	<?php if($total > ($limit * $page)):?>
+		<?=$this->html->link('Next >', array('Venues::index', 'admin'=>true, 'page'=> $page + 1));?>
+	<?php endif;?>
+</div>

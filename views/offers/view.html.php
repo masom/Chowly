@@ -9,9 +9,7 @@
 		<?php endif;?>
 		<p id="offer-countdown" class="countdown"></p>
 		<?php if($offer->availability > 0):?>
-			<div style="padding: 10px; font-size: 14px; border: 1px solid #aaa; background-color:#ddd; border-radius: 9px; width: 50px; text-align: center;">
-				<?=$this->html->link('Buy', array('Offers::buy', 'id'=>$offer->_id));?>
-			</div>
+		<?=$this->html->link('Buy', array('Offers::buy', 'id'=>$offer->_id),array('id'=>'offer_buy'));?>
 		<?php endif;?>
 		<?php if($offer->image):?>
 			<?=$this->html->image("/images/{$offer->image}.jpg");?>
@@ -33,6 +31,8 @@
 
 <script type="text/javascript">
 $(function () {
+	$('#offer_buy').button();
+	
 	var couponEnd = new Date();
 	couponEnd = new Date(<?php echo $offer->ends->sec * 1000;?>);
 	$("#offer-countdown").countdown({until: couponEnd, layout: 'Ends in {dn} {dl}, {hnn}{sep}{mnn}{sep}{snn}'});
