@@ -1,6 +1,8 @@
 <?php
 namespace chowly\controllers;
 
+use lithium\data\source\Database;
+
 use li3_flash_message\extensions\storage\FlashMessage;
 use chowly\models\Cart;
 use chowly\models\Inventory;
@@ -73,7 +75,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 				//TODO: Do we fail at that point or still sell the item?
 			}
 		}
-		
+
 		//TODO: Credit Card data processing...
 		if($this->request->data){
 			
@@ -126,7 +128,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			
 			$conditions = array('_id' => $venuesList);
 			$venues = Venue::find('all', compact('conditions'));
-			
+
 			try{
 				$path = $this->_writePdf($purchase->_id, $this->_getPdf($purchase, $offers, $venues));
 			} catch (\Exception $e){
@@ -160,8 +162,6 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 	}
 	private function _getEmail($purchase){
 		$view  = new View(array(
-		    'loader' => 'File',
-		    'renderer' => 'File',
 		    'paths' => array(
 		        'template' => '{:library}/views/{:controller}/{:template}.{:type}.php'
 		    )
@@ -178,9 +178,9 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		);
 	}
 	private function _getPdf($purchase, $offers, $venues){
-		$view  = new View(array(
-		    'loader' => 'Pdf',
-		    'renderer' => 'Pdf',
+		$view  = new View(
+		array(
+
 		    'paths' => array(
 		        'template' => '{:library}/views/{:controller}/{:template}.{:type}.php',
 		        'layout'   => '{:library}/views/layouts/{:layout}.{:type}.php',
@@ -199,7 +199,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		);
 	}
 	private function _writePdf($purchaseId, &$pdf){
-		$path = LITHIUM_APP_PATH.'/resources/purchases/';
+		$path = LITHIUM_APP_PATH.'/resources/purchases';
 		$filepath = $path.DIRECTORY_SEPARATOR. $purchaseId.'.pdf';
 		if(file_exists($filepath)){
 			return true;
@@ -207,8 +207,8 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		if(!is_writable($path)){
 			throw new \Exception("File path is not writable.");
 		}
-		if(file_put_contents($path,$pdf, LOCK_EX)){
-			return true;
+		if(file_put_contents($filepath, $pdf,LOCK_EX)){
+			return $filepath;
 		}else{
 			throw new \Exception("Could not write to file");
 		}
