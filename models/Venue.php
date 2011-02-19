@@ -29,13 +29,12 @@ class Venue extends \lithium\data\Model{
 		return $this->_errors;
 	}
 	public function save($entity, $data = null, array $options = array()) {
+		$files = array();
 		$files['logo'] = $data['logo'];
 		$files['image'] = $data['image'];
 		unset($data['logo'],$data['image']);
 		
-		if(!parent::save($entity, $data, $options)){
-			return false;
-		}
+		$entity->_id = new \MongoId();
 		
 		$this->_errors = array();
 		foreach($files as $key => $file){
@@ -43,10 +42,11 @@ class Venue extends \lithium\data\Model{
 			
 			$image = Image::create();
 			$imageData = array('file'=> $file, 'parent_id'=> $entity->_id, 'parent_type'=>'venue');
-			if(!$image->save($imageData)){
+			if($image->save($imageData)){
+				$data[$key] = $image->_id;
+			}else{
 				$this->_errors[]= "Image {$key} could not be saved.";
 			}
-			$data[$key] = $image->_id;
 		}
 		return parent::save($entity, $data, $options);
 	}

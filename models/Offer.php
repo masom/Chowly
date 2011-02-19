@@ -28,6 +28,7 @@ class Offer extends \lithium\data\Model{
 		'cost' => array(
 			array('numeric','message'=>'Must be a monetary amount (ex: 33.00)')
 		)
+		
 	);
 
 	protected $_schema = array(
@@ -37,6 +38,7 @@ class Offer extends \lithium\data\Model{
 		'name' => array('type'=>'string','null'=>false),
 		'starts' => array('type'=>'date','null'=>false),
 		'ends'=>array('type'=>'date','null'=>false),
+		'image' => array('type'=>'id'),
 		'availability' => array('type'=>'integer'),
 		'inventoryCount' => array('type'=>'integer'),
 		'created'=>array('type'=>'date'),
@@ -128,6 +130,31 @@ class Offer extends \lithium\data\Model{
 	public function unpublish($entity){
 		$entity->state = 'unpublished';
 		return $entity->save(null,array('validate'=>false,'whitelist'=>array('state')));
+	}
+	
+	public function getErrors(){
+		return $this->_errors;
+	}
+	public function save($entity, $data = null, array $options = array()) {
+		$files = array();
+		$files['image'] = $data['image'];
+		unset($data['image']);
+
+		$entity->_id = new \MongoId();
+		$this->_errors = array();
+		foreach($files as $key => $file){
+			if(!$file['tmp_name'] || empty($file['tmp_name'])) continue;
+			
+			$image = Image::create();
+			$imageData = array('file'=> $file, 'parent_id'=> $entity->_id, 'parent_type'=>'offer');
+			if($image->save($imageData)){
+				$data[$key] = $image->_id;
+			}else{
+				$this->_errors[]= "Image {$key} could not be saved.";
+			}
+			
+		}
+		return parent::save($entity, $data, $options);
 	}
 }
 ?>

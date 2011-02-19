@@ -45,8 +45,7 @@
 	</div>
 	<div id="footer-container">
 		<div id="footer">
-			<strong>Unbeatable Deals for Local Dining</strong>
-			<div>Chowly the easiest way to discover local restaurants.
+			<div>
 				<?=$this->html->link('Our Promise To You', array('Pages::view','args'=>'guarantee'));?>
 				&nbsp;|&nbsp;
 				<?=$this->html->link('Privacy Policy', array('Pages::view','args'=>'privacy'));?>
