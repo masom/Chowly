@@ -58,32 +58,45 @@ class UsersController extends \chowly\extensions\action\Controller{
 		return compact('user');
 	}
 	public function admin_enable(){
-		if(empty($this->request->data)){
-			return;
+		$data = array('success'=>false,'active'=>false, 'id'=>$this->request->id);
+		
+		if(empty($this->request->id)){
+			return $this->render(array('json'=>$data));
 		}
 		
-		$conditions = array('_id'=>$this->request->data['id']);
+		$conditions = array('_id'=>$this->request->id);
 		$user = User::first(compact('conditions'));
 		
 		if(!$user){
-			return;
+			return $this->render(array('json' => $data));
 		}
 		
-		$user->enable();
+		if($user->setActive(true)){
+			$data['active'] = true;
+			$data['success'] = true;
+		}
+		return $this->render(array('json' => $data));
 	}
 	public function admin_disable(){
-		if(empty($this->request->data)){
-			return;
+		
+		$data = array('success'=>false,'active'=>false, 'id'=>$this->request->id);
+		
+		if(empty($this->request->id)){
+			return $this->render(array('json'=>$data));
 		}
 		
-		$conditions = array('_id'=>$this->request->data['id']);
+		$conditions = array('_id'=>$this->request->id);
 		$user = User::first(compact('conditions'));
 		
 		if(!$user){
-			return;
+			return $this->render(array('json' => $data));
 		}
+		if($user->setActive(false)){
+			$data['active'] = false;
+			$data['success'] = true;
+		}
+		return $this->render(array('json' => $data));
 		
-		$user->disable();
 	}
 	public function reset_password(){
 		

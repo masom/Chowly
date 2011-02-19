@@ -69,6 +69,8 @@ Router::connect('/{:controller}/{:action}/{:id:[0-9a-f]{24}}');
 Router::connect('/{:controller}/{:action}/{:args}');
 
 */
+
+Router::connect('/cart/remove/{:id:[0-9a-f]{24}}', 'Carts::remove');
 Router::connect('/offers/{:id:[0-9a-f]{24}}', 'Offers::view');
 Router::connect('/offers/buy/{:id:[0-9a-f]{24}}', 'Offers::buy');
 

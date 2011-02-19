@@ -9,10 +9,40 @@
 			<td><?=$user->name;?></td>
 			<td><?=$user->email;?></td>
 			<td><?=$user->role;?></td>
-			<td><?php echo ($user->active)? 'Enabled' : 'Disabled';?></td>
+			<td id="user_<?=$user->_id;?>_state"><?=($user->active)? 'Enabled' : 'Disabled';?></td>
 			<td>
-				<?=$this->html->link('Edit',array('controller'=>'users','action'=>'edit', 'id'=>$user->_id,'admin'=>true));?> 
-				<?=$this->html->link('Disable',array('controller'=>'users','action'=>'disable','id'=>$user->_id,'admin'=>true));?>
+				<?=$this->html->link('Edit',array('controller'=>'users','action'=>'edit', 'id'=>$user->_id,'admin'=>true));?>
+				<a href="#" id="<?php echo "user_{$user->_id}_activation";?>"><?=($user->active)? "Disable" : "Enable";?></a>
+				<script type="text/javascript">
+					$(function(){
+					$('#user_<?=$user->_id;?>_activation').data('enabled', <?=($user->active)? 1 : 0;?>);
+					$('#user_<?=$user->_id;?>_activation').bind('click', function(e){
+						var activate = '<?=$this->url(array('controller'=>'users','action'=>'enable','id'=>$user->_id,'admin'=>true));?>';
+						var deactivate = '<?=$this->url(array('controller'=>'users','action'=>'disable','id'=>$user->_id,'admin'=>true));?>';
+						var url = null;
+						if($('#user_<?=$user->_id;?>_activation').data('enabled')){
+							url = deactivate;
+						}else{
+							url = activate;
+						}
+						$.ajax({
+							  url: url,
+							  context: document.body,
+							  success: function(data){
+							  	if(!data.success){ return;}
+							  	$('#user_<?=$user->_id;?>_activation').data('enabled', data.active);
+								if(data.active){
+								 $('#user_<?=$user->_id;?>_activation').text('Disable');
+								 $('#user_<?=$user->_id;?>_state').text('Enabled');
+								}else{
+								 $('#user_<?=$user->_id;?>_activation').text('Enable');
+								 $('#user_<?=$user->_id;?>_state').text('Disabled');
+								}
+							  }
+							});
+						return false;
+					});});
+				</script>
 			</td>
 		</tr>
 	<?php endforeach;?>

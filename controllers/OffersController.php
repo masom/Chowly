@@ -6,6 +6,8 @@ use chowly\models\Venue;
 use chowly\models\Cart;
 
 use chowly\extensions\data\OfferException;
+use chowly\extensions\data\InventoryException;
+
 use li3_flash_message\extensions\storage\FlashMessage;
 
 class OffersController extends \chowly\extensions\action\Controller{
@@ -43,10 +45,10 @@ class OffersController extends \chowly\extensions\action\Controller{
 	public function buy(){
 		if(!$this->request->id){
 			FlashMessage::set("Missing data.");
-			$this->redirect(array("Offers::index"));
+			return $this->redirect(array("Offers::index"));
 		}
 		if(Cart::contain($this->request->id)){
-			$this->redirect(array('Checkouts::confirm'));
+			return $this->redirect(array('Checkouts::confirm'));
 		}
 		$readonly = Cart::isReadOnly();
 		if($readonly){
@@ -57,10 +59,10 @@ class OffersController extends \chowly\extensions\action\Controller{
 			$reserved = Offer::reserve($this->request->id, 'test');
 		}catch(InventoryException $e){
 			FlashMessage::set("Sorry, The item could not be added to your cart");
-			$this->redirect($this->request->referer());
+			return $this->redirect($this->request->referer());
 		}catch(OfferException $e){
 			FlashMessage::set("Sorry, The item could not be added to your cart for the following reason: {$e->getMessage()}");
-			$this->redirect($this->request->referer());
+			return $this->redirect($this->request->referer());
 		}
 		Cart::add($this->request->id, $reserved);
 		$this->redirect(array('Checkouts::confirm'));

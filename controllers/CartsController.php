@@ -6,15 +6,17 @@ use chowly\models\Cart;
 class CartsController extends \chowly\extensions\action\Controller{
 	
 	public function remove(){
+		
+		$data = array("cleared" => false, 'id' => $this->request->id);
+		
 		if(!$this->request->id){
-			return;
+			return $this->render(array('json' => $data));
 		}
 		
 		if(!Cart::clear($this->request->id)){
-			return true;
-		}else{
-			return false;
+			$data['cleared'] = true;
 		}
+		$this->render(array('json' => $data));
 	}
 }
 ?>

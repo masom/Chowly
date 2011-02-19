@@ -46,7 +46,6 @@ class User extends \lithium\data\Model{
 		
 		$entity->active = true;
 		if($entity->save()){
-			//TODO: Send email
 			return true;
 		}
 		return false;
@@ -63,6 +62,10 @@ class User extends \lithium\data\Model{
 		}
 		$entity->role = $role;
 		return $entity->save(null,array('validate'=>true,'whitelist'=>array('role')));
+	}
+	public function setActive($entity, $active){
+		$entity->active = $active;
+		return $entity->save(null,array('validate'=>true,'whitelist'=>array('active')));
 	}
 }
 ?>
