@@ -62,7 +62,7 @@ class OffersController extends \chowly\extensions\action\Controller{
 			return $this->redirect(array('Checkouts::confirm'));
 		}
 		try{
-			$reserved = Offer::reserve($this->request->id, 'test');
+			$reserved = Offer::reserve($this->request->id, Cart::id());
 		}catch(InventoryException $e){
 			FlashMessage::set("Sorry, The item could not be added to your cart");
 			return $this->redirect($this->request->referer());

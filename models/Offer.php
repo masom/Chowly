@@ -68,7 +68,18 @@ class Offer extends \lithium\data\Model{
 
 		return static::all(compact('conditions','order'));
 	}
-	
+	public static function releaseInventory($offer_id){
+		try{
+			Inventory::release(Cart::id(), $offer_id);
+		}catch(InventoryException $e){
+			Logger::write('error', "Could not release inventor for the following reason: {$e->getMessage()}");
+			return false;
+		}
+		
+		$query = array('$inc' => array('availability'=>1));
+		$conditions = array('_id' => $offer_id);
+		return static::update($query, $conditions);
+	}
 	/**
 	 * 
 	 * @param var $customer_id

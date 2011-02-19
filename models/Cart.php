@@ -2,6 +2,7 @@
 namespace chowly\models;
 
 use \lithium\storage\Session;
+use \MongoId;
 
 class Cart extends \lithium\data\Model{
 	/**
@@ -25,8 +26,16 @@ class Cart extends \lithium\data\Model{
 	 */
 	public static function __init() {
 		static::$_storage = static::$_classes['session'];
+		$storage = static::$_storage;
+		if(!$storage::check('Cart.id')){
+			$storage::write('Cart.id', new MongoId(), static::$_options);
+		}
 	}
 	
+	public static function id(){
+		$storage = static::$_storage;
+		return $storage::read("Cart.id", static::$_options);
+	}
 	public static function endTransaction(){
 		$storage = static::$_storage;
 		return $storage::write("Cart.State", $states['frozen'], static::$_options);
@@ -133,17 +142,14 @@ class Cart extends \lithium\data\Model{
 	 */
 	public static function clear($key = '') {
 		$storage = static::$_storage;
-
 		if(in_array($storage::read("Cart.State", static::$_options), array('transaction','frozen'))){
 			return false;
 		}
-		
 		if (empty($key)) {
-			$storage::write("Cart.Items", array(), static::$_options);
+			return $storage::write("Cart.Items", array(), static::$_options);
 		}else{
-			$storage::delete("Cart.Items.{$key}", static::$_options);
+			return $storage::delete("Cart.Items.{$key}", static::$_options);
 		}
-		
 	}
 	public static function isReadOnly(){
 		$storage = static::$_storage;

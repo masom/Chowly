@@ -20,6 +20,33 @@ class Inventory extends \lithium\data\Model{
 	public static function defaultState(){
 		return 'available';
 	}
+	
+	public static function release($customer_id, $offer_id){
+		$command = array(
+			'findAndModify' => 'inventories', 
+			'query' => array(
+				'offer_id' => new \MongoId($offer_id),
+				'state' => 'reserved'
+			), 
+			'update'=> array(
+				'$set' => array(
+					'state'=> 'available',
+					'customer_id' => null
+				)
+			)
+		);
+		
+		$result = static::_connection()->connection->command($command);
+		
+		if(isset($result['errmsg'])){
+			throw new InventoryException($result['errmsg']);
+		}
+
+		$inventory = new \lithium\data\entity\Document();
+		$inventory->set($result['value']);
+
+		return $inventory;
+	}
 	/**
 	 * 
 	 * Reserve a inventory item for a limited duration.
@@ -46,7 +73,7 @@ class Inventory extends \lithium\data\Model{
 		$result = static::_connection()->connection->command($command);
 		
 		if(isset($result['errmsg'])){
-			throw new InventoryException();
+			throw new InventoryException($result['errmsg']);
 		}
 
 		$inventory = new \lithium\data\entity\Document();
@@ -69,7 +96,7 @@ class Inventory extends \lithium\data\Model{
 		
 		$result = static::_connection()->connection->command($command);
 		if(isset($result['errmsg'])){
-			throw new InventoryException();
+			throw new InventoryException($result['errmsg']);
 		}		
 		return true;
 	}

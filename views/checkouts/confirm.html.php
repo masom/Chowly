@@ -23,6 +23,7 @@ $('#CheckoutGo').button();
 <?php foreach($offers as $offer):?>
 	$('#offer_<?=$offer->_id;?>_remove').button();
 	$('#offer_<?=$offer->_id;?>_remove').bind('click', function(){
+		this.style.display = 'none';
 		$.ajax({
 			  url: "<?=$this->url(array('Carts::remove', 'id'=>$offer->_id));?>",
 			  context: document.body,
