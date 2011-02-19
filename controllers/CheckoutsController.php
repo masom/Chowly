@@ -34,13 +34,16 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		}*/
 	}
 	public function cancel(){
-		Cart::unlock();
-		Cart::unfreeze();
+		if(Cart::inTransaction()){
+			FlashMessage::set("There is currently a transaction in progress. Cannot modify the cart.");
+		}else{
+			Cart::unfreeze();
+		}
 		$this->redirect(array('Offers::index'));
 	}
 	public function confirm(){
 		if(Cart::isEmpty()){
-			FlashMessage::set("Empty Cart!");
+			FlashMessage::set("Your cart is currently empty.");
 			return $this->redirect("Offers::index");
 		}
 		
@@ -58,12 +61,11 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		
 		Cart::freeze();
 		if(Cart::isEmpty()){
-			Cart::unlock();
 			Cart::unfreeze();
-			FlashMessage::set("Empty Cart!");
+			FlashMessage::set("Your cart is currently empty.");
 			return $this->redirect("Offers::index");
 		}
-		
+
 		$cart = Cart::get();
 		
 		//Secure inventory so it does not expire while in checkout.
@@ -71,13 +73,20 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			try{
 				Inventory::secure($attr['inventory_id']);
 			}catch(InventoryException $e){
-				Logger::write('warning', "Could not secure {$attr['inventory_id']} Reason: ". $e->getMessage());
+				Logger::write('warning', "Could not secure {$attr['inventory_id']} Reason: {$e->getMessage()}");
 				//TODO: Do we fail at that point or still sell the item?
 			}
 		}
-
+		
+		if(Cart::inTransaction()){
+			FlashMessage::set("There is a transaction in progress on your cart. Please try again.");
+			return $this->redirect("Offers::index");
+		}
+		
 		//TODO: Credit Card data processing...
 		if($this->request->data){
+			
+			Cart::startTransaction();
 			
 			$purchase = Purchase::create();
 			$purchase->set($this->request->data);
@@ -85,10 +94,13 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			
 			if(!$purchase->validates()){
 				unset($purchase->cc_number, $purchase->cc_sc);
+				
+				Cart::endTransaction();
+				
 				return compact('purchase', 'provinces');
 			}
 			
-			Cart::lock();
+			
 			$cart = Cart::get();
 			
 			$conditions = array('_id'=> array_keys($cart));
@@ -101,6 +113,9 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 				unset($purchase->cc_number, $purchase->cc_sc);
 				Logger::write('notice', "Could not process purchase due to: ". $e->getMessage());
 				FlashMessage::set("Some processing errors occured.");
+				
+				Cart::endTransaction();
+				
 				return compact('purchase', 'provinces');
 			}
 			unset($purchase->cc_number, $purchase->cc_sc);
@@ -109,6 +124,9 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			if(!$purchase->isCompleted()){
 				Logger::write('notice', "Transaction not completed due to : {$purchase->error}");
 				FlashMessage::set("The purchase could not be completed.");
+				
+				Cart::endTransaction();
+				
 				return compact('purchase', 'provinces');
 			}
 			
@@ -129,6 +147,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			$conditions = array('_id' => $venuesList);
 			$venues = Venue::find('all', compact('conditions'));
 
+			$path = null;
 			try{
 				$path = $this->_writePdf($purchase->_id, $this->_getPdf($purchase, $offers, $venues));
 			} catch (\Exception $e){
@@ -142,25 +161,28 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			$message->setSubject("Chowly Purchase {$purchase->_id} confirmation");
 			$message->setFrom(array('purchases@chowly.com' => 'Chowly'));
 			$message->setTo($to);
-			$message->setBody($this->_getEmail($purchase));
 			
 			if($path){
+				$message->setBody($this->_getEmail($purchase));
 				$message->attach(Swift_Attachment::fromPath($path));
+			}else{
+				$message->setBody($this->_getEmail($purchase, 'generation_failure'));
 			}
 			
 			if(!$mailer->send($message)){
-				Logger::write('error', "Could not generate pdf due to: ". $e->getMessage());
+				Logger::write('error', "Could not send email for purchase {$purchase->_id}");
 			}
 			
-			Cart::unlock();
+			Cart::endTransaction();
 			Cart::unfreeze();
 			Cart::clear();
+			
 			$this->_render['template'] = 'success';
 			return compact('purchase');
 		}
 		return compact('provinces');
 	}
-	private function _getEmail($purchase){
+	private function _getEmail($purchase, $template = 'purchase'){
 		$view  = new View(array(
 		    'paths' => array(
 		        'template' => '{:library}/views/{:controller}/{:template}.{:type}.php'
@@ -171,7 +193,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		    compact('purchase'),
 		    array(
 		        'controller' => 'purchases',
-		        'template'=>'purchase',
+		        'template'=> $template,
 		        'type' => 'mail',
 		        'layout' => false
 		    )

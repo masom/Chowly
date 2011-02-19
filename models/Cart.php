@@ -27,44 +27,52 @@ class Cart extends \lithium\data\Model{
 		static::$_storage = static::$_classes['session'];
 	}
 	
-	public static function lock(){
+	public static function endTransaction(){
 		$storage = static::$_storage;
-		return $storage::write("CartLock", true, static::$_options);
+		return $storage::write("Cart.State", $states['frozen'], static::$_options);
 	}
-	public static function unlock(){
+	public static function startTransaction(){
 		$storage = static::$_storage;
-		if($storage::check("CartLock", static::$_options)){
-			return $storage::delete("CartLock", static::$_options);
-		}
-		return true;
+		return $storage::write("Cart.State", static::$_states['transaction'], static::$_options);
 	}
+	public static function inTransaction(){
+		$storage = static::$_storage;
+		return ($storage::read("Cart.State", static::$_options) == 'transaction');
+	}
+	
 	public static function freeze(){
 		$storage = static::$_storage;
 		
-		if($storage::read("CartLock", static::$_options)){
-			return false;
+		switch ($storage::read("Cart.State", static::$_options)){
+			case 'transaction':
+			case 'frozen':
+				return true;
+				break;
+			default:
+				return $storage::write("Cart.State", $states['frozen'], static::$_options);
+				break;
 		}
-		
-		return $storage::write("CartFreeze",true, static::$_options);
 	}
 	
 	public static function unfreeze(){
 		$storage = static::$_storage;
 		
-		if($storage::read("CartLock", static::$_options)){
-			return false;
+		switch($storage::read("Cart.State", static::$_options)){
+			case 'transaction':
+				break;
+			case 'frozen':
+				$storage::write("Cart.State", 'default', static::$_options);
+				break;
+			default:
+				return true;
+				break;
 		}
-		
-		if($storage::check("CartFreeze", static::$_options)){
-			return $storage::delete("CartFreeze", static::$_options);
-		}
-		return true;
 	}
 	
 	public static function contain($offer_id){
 		$storage = static::$_storage;
 		static::clean();
-		return $storage::check("Cart.{$offer_id}", static::$_options);
+		return $storage::check("Cart.Items.{$offer_id}", static::$_options);
 	}
 	
 	/**
@@ -75,14 +83,14 @@ class Cart extends \lithium\data\Model{
 	public static function add($offer_id, $inventory_id){
 		$storage = static::$_storage;
 		
-		if($storage::read("CartLock", static::$_options) || $storage::read("CartFreeze", static::$_options)){
+		if(in_array($storage::read("Cart.State", static::$_options), array('transaction','frozen'))){
 			return false;
 		}
 		
 		if(static::contain($offer_id)){
 			return true;
 		}
-		return $storage::write("Cart.{$offer_id}", array('inventory_id'=>$inventory_id,'expires'=> time() + 15 * 60), static::$_options);
+		return $storage::write("Cart.Items.{$offer_id}", array('inventory_id'=>$inventory_id,'expires'=> time() + 15 * 60), static::$_options);
 	}
 	
 	/**
@@ -92,19 +100,17 @@ class Cart extends \lithium\data\Model{
 	public static function get() {
 		$storage = static::$_storage;
 
-		if($storage::read("CartLock", static::$_options) || $storage::read("CartFreeze", static::$_options)){
-			return $storage::read("Cart", static::$_options);
+		if(!in_array($storage::read("Cart.State", static::$_options), array('transaction','frozen'))){
+			static::clean();
 		}
-		
-		static::clean();
-		return $storage::read("Cart", static::$_options);
+		return $storage::read("Cart.Items", static::$_options);
 	}
 	
 	public static function clean(){
 		$storage	= static::$_storage;
 		$time		= time();
 		
-		foreach($storage::read("Cart", static::$_options) as $offer => $attr){
+		foreach($storage::read("Cart.Items", static::$_options) as $offer => $attr){
 			if($attr['expires'] < $time){
 				static::clear($offer);
 			}
@@ -113,12 +119,11 @@ class Cart extends \lithium\data\Model{
 	public static function isEmpty(){
 		$storage = static::$_storage;
 
-		if($storage::read("CartLock", static::$_options) || $storage::read("CartFreeze", static::$_options)){
-			return ($storage::read("Cart", static::$_options))? false : true;
+		if(!in_array($storage::read("Cart.State", static::$_options), array('transaction','frozen'))){
+			static::clean();
 		}
 		
-		static::clean();
-		return ($storage::read("Cart", static::$_options))? false : true;
+		return ($storage::read("Cart.Items", static::$_options))? false : true;
 	}
 	/**
 	 * Clears one or all items from the storage.
@@ -129,29 +134,22 @@ class Cart extends \lithium\data\Model{
 	public static function clear($key = '') {
 		$storage = static::$_storage;
 
-		if($storage::read("CartLock", static::$_options) || $storage::read("CartFreeze", static::$_options)){
+		if(in_array($storage::read("Cart.State", static::$_options), array('transaction','frozen'))){
 			return false;
 		}
 		
-		$sessionKey = 'Cart';
 		if (empty($key)) {
-			$storage::write("Cart", array(), static::$_options);
+			$storage::write("Cart.Items", array(), static::$_options);
 		}else{
-			$sessionKey .= ".{$key}";
-			$storage::delete($sessionKey, static::$_options);
+			$storage::delete("Cart.Items.{$key}", static::$_options);
 		}
 		
 	}
 	public static function isReadOnly(){
 		$storage = static::$_storage;
-		if($storage::read("CartFreeze", static::$_options)){
-			return 1;
+		if(in_array($storage::read("Cart.State", static::$_options), array('transaction','frozen'))){
+			return true;
 		}
-		
-		if($storage::read("CartLock", static::$_options)){ 
-			return 2;
-		}
-		
 		return false;
 	}
 }

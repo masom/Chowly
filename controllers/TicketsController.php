@@ -14,7 +14,13 @@ class TicketsController extends \chowly\extensions\action\Controller{
 				FlashMessage::set('Sorry, there is something wrong with the provided information.');
 			}
 		}
-		return compact('ticket');
+		
+		$isRestaurant = false;
+		
+		if(in_array('restaurants',$this->request->args)){
+			$isRestaurant = true;
+		}
+		return compact('ticket','isRestaurant');
 	}
 	public function received(){}
 }
