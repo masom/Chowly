@@ -4,7 +4,7 @@ NOTE: Please read this disclaimer in its entirety before using our web site.
 </p>
 <p>For the purpose of this disclaimer, Chowly.com will be referred to as "The COMPANY"</p>
 
-<p>General Disclaimer of Liability</p>
+<h3>General Disclaimer of Liability</h3>
 
 <p>THE SERVICE AND CONTENT FROM OR THROUGH THIS SITE ARE PROVIDED "AS-IS," "AS AVAILABLE,"
 AND ALL WARRANTIES, EXPRESS OR IMPLIED, ARE DISCLAIMED (INCLUDING BUT NOT LIMITED TO THE
@@ -21,12 +21,12 @@ or use of the Web site.</p>
 <p>All responsibility or liability for any damages caused by viruses contained within the electronic files or at
 the site is disclaimed.</p>
 
-<p>Hyperlinks</p>
+<h3>Hyperlinks</h3>
 <p>
 This site contains links to other Internet sites. Such links are not endorsements of any products or
 services in such sites, and no information in such site has been endorsed or approved by the COMPANY.
 </p>
-<p>Submissions</p>
+<h3>Submissions</h3>
 <p>
 All remarks, suggestions, ideas, graphics, or other information communicated to the COMPANY through
 this site (collectively, the "Submission") will forever be the property of the COMPANY. The COMPANY
