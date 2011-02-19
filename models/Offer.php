@@ -79,7 +79,8 @@ class Offer extends \lithium\data\Model{
 		$conditions = array(
 			'starts' => array('$lt' => $date),
 			'ends' => array('$gt' => $date),
-			'_id' => $offer_id
+			'_id' => $offer_id,
+			'state'=> 'published'
 		);
 
 		$offer = static::first(array('conditions'=> $conditions));
@@ -108,6 +109,7 @@ class Offer extends \lithium\data\Model{
 		if(!$entity->save()){
 			return false;
 		}
+		
 		$created = 0;
 		for($i =0; $i < $entity->inventoryCount; $i++){
 			if(Inventory::createForOffer($entity->_id)){
@@ -136,11 +138,17 @@ class Offer extends \lithium\data\Model{
 		return $this->_errors;
 	}
 	public function save($entity, $data = null, array $options = array()) {
+		
 		$files = array();
-		$files['image'] = $data['image'];
-		unset($data['image']);
-
-		$entity->_id = new \MongoId();
+		if(isset($data['image'])){
+			$files['image'] = $data['image'];
+			unset($data['image']);
+		}
+		
+		if(!$entity->_id){
+			$entity->_id = new \MongoId();
+		}
+		
 		$this->_errors = array();
 		foreach($files as $key => $file){
 			if(!$file['tmp_name'] || empty($file['tmp_name'])) continue;

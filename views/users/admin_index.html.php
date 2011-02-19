@@ -1,5 +1,5 @@
 <h1>Users</h1>
-<?=$this->html->link('Add a new user',array('Users::add','admin'=>true));?>
+<?=$this->html->link("{$this->html->image('silk/add.png', array('style'=>'vertical-align: text-top;'))} Add a new user",array('Users::add','admin'=>true), array('escape'=> false));?>
 <table>
 	<thead>
 		<tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th></tr>

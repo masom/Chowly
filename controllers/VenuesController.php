@@ -41,6 +41,26 @@ class VenuesController extends \chowly\extensions\action\Controller{
 		return compact('venue','publishedOptions');
 	}
 	
+	public function admin_view(){
+
+		if(!$this->request->id){
+			FlashMessage::set("Missing data.");
+			$this->redirect(array('Venues::index'));
+		}
+		
+		$conditions = array('_id'=>$this->request->id);
+		
+		$venue = Venue::first(compact('conditions'));
+		if(!$venue){
+			FlashMessage::set("The specified venue does not exists.");
+			$this->redirect($this->request->referer());
+		}
+		
+		$conditions = array('venue_id' => $venue->_id);
+		$offers = Offer::all(compact('conditions'));
+		return compact('venue', 'offers');
+	}
+	
 	public function index(){
 		$conditions = array('state' => 'published');
 		$venues = Venue::all(compact('conditions'));
@@ -54,9 +74,14 @@ class VenuesController extends \chowly\extensions\action\Controller{
 		$conditions = array('_id'=>$this->request->id, 'state'=>'published');
 		$venue = Venue::first(compact('conditions'));
 		
+		if(!$venue){
+			FlashMessage::set("The specified venue does not exists.");
+			$this->redirect($this->request->referer());
+		}
+		
 		$conditions = array('venue_id' => $this->request->id, 'state'=>'published', 'availability' => array('$gt'=> 0));
 		$offers = Offer::all(compact('conditions'));
-		return compact('venue');
+		return compact('venue','offers');
 	}
 }
 ?>

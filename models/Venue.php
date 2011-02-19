@@ -29,12 +29,19 @@ class Venue extends \lithium\data\Model{
 		return $this->_errors;
 	}
 	public function save($entity, $data = null, array $options = array()) {
-		$files = array();
-		$files['logo'] = $data['logo'];
-		$files['image'] = $data['image'];
-		unset($data['logo'],$data['image']);
 		
-		$entity->_id = new \MongoId();
+		$files = array();
+		$keys = array('logo','image');
+		foreach($keys as $key){
+			if(isset($data[$key])){
+				$files[$key] = $data[$key];
+				unset($data[$key]);
+			}
+		}
+		
+		if(!$entity->_id){
+			$entity->_id = new \MongoId();
+		}
 		
 		$this->_errors = array();
 		foreach($files as $key => $file){

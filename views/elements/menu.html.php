@@ -2,6 +2,8 @@
 
 <div style="float:right;">
 	<?php if(in_array($user['role'], array('admin','staff'))):?>
+		<?=$this->html->link('Tickets', array('Tickets::index',$user['role']=>true));?>
+		&nbsp;|&nbsp;
 		<?=$this->html->link('Purchases', array('Purchases::index',$user['role']=>true));?>
 		&nbsp;|&nbsp;
 		<?=$this->html->link('Offers', array('Offers::index',$user['role']=>true));?>

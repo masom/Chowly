@@ -32,7 +32,13 @@ class OffersController extends \chowly\extensions\action\Controller{
 			FlashMessage::set("Missing data.");
 			$this->redirect(array("Offers::index"));
 		}
-		$offer = Offer::first($this->request->id);
+		
+		$conditions = array(
+			'_id' => $this->request->id,
+			'state'=>'published'
+		);
+		
+		$offer = Offer::first(compact('conditions'));
 		if(!$offer){
 			FlashMessage::set("The specified offer does not exists.");
 			$this->redirect(array("Offers::index"));
@@ -80,7 +86,7 @@ class OffersController extends \chowly\extensions\action\Controller{
 		
 		return compact('offers', 'total', 'page', 'limit');
 	}
-	public function admin_preview(){
+	public function admin_view(){
 		$offer = Offer::first($this->request->id);
 		if(!$offer){
 			$this->redirect(array('Offers::index','admin'=>true));
@@ -88,14 +94,13 @@ class OffersController extends \chowly\extensions\action\Controller{
 		$conditions = array('_id'=> $offer->venue_id);
 		$venue = Venue::first(compact('conditions'));
 		
-		$this->_render['template'] = 'preview';
 		return compact('venue','offer');
 	}
-	public function publish(){
+	public function admin_publish(){
 		$offer = Offer::first($this->request->id);
 		if(!$offer){
 			FlashMessage::set("Offer not found.");
-			$this->redirect(array('Offers::index'));
+			$this->redirect($this->request->referer());
 		}
 		if($offer->publish()){
 			FlashMessage::set("Offer published.");
@@ -104,11 +109,11 @@ class OffersController extends \chowly\extensions\action\Controller{
 		}
 		$this->redirect($this->request->referer());
 	}
-	public function unpublish(){
+	public function admin_unpublish(){
 		$offer = Offer::first($this->request->id);
 		if(!$offer){
 			FlashMessage::set("Offer not found");
-			$this->redirect(array('Offers::index'));
+			$this->redirect($this->request->referer());
 		}
 		if($offer->unpublish()){
 			FlashMessage::set("Offer unpublished.");

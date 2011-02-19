@@ -6,11 +6,14 @@
 	</thead>
 <?php foreach($venues as $venue):?>
 	<tr>
-		<td><?=$this->html->link('+', array('Offers::add','id'=>$venue->_id,'admin'=>true));?></td>
+		<td><?=$this->html->link($this->html->image('silk/add.png'), array('Offers::add','id'=>$venue->_id,'admin'=>true), array('escape'=>false));?></td>
 		<td><?=$venue->name;?></td>
 		<td><?=$venue->address;?></td>
 		<td><?=$venue->state;?></td>
-		<td><?=$this->html->link('Edit', array('Venues::edit','id'=>$venue->_id,'admin'=>true));?></td>
+		<td>
+			<?=$this->html->link('View', array('Venues::view','id'=>$venue->_id,'admin'=>true));?>
+			<?=$this->html->link('Edit', array('Venues::edit','id'=>$venue->_id,'admin'=>true));?>
+		</td>
 	</tr>
 <?php endforeach;?>
 
