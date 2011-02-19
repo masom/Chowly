@@ -68,6 +68,18 @@ class Offer extends \lithium\data\Model{
 
 		return static::all(compact('conditions','order'));
 	}
+	public static function rebuildInventory(){
+		Inventory::releaseExpired();
+		$availableInventory = Inventory::getAvailable();
+		$offersInventory = array();
+		foreach($availableInventory as $inventory){
+			if(!isset($offersInventory[(string)$inventory->offer_id])){
+				$offersInventory[(string)$inventory->offer_id] = 0;
+			}
+			$offersInventory[(string)$inventory->offer_id] ++;
+		}
+		debug($offersInventory);die;
+	}
 	public static function releaseInventory($offer_id){
 		try{
 			Inventory::release(Cart::id(), $offer_id);

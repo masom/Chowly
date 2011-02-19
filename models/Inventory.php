@@ -20,7 +20,15 @@ class Inventory extends \lithium\data\Model{
 	public static function defaultState(){
 		return 'available';
 	}
-	
+	public static function getAvailable(){
+		$conditions = array('state'=>'available');
+		return static::all(compact('conditions'));
+	}
+	public static function releaseExpired(){
+		$data = array('$set'=> array('state'=>'available', 'expires'=>null, 'purchase_id'=> null));
+		$conditions = array('state'=> 'reserved', 'expires'=>array('$lt' => new \MongoDate(time())));
+		return static::update( $data , $conditions);
+	}
 	public static function release($customer_id, $offer_id){
 		$command = array(
 			'findAndModify' => 'inventories', 
@@ -31,7 +39,8 @@ class Inventory extends \lithium\data\Model{
 			'update'=> array(
 				'$set' => array(
 					'state'=> 'available',
-					'customer_id' => null
+					'customer_id' => null,
+					'expires' => null
 				)
 			)
 		);
@@ -100,7 +109,7 @@ class Inventory extends \lithium\data\Model{
 		}		
 		return true;
 	}
-	public static function purchase($inventory_id){
+	public static function purchase($purchase_id, $inventory_id){
 		$command = array(
 			'findAndModify' => 'inventories', 
 			'query' => array(
@@ -108,14 +117,14 @@ class Inventory extends \lithium\data\Model{
 			), 
 			'update'=> array(
 				'$set' => array(
-					'state' => 'purchased'
+					'state' => 'purchased',
+					'purchase_id' => $purchase_id
 				)
 			)
 		);
 		
 		$result = static::_connection()->connection->command($command);
 		if(isset($result['errmsg'])){
-			
 			throw new InventoryException($result['errmsg']);
 		}
 		return true;

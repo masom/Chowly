@@ -1,4 +1,6 @@
 <h1>Offers</h1>
+
+<?=$this->html->link("{$this->html->image('silk/cog.png')} Rebuild Inventory", array('action'=>'rebuild_inventory','admin'=>true),array('escape'=>false));?>
 <table>
 	<thead>
 		<tr><th>Name</th><th>Starts</th><th>Ends</th><th>Actions</th></tr>

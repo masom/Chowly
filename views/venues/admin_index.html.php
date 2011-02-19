@@ -1,8 +1,8 @@
 <h1>Venues</h1>
-<?=$this->html->link('Add a venue', array('Venues::add','admin'=>true));?>
+<?=$this->html->link("{$this->html->image('silk/add.png', array('style'=>'vertical-align: text-top;'))} Add a venue", array('Venues::add','admin'=>true), array('escape'=>false));?>
 <table>
 	<thead>
-		<tr><th></th><th>Name</th><th>Address</th><th>Status</th><th>Actions</th></tr>
+		<tr><th>Offer</th><th>Name</th><th>Address</th><th>Status</th><th>Actions</th></tr>
 	</thead>
 <?php foreach($venues as $venue):?>
 	<tr>

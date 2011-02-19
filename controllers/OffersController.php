@@ -122,6 +122,10 @@ class OffersController extends \chowly\extensions\action\Controller{
 		}
 		$this->redirect($this->request->referer());
 	}
+	public function admin_rebuild_inventory(){
+		Offer::rebuildInventory();
+		return $this->redirect($this->request->referer());
+	}
 	public function admin_add(){
 		$offer = Offer::create();
 		if (($this->request->data)){
