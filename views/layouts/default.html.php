@@ -3,6 +3,7 @@
 <head>
 	<?php echo $this->html->charset();?>
 	<title>Chowly | Pick. Eat. Save.</title>
+	<meta name="description" content="Find the best exclusive restaurant deals in Ottawa."/>
 	<?php echo $this->html->style(array('debug', 'lithium', 'cupertino/jquery-ui-1.8.7.custom')); ?>
 	<?php echo $this->html->script(array('jquery-1.4.4.min', 'jquery-ui-1.8.7.custom.min')); ?>
 	<?php echo $this->html->link('Icon', null, array('type' => 'icon')); ?>
