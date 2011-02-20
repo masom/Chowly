@@ -2,7 +2,7 @@
 namespace chowly\models;
 
 
-class Purchase extends \lithium\data\Model{
+class Purchase extends \chowly\extensions\data\Model{
 	
 	public $error = null;
 	protected $_schema = array(

@@ -8,6 +8,7 @@ class TicketsController extends \chowly\extensions\action\Controller{
 	public function add(){
 		$ticket = Ticket::create();
 		if($this->request->data){
+			$ticket->state = 'new';
 			if($ticket->save($this->request->data)){
 				$this->redirect(array('Tickets::received'));
 			}else{
@@ -23,5 +24,17 @@ class TicketsController extends \chowly\extensions\action\Controller{
 		return compact('ticket','isRestaurant');
 	}
 	public function received(){}
+	
+	public function admin_index(){
+		$conditions = array('state'=>'new');
+		$order = array('created' => 'ASC');
+		$tickets = Ticket::all(compact('conditions','order'));
+		return compact('tickets');
+	}
+	public function admin_view(){
+		$conditions = array('_id' => $this->request->id);
+		$ticket = Ticket::first(compact('conditions'));
+		return compact('ticket');
+	}
 }
 ?>

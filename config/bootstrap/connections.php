@@ -50,7 +50,11 @@ Connections::add('default', array(
 	'host' => 'localhost',
 	'database' => 'chowly'
 ));
-
+Connections::add('analytics', array(
+	'type'=>'MongoDb',
+	'host' => 'localhost',
+	'database' => 'chowly_analytics'
+));
 if (!Environment::is('production')) {
 	Connections::add('test', array(
 		'type' => 'MongoDb',

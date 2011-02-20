@@ -8,7 +8,7 @@ use chowly\extensions\data\OfferException;
 
 use \lithium\analysis\Logger;
 
-class Offer extends \lithium\data\Model{
+class Offer extends \chowly\extensions\data\Model{
 	protected static $_states = array('published'=>'published', 'unpublished'=>'unpublished');
 	public $validates = array(
 		'name' => array(
@@ -78,7 +78,10 @@ class Offer extends \lithium\data\Model{
 			}
 			$offersInventory[(string)$inventory->offer_id] ++;
 		}
-		debug($offersInventory);die;
+		
+		foreach($offersInventory as $offer_id => $availability){
+			Offer::update(compact('availability'), array('_id'=>$offer_id));
+		}
 	}
 	public static function releaseInventory($offer_id){
 		try{

@@ -3,7 +3,7 @@ namespace chowly\models;
 
 use chowly\extensions\data\InventoryException;
 
-class Inventory extends \lithium\data\Model{
+class Inventory extends \chowly\extensions\data\Model{
 	protected $_schema = array(
 		'_id' => array('type'=>'id'),
 		'offer_id' => array('type'=>'id'),

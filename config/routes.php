@@ -80,7 +80,9 @@ Router::connect('/venues/{:id:[0-9a-f]{24}}', 'Venues::view');
 Router::connect('/confirm', 'Checkouts::confirm');
 Router::connect('/checkout', 'Checkouts::checkout');
 
+Router::connect('/contact/received', 'Tickets::received');
 Router::connect('/contact/{:args}', 'Tickets::add');
+
 
 //TODO: Move these to admin auth only
 

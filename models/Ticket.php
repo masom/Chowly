@@ -1,7 +1,7 @@
 <?php
 namespace chowly\models;
 
-class ticket extends \lithium\data\Model{
+class Ticket extends \chowly\extensions\data\Model{
 	public $_schema = array(
 		'_id' => array('type'=>'id'),
 		'name' => array('type'=>'string','null'=>false),
@@ -22,6 +22,9 @@ class ticket extends \lithium\data\Model{
 		),
 		'zip' => array(
 			array('zip', 'skipEmpty'=>true, 'message' => 'Invalid Canadian postal code.')
+		),
+		'state'=>array(
+			array('inList', 'list'=> array('new','closed','in_progress'))
 		)
 	);
 	

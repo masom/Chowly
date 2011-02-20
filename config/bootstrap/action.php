@@ -57,18 +57,11 @@ Dispatcher::applyFilter('run', function($self, $params, $chain) {
 Dispatcher::config(array(
     'rules' => array('admin' => array('action' => 'admin_{:action}'))
 ));
-/**
- * Adds created and modified dates.
- * Updates modified if created is present.
- */
-$insureDate = function($self, $params, $chain){
-	$date = new \MongoDate(time());
-	if(!$params['entity']->created){
-		$params['entity']->created = $date;
-	}
-	$params['entity']->modified = $date;
-	return $chain->next($self, $params, $chain);
-};
+
+Validator::add('zip', function($value){
+	return preg_match('/^[ABCEGHJKLMNPRSTVXY]\d[A-Z]\s?\d[A-Z]\d$/i',$value);
+});
+
 /**
  * Add the default state to the document.
  * static::defaultState() must be defined.
@@ -81,12 +74,7 @@ $insureDefaultState = function($self, $params, $chain){
 	return $chain->next($self, $params, $chain);
 };
 
-Filters::apply('chowly\models\Venue', 'save', $insureDate);
 Filters::apply('chowly\models\Venue', 'save', $insureDefaultState);
-Filters::apply('chowly\models\Inventory', 'save', $insureDate );
 Filters::apply('chowly\models\Inventory', 'save', $insureDefaultState );
-Filters::apply('chowly\models\Offer', 'save', $insureDate);
 Filters::apply('chowly\models\Offer', 'save', $insureDefaultState);
-Filters::apply('chowly\models\Image', 'save', $insureDate);
-Filters::apply('chowly\models\Purchase', 'save', $insureDate);
 ?>

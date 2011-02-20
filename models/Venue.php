@@ -3,7 +3,7 @@ namespace chowly\models;
 
 use chowly\models\Image;
 
-class Venue extends \lithium\data\Model{
+class Venue extends \chowly\extensions\data\Model{
 	protected static $_states = array( 'published'=>'published','unpublished'=>'unpublished');
 	private $_errors = array();
 	
