@@ -33,7 +33,8 @@
 <script type="text/javascript">
 var map;
 var geocoder;
-
+var infoWindow;
+var marker;
 function initialize_maps() {
 	geocoder = new google.maps.Geocoder();
 	var myLatlng = new google.maps.LatLng(-34.397, 150.644);
@@ -46,11 +47,17 @@ function initialize_maps() {
 	geocoder.geocode( { 'address': '<?=$venue->address;?>'}, function(results, status) {
 		if (status == google.maps.GeocoderStatus.OK) {
 			map.setCenter(results[0].geometry.location);
-			var marker = new google.maps.Marker({
+			marker = new google.maps.Marker({
 				map: map,
 				visible: true,
-				title: "<?=addslashes($venue->name);?>",
 				position: results[0].geometry.location
+			});
+			infoWindow = new google.maps.InfoWindow({
+				content: "<p><?=addslashes($venue->name);?></p><p><?=addslashes($venue->address);?></p><p><?=addslashes($venue->phone);?></p>"
+			});
+			infoWindow.open(map,marker);
+			google.maps.event.addListener(marker, 'click', function() {
+				infoWindow.open(map,marker);
 			});
 		}else{
 			$('#map_canvas').hide();
