@@ -38,11 +38,11 @@ class Cart extends \lithium\data\Model{
 	}
 	public static function endTransaction(){
 		$storage = static::$_storage;
-		return $storage::write("Cart.State", $states['frozen'], static::$_options);
+		return $storage::write("Cart.State", 'frozen', static::$_options);
 	}
 	public static function startTransaction(){
 		$storage = static::$_storage;
-		return $storage::write("Cart.State", static::$_states['transaction'], static::$_options);
+		return $storage::write("Cart.State", 'transaction', static::$_options);
 	}
 	public static function inTransaction(){
 		$storage = static::$_storage;
@@ -58,7 +58,7 @@ class Cart extends \lithium\data\Model{
 				return true;
 				break;
 			default:
-				return $storage::write("Cart.State", $states['frozen'], static::$_options);
+				return $storage::write("Cart.State", 'frozen', static::$_options);
 				break;
 		}
 	}
