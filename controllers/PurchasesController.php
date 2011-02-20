@@ -26,7 +26,7 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 		
 		if(!$purchase){
 			FlashMessage::set("The specified purchase could not be found.");
-			$this->redirect($this->request->referer());
+			return $this->redirect($this->request->referer());
 		}
 		
 		$conditions = array('_id'=>array());
@@ -47,14 +47,14 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 	public function admin_download(){
 		if(!$this->request->id){
 			FlashMessage::set("Missing download details.");
-			$this->redirect(array('Offers::index'));
+			return $this->redirect(array('Offers::index'));
 		}
 		
 		$conditions = array('_id' => $this->request->id);
 		$purchase = Purchase::first(compact('conditions'));
 		if(!$purchase){
 			FlashMessage::set("The purchase could not be found");
-			$this->redirect($this->request->referer());
+			return $this->redirect($this->request->referer());
 		}
 		
 		$conditions = array('_id'=>array());
@@ -77,18 +77,18 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 	public function download(){
 		if(!$this->request->id){
 			FlashMessage::set("Missing download details.");
-			$this->redirect(array('Offers::index'));
+			return $this->redirect(array('Offers::index'));
 		}
 		
 		$conditions = array('_id' => $this->request->id);
 		$purchase = Purchase::first(compact('conditions'));
 		if(!$purchase){
 			FlashMessage::set("The purchase could not be found");
-			$this->redirect($this->request->referer());
+			return $this->redirect($this->request->referer());
 		}
 		if($purchase->downloaded){
 			FlashMessage::set("The purchase has already been downloaded. Contact Chowly support to re-download.");
-			$this->redirect(array('Offers::index'));
+			return $this->redirect(array('Offers::index'));
 		}
 		$conditions = array('_id'=>array());
 		foreach($purchase->offers as $offer){

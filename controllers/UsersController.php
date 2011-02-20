@@ -44,7 +44,7 @@ class UsersController extends \chowly\extensions\action\Controller{
 			
 			if($user->save()){
 				FlashMessage::set("User modified.");
-				$this->redirect('Users::index');
+				return $this->redirect('Users::index');
 			}else{
 				FlashMessage::set("The user could not be modified.");
 			}
@@ -52,7 +52,7 @@ class UsersController extends \chowly\extensions\action\Controller{
 				
 		if(empty($user)){
 			FlashMessage::set('User not found.');
-			$this->redirect($this->request->referer());
+			return $this->redirect($this->request->referer());
 		}
 		
 		return compact('user');
@@ -109,7 +109,7 @@ class UsersController extends \chowly\extensions\action\Controller{
 			$user->set($this->request->data);
 			if($user->save($this->request->data,array('whitelist'=>array('name')))){
 				FlashMessage::set("Profile updated.");
-				$this->redirect('/');
+				return $this->redirect('/');
 			}
 		}
 		return compact('user');
@@ -117,7 +117,7 @@ class UsersController extends \chowly\extensions\action\Controller{
 	public function login(){
 		if(!empty($this->request->data)){
 			if(Auth::check('user', $this->request)){
-				$this->redirect('Offers::index');
+				return $this->redirect('Offers::index');
 			}else{
 				FlashMessage::set("Wrong email or password.");
 			}
@@ -143,7 +143,7 @@ class UsersController extends \chowly\extensions\action\Controller{
 			
 			if($saved){
 				Auth::check('user',$this->request->data);
-				$this->redirect('/');
+				return $this->redirect('/');
 			}		
 		}
 		

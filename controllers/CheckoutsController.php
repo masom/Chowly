@@ -25,7 +25,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		parent::_init();
 		/** TODO: lets wait before requiring this
 		if(!$this->request->is('ssl')){
-			$this->redirect(Router::match(
+			return $this->redirect(Router::match(
 				$this->request->params,
 				$this->request,
 				array('absolute' => true, 'scheme'=>'https://')
@@ -39,7 +39,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		}else{
 			Cart::unfreeze();
 		}
-		$this->redirect(array('Offers::index'));
+		return $this->redirect(array('Offers::index'));
 	}
 	public function confirm(){
 		if(Cart::isEmpty()){

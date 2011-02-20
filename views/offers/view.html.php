@@ -15,6 +15,7 @@
 			<?=$this->html->image("/images/{$offer->image}.jpg");?>
 		<?php endif;?>
 		<p><?php echo nl2br($offer->description);?></p>
+	<div id="map_canvas" style="width: 380px; height: 380px;"></div>
 	</div>
 	<div class="whitebox" style="width: 300px; float:left;">
 		<?php if($venue->logo):?>
@@ -30,11 +31,48 @@
 	</div>
 
 <script type="text/javascript">
+var map;
+var geocoder;
+
+function initialize_maps() {
+	geocoder = new google.maps.Geocoder();
+	var myLatlng = new google.maps.LatLng(-34.397, 150.644);
+	var myOptions = {
+		zoom: 14,
+		center: myLatlng,
+		mapTypeId: google.maps.MapTypeId.ROADMAP
+	}
+	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+	geocoder.geocode( { 'address': '<?=$venue->address;?>'}, function(results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+			map.setCenter(results[0].geometry.location);
+			var marker = new google.maps.Marker({
+				map: map,
+				visible: true,
+				title: "<?=addslashes($venue->name);?>",
+				position: results[0].geometry.location
+			});
+		}else{
+			$('#map_canvas').hide();
+		}
+	});
+	
+
+}
 $(function () {
 	$('#offer_buy').button();
 	
 	var couponEnd = new Date();
 	couponEnd = new Date(<?php echo $offer->ends->sec * 1000;?>);
 	$("#offer-countdown").countdown({until: couponEnd, layout: 'Ends in {dn} {dl}, {hnn}{sep}{mnn}{sep}{snn}'});
+		  
+	function loadScript() {
+	  var script = document.createElement("script");
+	  script.type = "text/javascript";
+	  script.src = "http://maps.google.com/maps/api/js?v=3.2&sensor=false&callback=initialize_maps";
+	  document.body.appendChild(script);
+	}
+	loadScript();
+	
 });
 </script>

@@ -30,7 +30,7 @@ class OffersController extends \chowly\extensions\action\Controller{
 	public function view(){
 		if(!$this->request->id){
 			FlashMessage::set("Missing data.");
-			$this->redirect(array("Offers::index"));
+			return $this->redirect(array("Offers::index"));
 		}
 		
 		$conditions = array(
@@ -41,7 +41,7 @@ class OffersController extends \chowly\extensions\action\Controller{
 		$offer = Offer::first(compact('conditions'));
 		if(!$offer){
 			FlashMessage::set("The specified offer does not exists.");
-			$this->redirect(array("Offers::index"));
+			return $this->redirect(array("Offers::index"));
 		}
 		$conditions = array('_id' => $offer->venue_id);
 		$venue = Venue::first(compact('conditions'));
@@ -71,7 +71,7 @@ class OffersController extends \chowly\extensions\action\Controller{
 			return $this->redirect($this->request->referer());
 		}
 		Cart::add($this->request->id, $reserved);
-		$this->redirect(array('Checkouts::confirm'));
+		return $this->redirect(array('Checkouts::confirm'));
 	}
 
 	public function admin_index(){
@@ -89,7 +89,7 @@ class OffersController extends \chowly\extensions\action\Controller{
 	public function admin_view(){
 		$offer = Offer::first($this->request->id);
 		if(!$offer){
-			$this->redirect(array('Offers::index','admin'=>true));
+			return $this->redirect(array('Offers::index','admin'=>true));
 		}
 		$conditions = array('_id'=> $offer->venue_id);
 		$venue = Venue::first(compact('conditions'));
@@ -100,27 +100,27 @@ class OffersController extends \chowly\extensions\action\Controller{
 		$offer = Offer::first($this->request->id);
 		if(!$offer){
 			FlashMessage::set("Offer not found.");
-			$this->redirect($this->request->referer());
+			return $this->redirect($this->request->referer());
 		}
 		if($offer->publish()){
 			FlashMessage::set("Offer published.");
 		}else{
 			FlashMessage::set("The offer could not be published.");
 		}
-		$this->redirect($this->request->referer());
+		return $this->redirect($this->request->referer());
 	}
 	public function admin_unpublish(){
 		$offer = Offer::first($this->request->id);
 		if(!$offer){
 			FlashMessage::set("Offer not found");
-			$this->redirect($this->request->referer());
+			return $this->redirect($this->request->referer());
 		}
 		if($offer->unpublish()){
 			FlashMessage::set("Offer unpublished.");
 		}else{
 			FlashMessage::set("The offer could not be unpublished.");
 		}
-		$this->redirect($this->request->referer());
+		return $this->redirect($this->request->referer());
 	}
 	public function admin_rebuild_inventory(){
 		Offer::rebuildInventory();
@@ -136,12 +136,12 @@ class OffersController extends \chowly\extensions\action\Controller{
 				$success = $offer->createWithInventory();
 			}catch(\Exception $e){
 				FlashMessage::set($e->getMessage());
-				$this->redirect(array('Offers::index','admin'=>true));
+				return $this->redirect(array('Offers::index','admin'=>true));
 			}
 			
 			if($success){
 				FlashMessage::set("Offer created.");
-				$this->redirect(array('Offers::preview', 'id' => $offer->_id, 'admin'=>true));
+				return $this->redirect(array('Offers::preview', 'id' => $offer->_id, 'admin'=>true));
 			}
 		}
 		
@@ -153,13 +153,13 @@ class OffersController extends \chowly\extensions\action\Controller{
 			$conditions = array('_id' => $this->request->data['venue_id']);
 		}
 		if(!$conditions){
-			$this->redirect(array('Offers::index','admin'=>true));
+			return $this->redirect(array('Offers::index','admin'=>true));
 		}
 		$venue = Venue::first(compact('conditions'));
 		
 		if(!$venue){
 			FlashMessage::set("Venue not found.");
-			$this->redirect($this->request->referer());
+			return $this->redirect($this->request->referer());
 		}
 		$this->_render['template'] = 'edit';
 		return compact('venue', 'offer');
@@ -173,7 +173,7 @@ class OffersController extends \chowly\extensions\action\Controller{
 			$success = $offer->save($this->request->data);
 			if($success){
 				FlashMessage::set("Offer modified.");
-				$this->redirect(array('Offers::view', 'id' => $venue->_id));
+				return $this->redirect(array('Offers::view', 'id' => $venue->_id));
 			}
 		}
 		

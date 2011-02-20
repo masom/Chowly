@@ -16,7 +16,7 @@ class VenuesController extends \chowly\extensions\action\Controller{
 			$success = $venue->save($this->request->data);
 			if($success){
 				FlashMessage::set("Venue added.");
-				$this->redirect(array('Venues::view', 'id' => $venue->_id));
+				return $this->redirect(array('Venues::view', 'id' => $venue->_id));
 			}
 		}
 		$this->_render['template'] = 'admin_edit';
@@ -30,11 +30,11 @@ class VenuesController extends \chowly\extensions\action\Controller{
 
 		if (!$venue) {
 			FlashMessage::set("Venue not found.");
-			$this->redirect('Venues::index');
+			return $this->redirect('Venues::index');
 		}
 		if (($this->request->data) && $venue->save($this->request->data)) {
 			FlashMessage::set("Venue modified.");
-			$this->redirect('Venues::index');
+			return $this->redirect('Venues::index');
 		}
 		
 		$publishedOptions = $venue->states();
@@ -45,7 +45,7 @@ class VenuesController extends \chowly\extensions\action\Controller{
 
 		if(!$this->request->id){
 			FlashMessage::set("Missing data.");
-			$this->redirect(array('Venues::index'));
+			return $this->redirect(array('Venues::index'));
 		}
 		
 		$conditions = array('_id'=>$this->request->id);
@@ -53,7 +53,7 @@ class VenuesController extends \chowly\extensions\action\Controller{
 		$venue = Venue::first(compact('conditions'));
 		if(!$venue){
 			FlashMessage::set("The specified venue does not exists.");
-			$this->redirect($this->request->referer());
+			return $this->redirect($this->request->referer());
 		}
 		
 		$conditions = array('venue_id' => $venue->_id);
@@ -69,14 +69,14 @@ class VenuesController extends \chowly\extensions\action\Controller{
 	public function view(){
 		if(!$this->request->id){
 			FlashMessage::set("Missing data.");
-			$this->redirect(array('Venues::index'));
+			return $this->redirect(array('Venues::index'));
 		}
 		$conditions = array('_id'=>$this->request->id, 'state'=>'published');
 		$venue = Venue::first(compact('conditions'));
 		
 		if(!$venue){
 			FlashMessage::set("The specified venue does not exists.");
-			$this->redirect($this->request->referer());
+			return $this->redirect($this->request->referer());
 		}
 		
 		$conditions = array('venue_id' => $this->request->id, 'state'=>'published', 'availability' => array('$gt'=> 0));

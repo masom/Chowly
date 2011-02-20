@@ -10,7 +10,7 @@ class TicketsController extends \chowly\extensions\action\Controller{
 		if($this->request->data){
 			$ticket->state = 'new';
 			if($ticket->save($this->request->data)){
-				$this->redirect(array('Tickets::received'));
+				return $this->redirect(array('Tickets::received'));
 			}else{
 				FlashMessage::set('Sorry, there is something wrong with the provided information.');
 			}
