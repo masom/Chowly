@@ -44,6 +44,24 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 		
 		return compact('purchase','offers','venues');
 	}
+	public function admin_search(){
+		switch($this->request->data['search']['type']){
+			case "email":
+				$conditions = array('email' => $this->request->data['search']['value']);
+				break;
+			case "name":
+				$conditions = array('name' => $this->request->data['search']['value']);
+				break;				
+			default:
+				FlashMessage::set("Invalid search parameters");
+				return $this->redirect(array('Purchases::index','admin'=>true));
+		}
+		$order = array('created' => 'DESC');
+		$purchases = Purchase::all(compact('order','conditions'));
+		
+		$this->_render['template'] = 'admin_index';
+		return compact('purchases');
+	}
 	public function admin_download(){
 		if(!$this->request->id){
 			FlashMessage::set("Missing download details.");

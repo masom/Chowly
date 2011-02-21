@@ -83,13 +83,6 @@ Router::connect('/checkout', 'Checkouts::checkout');
 Router::connect('/contact/received', 'Tickets::received');
 Router::connect('/contact/{:args}', 'Tickets::add');
 
-
-//TODO: Move these to admin auth only
-
-
-
-
-Router::connect('/venues/edit/{:id:[0-9a-f]{24}}', 'Venues::edit');
 /**
  * ...and connect the rest of 'Pages' controller's urls.
  */

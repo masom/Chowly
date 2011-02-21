@@ -77,4 +77,27 @@ $insureDefaultState = function($self, $params, $chain){
 Filters::apply('chowly\models\Venue', 'save', $insureDefaultState);
 Filters::apply('chowly\models\Inventory', 'save', $insureDefaultState );
 Filters::apply('chowly\models\Offer', 'save', $insureDefaultState);
+
+/**
+// Allow access  if user is the owner
+Access::adapter('minerva_access')->add('allowIfOwner', function($user, $request, $options) {
+   
+   if(($user) && (isset($options['document']))) {
+	  // if owner_id matches user id
+	  if(isset($options['document']['owner_id'])) {
+		 if($options['document']['owner_id'] === $user['_id']) {
+			return true;
+		 }
+	  }
+	  // or if the document id IS the user's document id (it's the user him/herself - for updating your own record)
+	  if(isset($options['document']['_id'])) {
+		 if($options['document']['_id'] === $user['_id']) {
+			return true;
+		 }
+	  }
+	  
+   }
+   return false;
+});
+ */
 ?>
