@@ -14,9 +14,7 @@ Router::connect('/images/{:id:[0-9a-f]{24}}.(jpe?g|png|gif)', array(), function(
 
 	$image = chowly\models\Image::first($request->id);
 	if(!$image || !$image->file){	
-		header("Status: 404 Not Found");
-		header("HTTP/1.0 404 Not Found");
-		die;
+		return new Response(array('status' => 404));
 	}
 	return new \lithium\action\Response(array(
 		'headers' => array('Content-type' => $image->type),
@@ -37,7 +35,9 @@ if (!Environment::is('production')) {
  * its action called 'view', and we pass a param to select the view file
  * to use (in this case, /app/views/pages/home.html.php)...
  */
+
 Router::connect('/', 'Offers::index');
+
 
 Router::connect('/login', 'Users::login');
 Router::connect('/logout', 'Users::logout');
@@ -61,14 +61,15 @@ if(Session::read('user')){
 	}
 }
 
+
+// Finally, connect the default routes.
+
 /**
- * Finally, connect the default routes.
- 
 Router::connect('/{:controller}/{:action}/{:id:[0-9a-f]{24}}.{:type}', array('id' => null));
 Router::connect('/{:controller}/{:action}/{:id:[0-9a-f]{24}}');
 Router::connect('/{:controller}/{:action}/{:args}');
-
 */
+
 
 Router::connect('/cart/remove/{:id:[0-9a-f]{24}}', 'Carts::remove');
 Router::connect('/offers/{:id:[0-9a-f]{24}}', 'Offers::view');
@@ -89,4 +90,5 @@ Router::connect('/contact/{:args}', 'Tickets::add');
 
 
 Router::connect('/{:args}', 'Pages::view');
+
 ?>

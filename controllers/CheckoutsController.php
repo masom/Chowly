@@ -158,15 +158,15 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			$transport = Swift_MailTransport::newInstance();
 			$mailer = Swift_Mailer::newInstance($transport);
 			$message = Swift_Message::newInstance();
-			$message->setSubject("Chowly Purchase {$purchase->_id} confirmation");
+			$message->setSubject("Chowly Purchase Confirmation");
 			$message->setFrom(array('purchases@chowly.com' => 'Chowly'));
 			$message->setTo($to);
 			
 			if($path){
-				$message->setBody($this->_getEmail($purchase));
+				$message->setBody($this->_getEmail(compact('purchase'), 'purchase'));
 				$message->attach(Swift_Attachment::fromPath($path));
 			}else{
-				$message->setBody($this->_getEmail($purchase, 'generation_failure'));
+				$message->setBody($this->_getEmail(compact('purchase'), 'generation_failure'));
 			}
 			
 			if(!$mailer->send($message)){
@@ -181,23 +181,6 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			return compact('purchase');
 		}
 		return compact('provinces');
-	}
-	private function _getEmail($purchase, $template = 'purchase'){
-		$view  = new View(array(
-		    'paths' => array(
-		        'template' => '{:library}/views/{:controller}/{:template}.{:type}.php'
-		    )
-		));
-		return $view->render(
-		    'template',
-		    compact('purchase'),
-		    array(
-		        'controller' => 'purchases',
-		        'template'=> $template,
-		        'type' => 'mail',
-		        'layout' => false
-		    )
-		);
 	}
 	private function _getPdf($purchase, $offers, $venues){
 		$view  = new View(

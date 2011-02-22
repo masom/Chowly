@@ -50,7 +50,7 @@ Libraries::add('lithium');
 Libraries::add('chowly', array('default' => true));
 
 if (!Environment::is('production')) {
-	Libraries::add('li3_docs');
+	//Libraries::add('li3_docs');
 }
 /**
  * Add some plugins

@@ -14,7 +14,7 @@
  */
 
 ini_set("display_errors", 1);
-function debug($data){
+function debug($data = null){
 	$calledFrom = debug_backtrace();
 	echo '<pre><strong>' . substr(str_replace(ROOT, '', $calledFrom[0]['file']), 1) . '</strong>';
 	echo ' (line <strong>' . $calledFrom[0]['line'] . '</strong>)';
