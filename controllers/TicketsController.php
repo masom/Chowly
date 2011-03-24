@@ -9,6 +9,7 @@ use \Swift_Message;
 
 class TicketsController extends \chowly\extensions\action\Controller{
 	public function add(){
+		
 		$ticket = Ticket::create();
 		if($this->request->data){
 			$ticket->state = 'new';
@@ -29,11 +30,9 @@ class TicketsController extends \chowly\extensions\action\Controller{
 			}
 		}
 		
-		$isRestaurant = false;
+		$args = $this->request->args ?: array();
+		$isRestaurant = in_array('restaurants', $args) ?: false;
 		
-		if(in_array('restaurants',$this->request->args)){
-			$isRestaurant = true;
-		}
 		return compact('ticket','isRestaurant');
 	}
 	public function received(){}

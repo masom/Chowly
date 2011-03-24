@@ -13,13 +13,6 @@
  * the services needed for your application.
  */
 
-ini_set("display_errors", 1);
-function debug($data = null){
-	$calledFrom = debug_backtrace();
-	echo '<pre><strong>' . substr(str_replace(ROOT, '', $calledFrom[0]['file']), 1) . '</strong>';
-	echo ' (line <strong>' . $calledFrom[0]['line'] . '</strong>)';
-	echo "\n". str_replace('<', '&lt;', str_replace('>', '&gt;', print_r($data, true))) . "\n</pre>\n";
-}
 
 /**
  * This is the path to the class libraries used by your application, and must contain a copy of the
@@ -35,6 +28,14 @@ define('LITHIUM_LIBRARY_PATH', dirname(dirname(__DIR__)) . '/lithium/libraries')
  * stored outside of your app folder.
  */
 define('LITHIUM_APP_PATH', dirname(__DIR__));
+
+ini_set("display_errors", 1);
+function debug($data = null){
+	$calledFrom = debug_backtrace();
+	echo '<pre><strong>' . substr(str_replace(LITHIUM_APP_PATH, '', $calledFrom[0]['file']), 1) . '</strong>';
+	echo ' (line <strong>' . $calledFrom[0]['line'] . '</strong>)';
+	echo "\n". str_replace('<', '&lt;', str_replace('>', '&gt;', print_r($data, true))) . "\n</pre>\n";
+}
 
 /**
  * Locate and load Lithium core library files.  Throws a fatal error if the core can't be found.
@@ -54,6 +55,11 @@ if (!include LITHIUM_LIBRARY_PATH . '/lithium/core/Libraries.php') {
  * classes to improve bootstrap performance.
  */
 require __DIR__ . '/bootstrap/libraries.php';
+
+/**
+ * This files configures error handling
+ */
+require __DIR__ . '/bootstrap/error.php';
 
 /**
  * This file contains configurations for connecting to external caching resources, as well as
@@ -97,7 +103,3 @@ require __DIR__ . '/bootstrap/media.php';
  */
 // require __DIR__ . '/bootstrap/console.php';
 
-/**
- * This files configures error handling
- */
-require __DIR__ . '/bootstrap/error.php';
