@@ -14,6 +14,9 @@ class OffersController extends \chowly\extensions\action\Controller{
 	
 	public function index(){	
 		$offers = Offers::current();
+		
+
+		
 		$venues = array();
 		$venues_id = array();
 		foreach($offers as $offer){
@@ -75,9 +78,8 @@ class OffersController extends \chowly\extensions\action\Controller{
 	}
 
 	public function admin_index(){
-		
 		$limit = 20;
-		$page = ($this->request->params['page'])? $this->request->params['page'] : 1;
+		$page = $this->request->page ?: 1;
 		$order = array('created' => 'DESC');
 		
 		$total = Offers::count();
@@ -121,13 +123,15 @@ class OffersController extends \chowly\extensions\action\Controller{
 		}
 		return $this->redirect($this->request->referer());
 	}
+	
 	public function admin_rebuild_inventory(){
 		Offers::rebuildInventory();
 		return $this->redirect($this->request->referer());
 	}
+	
 	public function admin_add(){
 		$offer = Offers::create();
-		if (($this->request->data)){
+		if ($this->request->data){
 			$offer->set($this->request->data);
 			
 			$success = false;
@@ -161,7 +165,7 @@ class OffersController extends \chowly\extensions\action\Controller{
 			return $this->redirect($this->request->referer());
 		}
 		
-		$this->_render['template'] = 'edit';
+		$this->_render['template'] = 'admin_edit';
 		return compact('venue', 'offer');
 	}
 	public function admin_edit(){

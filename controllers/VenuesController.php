@@ -7,8 +7,14 @@ use li3_flash_message\extensions\storage\FlashMessage;
 
 class VenuesController extends \chowly\extensions\action\Controller{
 	public function admin_index(){
-		$venues = Venue::all();
-		return compact('venues');
+		$limit = 20;
+		$page = $this->request->page ?: 1;
+		$order = array('name' => 'ASC');
+		
+		$total = Venues::count();
+		$venues = Venues::all(compact('order','limit','page'));
+		
+		return compact('venues', 'total', 'page', 'limit');
 	}
 	public function admin_add(){
 		$venue = Venues::create();

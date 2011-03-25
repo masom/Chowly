@@ -71,7 +71,7 @@ class Purchases extends \chowly\extensions\data\Model{
 		'Yukon' => 'Yukon'
 	);
 	
-	public function validates($entity, $options = array()){
+	public function validates($entity, array $options = array()){
 		$this->validates['province'][0]['list'] = static::$_provinces;
 		return parent::validates($entity,$options);
 	}

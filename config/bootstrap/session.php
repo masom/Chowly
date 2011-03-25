@@ -41,7 +41,7 @@ Session::config(array(
 Auth::config(array(
  	'user' => array(
  		'adapter' => 'Form',
- 		'model' => 'User',
+ 		'model' => 'Users',
  		'fields' => array('email', 'password'),
 		'scope' => array('active' => true)
  	)

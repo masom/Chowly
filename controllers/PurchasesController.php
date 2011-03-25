@@ -11,7 +11,7 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 	public function admin_index(){
 		
 		$limit = 20;
-		$page = ($this->request->params['page'])? $this->request->params['page'] : 1;
+		$page = ($this->request->page) ?: 1;
 		$order = array('created' => 'DESC');
 		
 		$total = Purchases::count();

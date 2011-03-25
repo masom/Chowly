@@ -1,3 +1,7 @@
+<?php 
+$starts = $offer->starts->sec ?: time();
+$ends = $offer->starts->sec ?: time() + 60 * 60 * 24 * 30;
+?>
 <div id="content-header">
 	<?php if($offer->_id):?>
 		<h1>Modifying Offer <?=$offer->name;?></h1>
@@ -13,8 +17,8 @@
 
 	<?=$this->form->field('cost', array('label' => 'Price in C$', 'id'=>'offer_cost'));?>
 	<ul class="time-picker">
-		<?=$this->form->field('starts', array('value'=>date('Y-m-d H:i:s', ($offer->starts->sec)? $offer->starts->sec : time()),'template'=>'<li{:wrap}>{:label}{:input}{:error}</li>','id'=>'form_offer_start_date'));?>
-		<?=$this->form->field('ends', array('value' => date('Y-m-d H:i:s', ($offer->ends->sec)? $offer->ends->sec : time() + 60 * 60 * 24 * 30),'template'=>'<li{:wrap}>{:label}{:input}{:error}</li>','id'=>'form_offer_end_date'));?>
+		<?=$this->form->field('starts', array('value'=>date('Y-m-d H:i:s', $starts),'template'=>'<li{:wrap}>{:label}{:input}{:error}</li>','id'=>'form_offer_start_date'));?>
+		<?=$this->form->field('ends', array('value' => date('Y-m-d H:i:s', $ends ),'template'=>'<li{:wrap}>{:label}{:input}{:error}</li>','id'=>'form_offer_end_date'));?>
 	</ul>
 	<br style="clear: both;" />
 	
