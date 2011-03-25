@@ -58,7 +58,6 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 		}
 		$order = array('created' => 'DESC');
 		$purchases = Purchases::all(compact('order','conditions'));
-		
 		$this->_render['template'] = 'admin_index';
 		return compact('purchases');
 	}

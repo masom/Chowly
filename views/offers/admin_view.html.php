@@ -22,9 +22,11 @@
 	</ul>
 </div>
 <br style="clear: both" />
-<div class="whitebox" style="width: 200px;">
-	<?=$this->html->link('Publish', array('Offers::publish', 'id'=>$offer->_id),array('id'=>'publish'));?>
-</div>
+<?php if($offer->state == 'unpublished'):?>
+	<?=$this->html->link('Publish', array('Offers::publish', 'id'=>$offer->_id,'admin'=>true),array('id'=>'publish'));?>
+<?php else:?>
+	<?=$this->html->link('Unpublish', array('Offers::unpublish', 'id'=>$offer->_id,'admin'=>true),array('id'=>'publish'));?>
+<?php endif;?>
 <script type="text/javascript">
 $('#publish').button();
 </script>

@@ -144,7 +144,7 @@ class OffersController extends \chowly\extensions\action\Controller{
 			
 			if($success){
 				FlashMessage::set("Offer created.");
-				return $this->redirect(array('Offers::preview', 'id' => $offer->_id, 'admin'=>true));
+				return $this->redirect(array('Offers::view', 'id' => $offer->_id, 'admin'=>true));
 			}
 		}
 		

@@ -41,6 +41,7 @@
 	<?php endforeach;?>
 </table>
 
+<?php if(isset($page)):?>
 <div>
 	<?php if($page > 1):?>
 		<?=$this->html->link('< Previous', array('Purchases::index', 'admin'=>true, 'page'=> $page - 1));?>
@@ -49,3 +50,4 @@
 		<?=$this->html->link('Next >', array('Purchases::index', 'admin'=>true, 'page'=> $page + 1));?>
 	<?php endif;?>
 </div>
+<?php endif;?>
