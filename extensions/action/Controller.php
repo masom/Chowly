@@ -4,7 +4,11 @@ namespace chowly\extensions\action;
 use \lithium\net\http\Router;
 use \lithium\template\View;
 
+use chowly\models\Carts;
+
 class Controller extends \lithium\action\Controller{
+	
+	protected $Cart;
 	
 	protected function _init(){
 		parent::_init();
@@ -16,7 +20,11 @@ class Controller extends \lithium\action\Controller{
 				)
 			);
 		}
-		
+		$this->Cart = Carts::first(array('_id' => session_id()));
+		if(!$this->Cart){
+			$this->Cart = Carts::create();
+			$this->Cart->_id = new \MongoId();
+		}
 	}
 	protected function _getEmail(array $data, $template = null, $controller = null){
 		

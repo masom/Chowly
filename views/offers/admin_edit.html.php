@@ -1,6 +1,6 @@
 <?php 
-$starts = $offer->starts->sec ?: time();
-$ends = $offer->starts->sec ?: time() + 60 * 60 * 24 * 30;
+$starts = ($offer->_id)? $offer->starts->sec : time();
+$ends = ($offer->_id)? $offer->ends->sec : time() + 60 * 60 * 24 * 30;
 ?>
 <div id="content-header">
 	<?php if($offer->_id):?>

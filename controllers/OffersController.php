@@ -14,9 +14,7 @@ class OffersController extends \chowly\extensions\action\Controller{
 	
 	public function index(){	
 		$offers = Offers::current();
-		
 
-		
 		$venues = array();
 		$venues_id = array();
 		foreach($offers as $offer){
@@ -26,7 +24,7 @@ class OffersController extends \chowly\extensions\action\Controller{
 		if(!empty($venues_id)){
 			$conditions = array('_id' => array_keys($venues_id));
 			Venues::meta('title', 'logo');
-			$venues = Venue::find('list', compact('conditions','fields'));
+			$venues = Venues::find('list', compact('conditions','fields'));
 		}
 		return compact('offers', 'venues');
 	}
@@ -54,18 +52,20 @@ class OffersController extends \chowly\extensions\action\Controller{
 	public function buy(){
 		if(!$this->request->id){
 			FlashMessage::set("Missing data.");
-			return $this->redirect(array("Offers::index"));
+			return $this->redirect( array("Offers::index") );
 		}
-		if(Cart::contain($this->request->id)){
-			return $this->redirect(array('Checkouts::confirm'));
+		
+		if($this->Cart->containItem($this->request->id)){
+			return $this->redirect( array('Checkouts::confirm') );
 		}
-		$readonly = Cart::isReadOnly();
-		if($readonly){
+
+		if($this->Cart->isReadOnly()){
 			FlashMessage::set("There is currently a transaction in progress on your cart.");
 			return $this->redirect(array('Checkouts::confirm'));
 		}
+		
 		try{
-			$reserved = Offers::reserve($this->request->id, Cart::id());
+			$reserved = Offers::reserve($this->request->id, $this->Cart->_id);
 		}catch(InventoryException $e){
 			FlashMessage::set("Sorry, The item could not be added to your cart");
 			return $this->redirect($this->request->referer());
@@ -73,7 +73,7 @@ class OffersController extends \chowly\extensions\action\Controller{
 			FlashMessage::set("Sorry, The item could not be added to your cart for the following reason: {$e->getMessage()}");
 			return $this->redirect($this->request->referer());
 		}
-		Cart::add($this->request->id, $reserved);
+		$this->Cart->addItem($this->request->id, $reserved);
 		return $this->redirect(array('Checkouts::confirm'));
 	}
 

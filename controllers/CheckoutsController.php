@@ -42,6 +42,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		return $this->redirect(array('Offers::index'));
 	}
 	public function confirm(){
+		
 		if(Cart::isEmpty()){
 			FlashMessage::set("Your cart is currently empty.");
 			return $this->redirect("Offers::index");

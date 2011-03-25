@@ -100,7 +100,7 @@ class Offers extends \chowly\extensions\data\Model{
 	 * @param var $customer_id
 	 * @param var $offer_id
 	 */
-	public static function reserve($offer_id,$customer_id){
+	public static function reserve($offer_id, $cart_id){
 		$date = new \MongoDate();
 		$conditions = array(
 			'starts' => array('$lt' => $date),
@@ -114,8 +114,9 @@ class Offers extends \chowly\extensions\data\Model{
 			throw new OfferException("Offer not found.");
 		}
 
+		
 		try{
-			$inventory = Inventories::reserve($customer_id,$offer_id);
+			$inventory = Inventories::reserve($offer_id, $cart_id);
 			$offer->availability--;
 			if($offer->availability <= 0){
 				$offer->availability = 0;

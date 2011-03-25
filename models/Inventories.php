@@ -30,9 +30,8 @@ class Inventories extends \chowly\extensions\data\Model{
 		return static::update( $data , $conditions);
 	}
 	public static function release($customer_id, $offer_id){
-		$self = static::_object();
 		$command = array(
-			'findAndModify' => $self->_meta['source'], 
+			'findAndModify' => static::meta('source'), 
 			'query' => array(
 				'offer_id' => new \MongoId($offer_id),
 				'state' => 'reserved'
@@ -64,10 +63,9 @@ class Inventories extends \chowly\extensions\data\Model{
 	 * @param var $offer_id
 	 * @todo Add indexes to inventory
 	 */
-	public static function reserve($customer_id, $offer_id){
-		$self = static::_object();
+	public static function reserve($offer_id, $customer_id){
 		$command = array(
-			'findAndModify' => $self->_meta['source'], 
+			'findAndModify' => static::meta('source'), 
 			'query' => array(
 				'offer_id' => new \MongoId($offer_id),
 				'state' => 'available'
@@ -80,7 +78,6 @@ class Inventories extends \chowly\extensions\data\Model{
 				)
 			)
 		);
-		
 		$result = static::connection()->connection->command($command);
 		
 		if(isset($result['errmsg'])){
@@ -93,9 +90,8 @@ class Inventories extends \chowly\extensions\data\Model{
 		return $inventory;
 	}
 	public static function secure($inventory_id){
-		$self = static::_object();
 		$command = array(
-			'findAndModify' => $self->_meta['source'], 
+			'findAndModify' => static::meta('source'), 
 			'query' => array(
 				'_id' => $inventory_id,
 			), 
@@ -113,9 +109,8 @@ class Inventories extends \chowly\extensions\data\Model{
 		return true;
 	}
 	public static function purchase($purchase_id, $inventory_id){
-		$self = static::_object();
 		$command = array(
-			'findAndModify' => $self->_meta['source'], 
+			'findAndModify' => static::meta('source'), 
 			'query' => array(
 				'_id' => new \MongoId($inventory_id),
 			), 
