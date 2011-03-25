@@ -2,7 +2,7 @@
 namespace chowly\models;
 
 
-class Purchase extends \chowly\extensions\data\Model{
+class Purchases extends \chowly\extensions\data\Model{
 	
 	public $error = null;
 	protected $_schema = array(

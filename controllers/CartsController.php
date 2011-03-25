@@ -2,7 +2,7 @@
 namespace chowly\controllers;
 
 use chowly\models\Cart;
-use chowly\models\Offer;
+use chowly\models\Offers;
 use \lithium\analysis\Logger;
 class CartsController extends \chowly\extensions\action\Controller{
 	
@@ -16,7 +16,7 @@ class CartsController extends \chowly\extensions\action\Controller{
 		
 		if(Cart::clear($this->request->id)){
 			$data['cleared'] = true;
-			Offer::releaseInventory($this->request->id);
+			Offers::releaseInventory($this->request->id);
 		}
 		$this->render(array('json' => $data));
 	}

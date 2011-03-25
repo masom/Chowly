@@ -5,10 +5,10 @@ use lithium\data\source\Database;
 
 use li3_flash_message\extensions\storage\FlashMessage;
 use chowly\models\Cart;
-use chowly\models\Inventory;
-use chowly\models\Venue;
-use chowly\models\Offer;
-use chowly\models\Purchase;
+use chowly\models\Inventories;
+use chowly\models\Venues;
+use chowly\models\Offers;
+use chowly\models\Purchases;
 
 use chowly\extensions\data\InventoryException;
 use \lithium\net\http\Router;
@@ -50,14 +50,14 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		$conditions = array(
 			'_id' => array_keys(Cart::get())
 		);
-		$offers = Offer::all(compact('conditions'));
+		$offers = Offers::all(compact('conditions'));
 		
 		$cart = Cart::get();
 		return compact('offers', 'cart');
 	}
 	
 	public function checkout(){
-		$provinces = Purchase::getProvinces();
+		$provinces = Purchases::getProvinces();
 		
 		Cart::freeze();
 		if(Cart::isEmpty()){
@@ -71,7 +71,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		//Secure inventory so it does not expire while in checkout.
 		foreach($cart as $offer_id => $attr){
 			try{
-				Inventory::secure($attr['inventory_id']);
+				Inventories::secure($attr['inventory_id']);
 			}catch(InventoryException $e){
 				Logger::write('warning', "Could not secure {$attr['inventory_id']} Reason: {$e->getMessage()}");
 				//TODO: Do we fail at that point or still sell the item?
@@ -88,7 +88,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			
 			Cart::startTransaction();
 			
-			$purchase = Purchase::create();
+			$purchase = Purchases::create();
 			$purchase->set($this->request->data);
 			$purchase->status = 'new';
 			
@@ -104,7 +104,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			$cart = Cart::get();
 			
 			$conditions = array('_id'=> array_keys($cart));
-			$offers = Offer::all(compact('conditions'));
+			$offers = Offers::all(compact('conditions'));
 			
 			//TODO: Log transaction for history/accounting
 			try{
@@ -130,10 +130,10 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 				return compact('purchase', 'provinces');
 			}
 			
-			Logger::write('info', "Transaction Completed. E[{$purchase->email}] T[{$purchase->_id}] P[{$purchase->price}]");
+			Logger::write('info', "Transaction Completed. E[{$purchase->email}] I[{$purchase->_id}] P[{$purchase->price}]");
 			foreach($cart as $offer_id => $attr){
 				try{
-					Inventory::purchase($purchase->_id, $attr['inventory_id']);
+					Inventories::purchase($purchase->_id, $attr['inventory_id']);
 				}catch(InventoryException $e){
 					Logger::write('warning', "Could not mark inventory as purchased. Purchase: {$purchase->_id}. Item: {$attr['inventory_id']} Reason: ". $e->getMessage());
 				}
@@ -145,7 +145,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			}
 			
 			$conditions = array('_id' => $venuesList);
-			$venues = Venue::find('all', compact('conditions'));
+			$venues = Venues::find('all', compact('conditions'));
 
 			$path = null;
 			try{

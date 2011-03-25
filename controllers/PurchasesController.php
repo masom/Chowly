@@ -1,9 +1,9 @@
 <?php
 namespace chowly\controllers;
 
-use chowly\models\Purchase;
-use chowly\models\Offer;
-use chowly\models\Venue;
+use chowly\models\Purchases;
+use chowly\models\Offers;
+use chowly\models\Venues;
 use li3_flash_message\extensions\storage\FlashMessage;
 
 class PurchasesController extends \chowly\extensions\action\Controller{
@@ -14,15 +14,15 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 		$page = ($this->request->params['page'])? $this->request->params['page'] : 1;
 		$order = array('created' => 'DESC');
 		
-		$total = Purchase::count();
-		$purchases = Purchase::all(compact('order','limit','page'));
+		$total = Purchases::count();
+		$purchases = Purchases::all(compact('order','limit','page'));
 		
 		return compact('purchases', 'total', 'page', 'limit');
 	}
 	public function admin_view(){
 		
 		$conditions = array('_id' => $this->request->id);
-		$purchase = Purchase::first(compact('conditions'));
+		$purchase = Purchases::first(compact('conditions'));
 		
 		if(!$purchase){
 			FlashMessage::set("The specified purchase could not be found.");
@@ -33,13 +33,13 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 		foreach($purchase->offers as $offer){
 			$conditions['_id'][] = $offer->_id;
 		}
-		$offers = Offer::all(compact('conditions'));
+		$offers = Offers::all(compact('conditions'));
 		
 		$conditions = array('_id'=>array());
 		foreach($offers as $offer){
 			$conditions['_id'][] = $offer->venue_id;
 		}
-		$venues = Venue::all(compact('conditions'));
+		$venues = Venues::all(compact('conditions'));
 		
 		
 		return compact('purchase','offers','venues');
@@ -57,7 +57,7 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 				return $this->redirect(array('Purchases::index','admin'=>true));
 		}
 		$order = array('created' => 'DESC');
-		$purchases = Purchase::all(compact('order','conditions'));
+		$purchases = Purchases::all(compact('order','conditions'));
 		
 		$this->_render['template'] = 'admin_index';
 		return compact('purchases');
@@ -69,7 +69,7 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 		}
 		
 		$conditions = array('_id' => $this->request->id);
-		$purchase = Purchase::first(compact('conditions'));
+		$purchase = Purchases::first(compact('conditions'));
 		if(!$purchase){
 			FlashMessage::set("The purchase could not be found");
 			return $this->redirect($this->request->referer());
@@ -79,13 +79,13 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 		foreach($purchase->offers as $offer){
 			$conditions['_id'][] = $offer->_id;
 		}
-		$offers = Offer::all(compact('conditions'));
+		$offers = Offers::all(compact('conditions'));
 		
 		$conditions = array('_id'=>array());
 		foreach($offers as $offer){
 			$conditions['_id'][] = $offer->venue_id;
 		}
-		$venues = Venue::all(compact('conditions'));
+		$venues = Venues::all(compact('conditions'));
 		
 		$filename = $purchase->_id.'.pdf';
 		$this->_view['renderer'] = 'Pdf';
@@ -99,7 +99,7 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 		}
 		
 		$conditions = array('_id' => $this->request->id);
-		$purchase = Purchase::first(compact('conditions'));
+		$purchase = Purchases::first(compact('conditions'));
 		if(!$purchase){
 			FlashMessage::set("The purchase could not be found");
 			return $this->redirect($this->request->referer());
@@ -112,13 +112,13 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 		foreach($purchase->offers as $offer){
 			$conditions['_id'][] = $offer->_id;
 		}
-		$offers = Offer::all(compact('conditions'));
+		$offers = Offers::all(compact('conditions'));
 		
 		$conditions = array('_id'=>array());
 		foreach($offers as $offer){
 			$conditions['_id'][] = $offer->venue_id;
 		}
-		$venues = Venue::all(compact('conditions'));
+		$venues = Venues::all(compact('conditions'));
 		
 		$filename = $purchase->_id.'.pdf';
 		return compact('purchase','venues', 'offers','filename');

@@ -74,9 +74,9 @@ $insureDefaultState = function($self, $params, $chain){
 	return $chain->next($self, $params, $chain);
 };
 
-Filters::apply('chowly\models\Venue', 'save', $insureDefaultState);
-Filters::apply('chowly\models\Inventory', 'save', $insureDefaultState );
-Filters::apply('chowly\models\Offer', 'save', $insureDefaultState);
+Filters::apply('chowly\models\Venues', 'save', $insureDefaultState);
+Filters::apply('chowly\models\Inventories', 'save', $insureDefaultState );
+Filters::apply('chowly\models\Offers', 'save', $insureDefaultState);
 
 /**
 // Allow access  if user is the owner

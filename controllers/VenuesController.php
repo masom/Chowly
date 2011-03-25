@@ -1,8 +1,8 @@
 <?php
 namespace chowly\controllers;
 
-use chowly\models\Venue;
-use chowly\models\Offer;
+use chowly\models\Venues;
+use chowly\models\Offers;
 use li3_flash_message\extensions\storage\FlashMessage;
 
 class VenuesController extends \chowly\extensions\action\Controller{
@@ -11,7 +11,7 @@ class VenuesController extends \chowly\extensions\action\Controller{
 		return compact('venues');
 	}
 	public function admin_add(){
-		$venue = Venue::create();
+		$venue = Venues::create();
 		if (($this->request->data)){
 			$success = $venue->save($this->request->data);
 			if($success){
@@ -26,7 +26,7 @@ class VenuesController extends \chowly\extensions\action\Controller{
 		return compact('venue','publishedOptions');
 	}
 	public function admin_edit(){
-		$venue = Venue::find($this->request->id);
+		$venue = Venues::find($this->request->id);
 
 		if (!$venue) {
 			FlashMessage::set("Venue not found.");
@@ -50,20 +50,20 @@ class VenuesController extends \chowly\extensions\action\Controller{
 		
 		$conditions = array('_id'=>$this->request->id);
 		
-		$venue = Venue::first(compact('conditions'));
+		$venue = Venues::first(compact('conditions'));
 		if(!$venue){
 			FlashMessage::set("The specified venue does not exists.");
 			return $this->redirect($this->request->referer());
 		}
 		
 		$conditions = array('venue_id' => $venue->_id);
-		$offers = Offer::all(compact('conditions'));
+		$offers = Offers::all(compact('conditions'));
 		return compact('venue', 'offers');
 	}
 	
 	public function index(){
 		$conditions = array('state' => 'published');
-		$venues = Venue::all(compact('conditions'));
+		$venues = Venues::all(compact('conditions'));
 		return compact('venues');
 	}
 	public function view(){
@@ -72,7 +72,7 @@ class VenuesController extends \chowly\extensions\action\Controller{
 			return $this->redirect(array('Venues::index'));
 		}
 		$conditions = array('_id'=>$this->request->id, 'state'=>'published');
-		$venue = Venue::first(compact('conditions'));
+		$venue = Venues::first(compact('conditions'));
 		
 		if(!$venue){
 			FlashMessage::set("The specified venue does not exists.");
@@ -80,7 +80,7 @@ class VenuesController extends \chowly\extensions\action\Controller{
 		}
 		
 		$conditions = array('venue_id' => $this->request->id, 'state'=>'published', 'availability' => array('$gt'=> 0));
-		$offers = Offer::all(compact('conditions'));
+		$offers = Offers::all(compact('conditions'));
 		return compact('venue','offers');
 	}
 }

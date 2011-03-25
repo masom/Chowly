@@ -1,7 +1,7 @@
 <?php
 namespace chowly\controllers;
 
-use chowly\models\Ticket;
+use chowly\models\Tickets;
 use li3_flash_message\extensions\storage\FlashMessage;
 use \Swift_MailTransport;
 use \Swift_Mailer;
@@ -10,7 +10,7 @@ use \Swift_Message;
 class TicketsController extends \chowly\extensions\action\Controller{
 	public function add(){
 		
-		$ticket = Ticket::create();
+		$ticket = Tickets::create();
 		if($this->request->data){
 			$ticket->state = 'new';
 			if($ticket->save($this->request->data)){
@@ -40,12 +40,12 @@ class TicketsController extends \chowly\extensions\action\Controller{
 	public function admin_index(){
 		$conditions = array('state'=>'new');
 		$order = array('created' => 'ASC');
-		$tickets = Ticket::all(compact('conditions','order'));
+		$tickets = Tickets::all(compact('conditions','order'));
 		return compact('tickets');
 	}
 	public function admin_view(){
 		$conditions = array('_id' => $this->request->id);
-		$ticket = Ticket::first(compact('conditions'));
+		$ticket = Tickets::first(compact('conditions'));
 		return compact('ticket');
 	}
 }

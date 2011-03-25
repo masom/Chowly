@@ -1,7 +1,7 @@
 <?php
 namespace chowly\controllers;
 
-use chowly\models\User;
+use chowly\models\Users;
 use \li3_flash_message\extensions\storage\FlashMessage;
 use \lithium\security\Auth;
 use \lithium\storage\Session;
@@ -14,13 +14,13 @@ class UsersController extends \chowly\extensions\action\Controller{
 		$page = ($this->request->params['page'])? $this->request->params['page'] : 1;
 		$order = array('name' => 'ASC');
 		
-		$total = User::count();
-		$users = User::all(compact('order','limit','page'));
+		$total = Users::count();
+		$users = Users::all(compact('order','limit','page'));
 		
 		return compact('users', 'total', 'page', 'limit');
 	}
 	public function admin_add(){
-		$user = User::create();
+		$user = Users::create();
 		if(!empty($this->request->data)){
 			
 		}
@@ -30,7 +30,7 @@ class UsersController extends \chowly\extensions\action\Controller{
 		$conditions = array(
 			'_id' => $this->request->id
 		);
-		$user = User::first(compact('conditions'));
+		$user = Users::first(compact('conditions'));
 		
 		if(!empty($this->request->data)){
 			
@@ -65,7 +65,7 @@ class UsersController extends \chowly\extensions\action\Controller{
 		}
 		
 		$conditions = array('_id'=>$this->request->id);
-		$user = User::first(compact('conditions'));
+		$user = Users::first(compact('conditions'));
 		
 		if(!$user){
 			return $this->render(array('json' => $data));
@@ -86,7 +86,7 @@ class UsersController extends \chowly\extensions\action\Controller{
 		}
 		
 		$conditions = array('_id'=>$this->request->id);
-		$user = User::first(compact('conditions'));
+		$user = Users::first(compact('conditions'));
 		
 		if(!$user){
 			return $this->render(array('json' => $data));
@@ -104,7 +104,7 @@ class UsersController extends \chowly\extensions\action\Controller{
 	
 	public function edit(){
 		$conditions = array('_id' => Session::read('user._id'));
-		$user = User::first(compact('conditions'));
+		$user = Users::first(compact('conditions'));
 		if(!empty($this->request->data)){
 			$user->set($this->request->data);
 			if($user->save($this->request->data,array('whitelist'=>array('name')))){
@@ -130,7 +130,7 @@ class UsersController extends \chowly\extensions\action\Controller{
 	}
 	public function add(){
 
-		$user = User::create();
+		$user = Users::create();
 		if(!empty($this->request->data)){
 			try{
 				$user->set($this->request->data);

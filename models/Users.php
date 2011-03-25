@@ -1,7 +1,7 @@
 <?php
 namespace chowly\models;
 
-class User extends \chowly\extensions\data\Model{
+class Users extends \chowly\extensions\data\Model{
 	public $_schema = array(
 		'_id' => array('type'=>'id'),
 		'name' => array('type'=>'string','null'=>false),

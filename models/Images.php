@@ -1,7 +1,7 @@
 <?php
 namespace chowly\models;
 
-class Image extends \chowly\extensions\data\Model{
+class Images extends \chowly\extensions\data\Model{
 	
 	protected $_meta = array('source' => 'fs.files');
 	

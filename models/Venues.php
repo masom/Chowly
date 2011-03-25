@@ -3,7 +3,7 @@ namespace chowly\models;
 
 use chowly\models\Image;
 
-class Venue extends \chowly\extensions\data\Model{
+class Venues extends \chowly\extensions\data\Model{
 	protected static $_states = array( 'published'=>'published','unpublished'=>'unpublished');
 	private $_errors = array();
 	
@@ -47,7 +47,7 @@ class Venue extends \chowly\extensions\data\Model{
 		foreach($files as $key => $file){
 			if(!$file['tmp_name'] || empty($file['tmp_name'])) continue;
 			
-			$image = Image::create();
+			$image = Images::create();
 			$imageData = array('file'=> $file, 'parent_id'=> $entity->_id, 'parent_type'=>'venue');
 			if($image->save($imageData)){
 				$data[$key] = $image->_id;

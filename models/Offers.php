@@ -8,7 +8,7 @@ use chowly\extensions\data\OfferException;
 
 use \lithium\analysis\Logger;
 
-class Offer extends \chowly\extensions\data\Model{
+class Offers extends \chowly\extensions\data\Model{
 	protected static $_states = array('published'=>'published', 'unpublished'=>'unpublished');
 	public $validates = array(
 		'name' => array(
@@ -69,8 +69,8 @@ class Offer extends \chowly\extensions\data\Model{
 		return static::all(compact('conditions','order'));
 	}
 	public static function rebuildInventory(){
-		Inventory::releaseExpired();
-		$availableInventory = Inventory::getAvailable();
+		Inventories::releaseExpired();
+		$availableInventory = Inventories::getAvailable();
 		$offersInventory = array();
 		foreach($availableInventory as $inventory){
 			if(!isset($offersInventory[(string)$inventory->offer_id])){
@@ -80,12 +80,12 @@ class Offer extends \chowly\extensions\data\Model{
 		}
 		
 		foreach($offersInventory as $offer_id => $availability){
-			Offer::update(compact('availability'), array('_id'=>$offer_id));
+			static::update(compact('availability'), array('_id'=>$offer_id));
 		}
 	}
 	public static function releaseInventory($offer_id){
 		try{
-			Inventory::release(Cart::id(), $offer_id);
+			Inventories::release(Cart::id(), $offer_id);
 		}catch(InventoryException $e){
 			Logger::write('error', "Could not release inventor for the following reason: {$e->getMessage()}");
 			return false;
@@ -115,7 +115,7 @@ class Offer extends \chowly\extensions\data\Model{
 		}
 
 		try{
-			$inventory = Inventory::reserve($customer_id,$offer_id);
+			$inventory = Inventories::reserve($customer_id,$offer_id);
 			$offer->availability--;
 			if($offer->availability <= 0){
 				$offer->availability = 0;
@@ -138,7 +138,7 @@ class Offer extends \chowly\extensions\data\Model{
 		
 		$created = 0;
 		for($i =0; $i < $entity->inventoryCount; $i++){
-			if(Inventory::createForOffer($entity->_id)){
+			if(Inventories::createForOffer($entity->_id)){
 				$created++;
 			}else{
 				Logger::write('error', 'Could not create inventory item for {$entity->_id}.');
@@ -179,7 +179,7 @@ class Offer extends \chowly\extensions\data\Model{
 		foreach($files as $key => $file){
 			if(!$file['tmp_name'] || empty($file['tmp_name'])) continue;
 			
-			$image = Image::create();
+			$image = Images::create();
 			$imageData = array('file'=> $file, 'parent_id'=> $entity->_id, 'parent_type'=>'offer');
 			if($image->save($imageData)){
 				$data[$key] = $image->_id;

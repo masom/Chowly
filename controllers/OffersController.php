@@ -1,8 +1,8 @@
 <?php
 namespace chowly\controllers;
 
-use chowly\models\Offer;
-use chowly\models\Venue;
+use chowly\models\Offers;
+use chowly\models\Venues;
 use chowly\models\Cart;
 
 use chowly\extensions\data\OfferException;
@@ -13,7 +13,7 @@ use li3_flash_message\extensions\storage\FlashMessage;
 class OffersController extends \chowly\extensions\action\Controller{
 	
 	public function index(){	
-		$offers = Offer::current();
+		$offers = Offers::current();
 		$venues = array();
 		$venues_id = array();
 		foreach($offers as $offer){
@@ -22,7 +22,7 @@ class OffersController extends \chowly\extensions\action\Controller{
 		
 		if(!empty($venues_id)){
 			$conditions = array('_id' => array_keys($venues_id));
-			Venue::meta('title', 'logo');
+			Venues::meta('title', 'logo');
 			$venues = Venue::find('list', compact('conditions','fields'));
 		}
 		return compact('offers', 'venues');
@@ -38,13 +38,13 @@ class OffersController extends \chowly\extensions\action\Controller{
 			'state'=>'published'
 		);
 		
-		$offer = Offer::first(compact('conditions'));
+		$offer = Offers::first(compact('conditions'));
 		if(!$offer){
 			FlashMessage::set("The specified offer does not exists.");
 			return $this->redirect(array("Offers::index"));
 		}
 		$conditions = array('_id' => $offer->venue_id);
-		$venue = Venue::first(compact('conditions'));
+		$venue = Venues::first(compact('conditions'));
 		
 		return compact('offer','venue');
 	}
@@ -62,7 +62,7 @@ class OffersController extends \chowly\extensions\action\Controller{
 			return $this->redirect(array('Checkouts::confirm'));
 		}
 		try{
-			$reserved = Offer::reserve($this->request->id, Cart::id());
+			$reserved = Offers::reserve($this->request->id, Cart::id());
 		}catch(InventoryException $e){
 			FlashMessage::set("Sorry, The item could not be added to your cart");
 			return $this->redirect($this->request->referer());
@@ -80,24 +80,23 @@ class OffersController extends \chowly\extensions\action\Controller{
 		$page = ($this->request->params['page'])? $this->request->params['page'] : 1;
 		$order = array('created' => 'DESC');
 		
-		$total = Offer::count();
-		
-		$offers = Offer::all(compact('order','limit','page'));
+		$total = Offers::count();
+		$offers = Offers::all(compact('order','limit','page'));
 		
 		return compact('offers', 'total', 'page', 'limit');
 	}
 	public function admin_view(){
-		$offer = Offer::first($this->request->id);
+		$offer = Offers::first($this->request->id);
 		if(!$offer){
 			return $this->redirect(array('Offers::index','admin'=>true));
 		}
 		$conditions = array('_id'=> $offer->venue_id);
-		$venue = Venue::first(compact('conditions'));
+		$venue = Venues::first(compact('conditions'));
 		
 		return compact('venue','offer');
 	}
 	public function admin_publish(){
-		$offer = Offer::first($this->request->id);
+		$offer = Offers::first($this->request->id);
 		if(!$offer){
 			FlashMessage::set("Offer not found.");
 			return $this->redirect($this->request->referer());
@@ -110,7 +109,7 @@ class OffersController extends \chowly\extensions\action\Controller{
 		return $this->redirect($this->request->referer());
 	}
 	public function admin_unpublish(){
-		$offer = Offer::first($this->request->id);
+		$offer = Offers::first($this->request->id);
 		if(!$offer){
 			FlashMessage::set("Offer not found");
 			return $this->redirect($this->request->referer());
@@ -123,11 +122,11 @@ class OffersController extends \chowly\extensions\action\Controller{
 		return $this->redirect($this->request->referer());
 	}
 	public function admin_rebuild_inventory(){
-		Offer::rebuildInventory();
+		Offers::rebuildInventory();
 		return $this->redirect($this->request->referer());
 	}
 	public function admin_add(){
-		$offer = Offer::create();
+		$offer = Offers::create();
 		if (($this->request->data)){
 			$offer->set($this->request->data);
 			
@@ -155,12 +154,13 @@ class OffersController extends \chowly\extensions\action\Controller{
 		if(!$conditions){
 			return $this->redirect(array('Offers::index','admin'=>true));
 		}
-		$venue = Venue::first(compact('conditions'));
+		$venue = Venues::first(compact('conditions'));
 		
 		if(!$venue){
 			FlashMessage::set("Venue not found.");
 			return $this->redirect($this->request->referer());
 		}
+		
 		$this->_render['template'] = 'edit';
 		return compact('venue', 'offer');
 	}
@@ -168,7 +168,8 @@ class OffersController extends \chowly\extensions\action\Controller{
 		$conditions = array(
 			'_id' => $this->request->id
 		);
-		$offer = Offer::first(compact('conditions'));
+		
+		$offer = Offers::first(compact('conditions'));
 		if (($this->request->data)){
 			$success = $offer->save($this->request->data);
 			if($success){

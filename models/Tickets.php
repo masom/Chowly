@@ -1,7 +1,7 @@
 <?php
 namespace chowly\models;
 
-class Ticket extends \chowly\extensions\data\Model{
+class Tickets extends \chowly\extensions\data\Model{
 	public $_schema = array(
 		'_id' => array('type'=>'id'),
 		'name' => array('type'=>'string','null'=>false),
