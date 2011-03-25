@@ -30,8 +30,9 @@ class Inventories extends \chowly\extensions\data\Model{
 		return static::update( $data , $conditions);
 	}
 	public static function release($customer_id, $offer_id){
+		$self = static::_object();
 		$command = array(
-			'findAndModify' => 'inventories', 
+			'findAndModify' => $self->_meta['source'], 
 			'query' => array(
 				'offer_id' => new \MongoId($offer_id),
 				'state' => 'reserved'
@@ -45,7 +46,7 @@ class Inventories extends \chowly\extensions\data\Model{
 			)
 		);
 		
-		$result = static::_connection()->connection->command($command);
+		$result = static::connection()->connection->command($command);
 		
 		if(isset($result['errmsg'])){
 			throw new InventoryException($result['errmsg']);
@@ -64,8 +65,9 @@ class Inventories extends \chowly\extensions\data\Model{
 	 * @todo Add indexes to inventory
 	 */
 	public static function reserve($customer_id, $offer_id){
+		$self = static::_object();
 		$command = array(
-			'findAndModify' => 'inventories', 
+			'findAndModify' => $self->_meta['source'], 
 			'query' => array(
 				'offer_id' => new \MongoId($offer_id),
 				'state' => 'available'
@@ -79,7 +81,7 @@ class Inventories extends \chowly\extensions\data\Model{
 			)
 		);
 		
-		$result = static::_connection()->connection->command($command);
+		$result = static::connection()->connection->command($command);
 		
 		if(isset($result['errmsg'])){
 			throw new InventoryException($result['errmsg']);
@@ -91,8 +93,9 @@ class Inventories extends \chowly\extensions\data\Model{
 		return $inventory;
 	}
 	public static function secure($inventory_id){
+		$self = static::_object();
 		$command = array(
-			'findAndModify' => 'inventories', 
+			'findAndModify' => $self->_meta['source'], 
 			'query' => array(
 				'_id' => $inventory_id,
 			), 
@@ -103,15 +106,16 @@ class Inventories extends \chowly\extensions\data\Model{
 			)
 		);
 		
-		$result = static::_connection()->connection->command($command);
+		$result = static::connection()->connection->command($command);
 		if(isset($result['errmsg'])){
 			throw new InventoryException($result['errmsg']);
 		}		
 		return true;
 	}
 	public static function purchase($purchase_id, $inventory_id){
+		$self = static::_object();
 		$command = array(
-			'findAndModify' => 'inventories', 
+			'findAndModify' => $self->_meta['source'], 
 			'query' => array(
 				'_id' => new \MongoId($inventory_id),
 			), 
@@ -123,7 +127,7 @@ class Inventories extends \chowly\extensions\data\Model{
 			)
 		);
 		
-		$result = static::_connection()->connection->command($command);
+		$result = static::connection()->connection->command($command);
 		if(isset($result['errmsg'])){
 			throw new InventoryException($result['errmsg']);
 		}

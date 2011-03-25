@@ -1,87 +1,33 @@
 <?php
 namespace chowly\models;
 
-use \lithium\storage\Session;
-use \MongoId;
-
-class Cart extends \lithium\data\Model{
-	/**
-	 * Holds the instance of the session storage class
-	 *
-	 * @see \lithium\storage\Session
-	 */
-	protected static $_storage = null;
-
-	protected static $_classes = array(
-		'session' => '\lithium\storage\Session'
-	);
-	protected static $_options = array(
-		'name'=>'ChowlyCart'
-	);
+class Carts extends \lithium\data\Model{
 	
-	/**
-	 * Initializes the session class.
-	 *
-	 * @return void
-	 */
-	public static function __init() {
-		static::$_storage = static::$_classes['session'];
-		$storage = static::$_storage;
-		if(!$storage::check('Cart.id')){
-			$storage::write('Cart.id', new MongoId(), static::$_options);
-		}
+	public function endTransaction(){
+		$command = $entity->_transaction('transaction', 'default');
+		$result = static::connection()->connection->command($command);
+		return !isset($result['errmsg']);
+	}
+	public function startTransaction($entity){
+		$command = $entity->_transaction('default','transaction');
+		$result = static::connection()->connection->command($command);
+		return !isset($result['errmsg']);
 	}
 	
-	public static function id(){
-		$storage = static::$_storage;
-		return $storage::read("Cart.id", static::$_options);
-	}
-	public static function endTransaction(){
-		$storage = static::$_storage;
-		return $storage::write("Cart.State", 'frozen', static::$_options);
-	}
-	public static function startTransaction(){
-		$storage = static::$_storage;
-		return $storage::write("Cart.State", 'transaction', static::$_options);
-	}
-	public static function inTransaction(){
-		$storage = static::$_storage;
-		return ($storage::read("Cart.State", static::$_options) == 'transaction');
-	}
-	
-	public static function freeze(){
-		$storage = static::$_storage;
-		
-		switch ($storage::read("Cart.State", static::$_options)){
-			case 'transaction':
-			case 'frozen':
-				return true;
-				break;
-			default:
-				return $storage::write("Cart.State", 'frozen', static::$_options);
-				break;
-		}
-	}
-	
-	public static function unfreeze(){
-		$storage = static::$_storage;
-		
-		switch($storage::read("Cart.State", static::$_options)){
-			case 'transaction':
-				break;
-			case 'frozen':
-				$storage::write("Cart.State", 'default', static::$_options);
-				break;
-			default:
-				return true;
-				break;
-		}
-	}
-	
-	public static function contain($offer_id){
-		$storage = static::$_storage;
-		static::clean();
-		return $storage::check("Cart.Items.{$offer_id}", static::$_options);
+	private function _transaction($entity, $from = 'default', $to = 'transaction'){
+		debug($entity);die;
+		return array(
+			'findAndModify' => $entity->_meta['source'], 
+			'query' => array(
+				'_id' => $entity->_id,
+				'state' => $from
+			),
+			'update'=> array(
+				'$set' => array(
+					'state'=> $to
+				)
+			)
+		);
 	}
 	
 	/**
@@ -89,74 +35,28 @@ class Cart extends \lithium\data\Model{
 	 * @param var $offer_id
 	 * @return bool
 	 */
-	public static function add($offer_id, $inventory_id){
-		$storage = static::$_storage;
-		
-		if(in_array($storage::read("Cart.State", static::$_options), array('transaction','frozen'))){
-			return false;
-		}
-		
-		if(static::contain($offer_id)){
-			return true;
-		}
-		return $storage::write("Cart.Items.{$offer_id}", array('inventory_id'=>$inventory_id,'expires'=> time() + 15 * 60), static::$_options);
+	public function add($entity, $offer_id, $inventory_id){
+		$conditions = array('_id' => $entity->_id, 'state' => 'default');
+		$data = array('$addToSet' => array('items' => $offer_id));
+		$options = array('multiple' => false, 'safe' => true);
+		return $entity->update($data, $conditions, $options);
 	}
 	
-	/**
-	 * Get the cart content. Cleanup old items
-	 * @return array
-	 */
-	public static function get() {
-		$storage = static::$_storage;
-
-		if(!in_array($storage::read("Cart.State", static::$_options), array('transaction','frozen'))){
-			static::clean();
-		}
-		return $storage::read("Cart.Items", static::$_options);
+	public static function isEmpty($entity){
+		return empty($entity->items);
 	}
 	
-	public static function clean(){
-		$storage	= static::$_storage;
-		$time		= time();
-		
-		foreach($storage::read("Cart.Items", static::$_options) as $offer => $attr){
-			if($attr['expires'] < $time){
-				static::clear($offer);
-			}
-		}
+	public function clear($entity){
+		$conditions = array('_id' => $entity->_id, 'state' => 'default');
+		$data = array('$set' => array('items' => array()));
+		$options = array('multiple' => false, 'safe' => true);
+		return $entity->update($data, $conditions, $options);
 	}
-	public static function isEmpty(){
-		$storage = static::$_storage;
-
-		if(!in_array($storage::read("Cart.State", static::$_options), array('transaction','frozen'))){
-			static::clean();
-		}
-		
-		return ($storage::read("Cart.Items", static::$_options))? false : true;
-	}
-	/**
-	 * Clears one or all items from the storage.
-	 *
-	 * @param string [$key] Optional key. Set this to `null` to delete all items.
-	 * @return void
-	 */
-	public static function clear($key = '') {
-		$storage = static::$_storage;
-		if(in_array($storage::read("Cart.State", static::$_options), array('transaction','frozen'))){
-			return false;
-		}
-		if (empty($key)) {
-			return $storage::write("Cart.Items", array(), static::$_options);
-		}else{
-			return $storage::delete("Cart.Items.{$key}", static::$_options);
-		}
-	}
-	public static function isReadOnly(){
-		$storage = static::$_storage;
-		if(in_array($storage::read("Cart.State", static::$_options), array('transaction','frozen'))){
-			return true;
-		}
-		return false;
+	public function remove($entity, $offer_id){
+		$conditions = array('_id' => $entity->_id, 'state' => 'default');
+		$data = array('$pull' => array('items' => $offer_id));
+		$options = array('safe'=>true);
+		return $entity->update($data, $conditions, $options);
 	}
 }
 ?>
