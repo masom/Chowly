@@ -4,7 +4,7 @@ namespace chowly\controllers;
 use lithium\data\source\Database;
 
 use li3_flash_message\extensions\storage\FlashMessage;
-use chowly\models\Cart;
+use chowly\models\Carts;
 use chowly\models\Inventories;
 use chowly\models\Venues;
 use chowly\models\Offers;
@@ -43,43 +43,45 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 	}
 	public function confirm(){
 		
-		if(Cart::isEmpty()){
+		if($this->Cart->isEmpty()){
 			FlashMessage::set("Your cart is currently empty.");
 			return $this->redirect("Offers::index");
 		}
 		
+		$cart_items = $this->Cart->items;
+		$cart_items_id = array();
+		foreach($cart_items as $item){
+			$cart_items_id[] = $item->_id;
+		}
+
 		$conditions = array(
-			'_id' => array_keys(Cart::get())
+			'_id' => $cart_items_id
 		);
 		$offers = Offers::all(compact('conditions'));
 		
-		$cart = Cart::get();
-		return compact('offers', 'cart');
+		
+		return compact('offers','cart_items');
 	}
 	
 	public function checkout(){
 		$provinces = Purchases::getProvinces();
 		
-		Cart::freeze();
-		if(Cart::isEmpty()){
-			Cart::unfreeze();
+		if($this->Cart->isEmpty()){
 			FlashMessage::set("Your cart is currently empty.");
 			return $this->redirect("Offers::index");
 		}
-
-		$cart = Cart::get();
 		
 		//Secure inventory so it does not expire while in checkout.
-		foreach($cart as $offer_id => $attr){
+		foreach($this->Cart->items as $item){
 			try{
-				Inventories::secure($attr['inventory_id']);
+				Inventories::secure($item->inventory_id);
 			}catch(InventoryException $e){
-				Logger::write('warning', "Could not secure {$attr['inventory_id']} Reason: {$e->getMessage()}");
+				Logger::write('warning', "Could not secure {$item->inventory_id} Reason: {$e->getMessage()}");
 				//TODO: Do we fail at that point or still sell the item?
 			}
 		}
 		
-		if(Cart::inTransaction()){
+		if(!$this->Cart->startTransaction()){
 			FlashMessage::set("There is a transaction in progress on your cart. Please try again.");
 			return $this->redirect("Offers::index");
 		}
@@ -87,24 +89,21 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		//TODO: Credit Card data processing...
 		if($this->request->data){
 			
-			Cart::startTransaction();
-			
 			$purchase = Purchases::create();
 			$purchase->set($this->request->data);
 			$purchase->status = 'new';
 			
 			if(!$purchase->validates()){
 				unset($purchase->cc_number, $purchase->cc_sc);
-				
-				Cart::endTransaction();
-				
+				$this->Cart->endTransaction();
 				return compact('purchase', 'provinces');
 			}
 			
-			
-			$cart = Cart::get();
-			
-			$conditions = array('_id'=> array_keys($cart));
+			$cart_items_id = array();
+			foreach($this->Cart->items as $item){
+				$cart_items_id[] = $item->_id;
+			}
+			$conditions = array('_id'=> $cart_items_id);
 			$offers = Offers::all(compact('conditions'));
 			
 			//TODO: Log transaction for history/accounting
@@ -115,28 +114,26 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 				Logger::write('notice', "Could not process purchase due to: ". $e->getMessage());
 				FlashMessage::set("Some processing errors occured.");
 				
-				Cart::endTransaction();
-				
+				$this->Cart->endTransaction();
 				return compact('purchase', 'provinces');
 			}
 			unset($purchase->cc_number, $purchase->cc_sc);
-			
 			
 			if(!$purchase->isCompleted()){
 				Logger::write('notice', "Transaction not completed due to : {$purchase->error}");
 				FlashMessage::set("The purchase could not be completed.");
 				
-				Cart::endTransaction();
+				$this->Cart->endTransaction();
 				
 				return compact('purchase', 'provinces');
 			}
 			
 			Logger::write('info', "Transaction Completed. E[{$purchase->email}] I[{$purchase->_id}] P[{$purchase->price}]");
-			foreach($cart as $offer_id => $attr){
+			foreach($this->Cart->items as $item){
 				try{
-					Inventories::purchase($purchase->_id, $attr['inventory_id']);
+					Inventories::purchase($purchase->_id, $item->inventory_id);
 				}catch(InventoryException $e){
-					Logger::write('warning', "Could not mark inventory as purchased. Purchase: {$purchase->_id}. Item: {$attr['inventory_id']} Reason: ". $e->getMessage());
+					Logger::write('warning', "Could not mark inventory as purchased. Purchase: {$purchase->_id}. Item: {$item->inventory_id} Reason: ". $e->getMessage());
 				}
 			}
 			

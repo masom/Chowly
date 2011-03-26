@@ -1,9 +1,9 @@
 <?php
 namespace chowly\controllers;
 
-use chowly\models\Cart;
+use chowly\models\Carts;
 use chowly\models\Offers;
-use \lithium\analysis\Logger;
+
 class CartsController extends \chowly\extensions\action\Controller{
 	
 	public function remove(){
@@ -14,9 +14,9 @@ class CartsController extends \chowly\extensions\action\Controller{
 			return $this->render(array('json' => $data));
 		}
 		
-		if(Cart::clear($this->request->id)){
+		if($this->Cart->removeItem($this->request->id)){
 			$data['cleared'] = true;
-			Offers::releaseInventory($this->request->id);
+			Offers::releaseInventory($this->request->id, $this->Cart->_id);
 		}
 		$this->render(array('json' => $data));
 	}

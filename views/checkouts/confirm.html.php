@@ -4,7 +4,10 @@
 	<p><?=$this->html->link('Take me back to the main page.', '/');?>
 </div>
 <div style="float:left; width:400px;" id="offers">
-<?php foreach($offers as $offer):?>
+<?php foreach($offers as $offer):
+$offer_id = $offer->_id;
+$cart_item = $cart_items->first(function($i) use ($offer_id) { return $i->_id == $offer_id; });
+?>
 	<div class="whitebox" id="offer_<?=$offer->_id;?>">
 		<?=$this->html->image('silk/cart_delete.png', array('id'=>"offer_{$offer->_id}_remove"))?>
 		<?php if($offer->image):?>
@@ -12,7 +15,7 @@
 		<?php endif;?>
 		<p><?php echo nl2br($offer->name);?></p>
 		<p><?php echo nl2br($offer->description);?></p>
-		<p>Inventory reservation expires at <?php echo date('H:i:s', $cart[(string)$offer->_id]['expires']);?></p>
+		<p>Inventory reservation expires at <?php echo date('H:i:s', $cart_item['expires']);?></p>
 	</div>
 <?php endforeach;?>
 </div>
@@ -23,7 +26,7 @@ $('#CheckoutGo').button();
 <?php foreach($offers as $offer):?>
 	$('#offer_<?=$offer->_id;?>_remove').button();
 	$('#offer_<?=$offer->_id;?>_remove').bind('click', function(){
-		this.style.display = 'none';
+		$(this).hide();
 		$.ajax({
 			  url: "<?=$this->url(array('Carts::remove', 'id'=>$offer->_id));?>",
 			  context: document.body,

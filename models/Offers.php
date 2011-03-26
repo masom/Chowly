@@ -83,9 +83,9 @@ class Offers extends \chowly\extensions\data\Model{
 			static::update(compact('availability'), array('_id'=>$offer_id));
 		}
 	}
-	public static function releaseInventory($offer_id){
+	public static function releaseInventory($offer_id, $cart_id){
 		try{
-			Inventories::release(Cart::id(), $offer_id);
+			Inventories::release($cart_id, $offer_id);
 		}catch(InventoryException $e){
 			Logger::write('error', "Could not release inventor for the following reason: {$e->getMessage()}");
 			return false;
