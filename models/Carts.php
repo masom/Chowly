@@ -3,15 +3,29 @@ namespace chowly\models;
 
 class Carts extends \lithium\data\Model{
 	
+	/**
+	 * Holds MongoDb Schema definition
+	 * @var array
+	 */
 	protected $_schema = array(
 		'_id' => array('type'=>'id'),
-		'items' => array('type'=>'id', 'array' => true)
+		'items' => array('type'=>'object', 'array' => true)
 	);
+	
+	/**
+	 * End a transaction on a cart.
+	 * @return var A Carts entity -or- null if the transaction could not be ended.
+	 */
 	public function endTransaction(){
 		$command = $this->_transaction($entity, 'transaction', 'default');
 		$result = static::connection()->connection->command($command);
 		return !isset($result['errmsg']);
 	}
+	
+	/**
+	 * Start a transaction on a cart.
+	 * @return var A Carts entity -or- null if the transaction could not be started.
+	 */
 	public function startTransaction($entity){
 		$command = $this->_transaction($entity, 'default','transaction');
 		$result = static::connection()->connection->command($command);
@@ -41,7 +55,25 @@ class Carts extends \lithium\data\Model{
 	}
 	
 	/**
+	 * Cart Item stub
+	 * 
+	 * @param var $offer_id Offer reference
+	 * @param var $inventory_id Inventory item
+	 * @param var $expires Item expiration date as a UNIX timestamp
+	 */
+	private function _newItem($offer_id, $inventory_id, $expires){
+		return array(
+			'_id'=> new \MongoId($offer_id),
+			'inventory_id'=>$inventory_id,
+			'expires'=> $expires
+		);
+	}
+	
+	/**
 	 * Add a cart item
+	 * @param Object $entity
+	 * @param MongoId $offer_id
+	 * @param MongoId $inventory_id
 	 * @return bool
 	 */
 	public function addItem($entity, $offer_id, $inventory_id){
@@ -52,11 +84,7 @@ class Carts extends \lithium\data\Model{
 		$expires = time() + 15 * 60;
 		$conditions = array('_id' => $entity->_id, 'state' => 'default');
 		$data = array('$addToSet' => array(
-			'items' => array(
-				'_id'=> new \MongoId($offer_id),
-				'inventory_id'=>$inventory_id,
-				'expires'=> $expires
-				)
+			'items' => $this->_newItem($offer_id, $inventory_id, $expires)
 		));
 		
 		$options = array('multiple' => false, 'safe' => true, 'upsert'=>true);
@@ -84,7 +112,7 @@ class Carts extends \lithium\data\Model{
 		}
 		
 		$conditions = array('_id' => $entity->_id, 'state' => 'default');
-		$data = array('$pull' => array('items' => $offer_id));
+		$data = array('$pull' => array('items._id' => $offer_id));
 		$options = array('multiple' => false, 'safe' => true);
 		return static::update($data, $conditions, $options);
 	}
