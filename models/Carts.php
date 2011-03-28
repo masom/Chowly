@@ -51,7 +51,14 @@ class Carts extends \lithium\data\Model{
 		
 		$expires = time() + 15 * 60;
 		$conditions = array('_id' => $entity->_id, 'state' => 'default');
-		$data = array('$addToSet' => array('items' => array('_id'=> new \MongoId($offer_id), 'inventory_id'=>$inventory_id, 'expires'=> $expires)));
+		$data = array('$addToSet' => array(
+			'items' => array(
+				'_id'=> new \MongoId($offer_id),
+				'inventory_id'=>$inventory_id,
+				'expires'=> $expires
+				)
+		));
+		
 		$options = array('multiple' => false, 'safe' => true, 'upsert'=>true);
 		return static::update($data, $conditions, $options);
 	}
@@ -78,7 +85,7 @@ class Carts extends \lithium\data\Model{
 		
 		$conditions = array('_id' => $entity->_id, 'state' => 'default');
 		$data = array('$pull' => array('items' => $offer_id));
-		$options = array('safe'=>true);
+		$options = array('multiple' => false, 'safe' => true);
 		return static::update($data, $conditions, $options);
 	}
 	

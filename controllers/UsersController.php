@@ -142,7 +142,7 @@ class UsersController extends \chowly\extensions\action\Controller{
 			}
 			
 			if($saved){
-				Auth::check('user',$this->request->data);
+				Auth::check('user', $this->request);
 				return $this->redirect('/');
 			}		
 		}
