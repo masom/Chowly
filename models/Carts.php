@@ -1,6 +1,9 @@
 <?php
 namespace chowly\models;
 
+//Cleanup: db.carts.update({state: "default"},{$pull : { items : { expires : { $lt : 1301520008} } } }, { multi: true, safe: true});
+
+
 class Carts extends \lithium\data\Model{
 	
 	/**
