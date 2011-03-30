@@ -86,10 +86,12 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			return $this->redirect("Offers::index");
 		}
 		
+		$purchase = Purchases::create();
+		
 		//TODO: Credit Card data processing...
 		if($this->request->data){
 			
-			$purchase = Purchases::create();
+			
 			$purchase->set($this->request->data);
 			$purchase->status = 'new';
 			
@@ -171,14 +173,15 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 				Logger::write('error', "Could not send email for purchase {$purchase->_id}");
 			}
 			
-			Cart::endTransaction();
-			Cart::unfreeze();
-			Cart::clear();
+			$this->Cart->endTransaction();
+			$this->Cart->clearItems();
 			
 			$this->_render['template'] = 'success';
 			return compact('purchase');
 		}
-		return compact('provinces');
+		
+		$this->Cart->endTransaction();
+		return compact('provinces', 'purchase');
 	}
 	private function _getPdf($purchase, $offers, $venues){
 		$view  = new View(

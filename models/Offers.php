@@ -71,6 +71,15 @@ class Offers extends \chowly\extensions\data\Model{
 	public static function rebuildInventory(){
 		Inventories::releaseExpired();
 		$availableInventory = Inventories::getAvailable();
+
+		if(count($availableInventory) == 0){
+			if(Inventories::count() == 0){
+				//We no longer have any inventory in the system!!
+				//TODO: Send error email!
+			}
+			static::update(array('availability'=>0));	
+		}
+		
 		$offersInventory = array();
 		foreach($availableInventory as $inventory){
 			if(!isset($offersInventory[(string)$inventory->offer_id])){

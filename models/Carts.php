@@ -16,7 +16,7 @@ class Carts extends \lithium\data\Model{
 	 * End a transaction on a cart.
 	 * @return var A Carts entity -or- null if the transaction could not be ended.
 	 */
-	public function endTransaction(){
+	public function endTransaction($entity){
 		$command = $this->_transaction($entity, 'transaction', 'default');
 		$result = static::connection()->connection->command($command);
 		return !isset($result['errmsg']);
@@ -96,7 +96,7 @@ class Carts extends \lithium\data\Model{
 	}
 	
 	public function clearItems($entity){
-			if($this->isReadOnly($entity)){
+		if($this->isReadOnly($entity)){
 			return false;
 		}
 		
