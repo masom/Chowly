@@ -107,12 +107,17 @@ class Carts extends \lithium\data\Model{
 	}
 	
 	public function removeItem($entity, $offer_id){
+		
 		if($this->isReadOnly($entity)){
 			return false;
 		}
 		
 		$conditions = array('_id' => $entity->_id, 'state' => 'default');
-		$data = array('$pull' => array('items._id' => $offer_id));
+		$data = array('$pull' => array(
+			'items' => array(
+				'_id'=> new \MongoId($offer_id)
+			)
+		));
 		$options = array('multiple' => false, 'safe' => true);
 		return static::update($data, $conditions, $options);
 	}
@@ -122,7 +127,7 @@ class Carts extends \lithium\data\Model{
 	}
 	
 	public function isReadOnly($entity){
-		return ($entity->state == "default");
+		return ($entity->state != "default");
 	}
 }
 ?>

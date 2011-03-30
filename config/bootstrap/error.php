@@ -21,13 +21,15 @@ ErrorHandler::apply('lithium\action\Dispatcher::run', array(), function($info, $
 	$message = "/(^Template not found|^Controller '\w+' not found|^Action '\w+' not found)/";
 	$template = (preg_match($message, $info['message'])) ? '404' : '500';
 	
-	if($template != '404'){
-		Logger::write('error', "{$info['file']} : {$info['line']} : {$info['message']}");
+	Logger::write('error', "{$info['file']} : {$info['line']} : {$info['message']}");
+	switch($template){
+		case '500':
+			debug($info);die;
+		break;
 	}
-	
 	Media::render($response, compact('info', 'params'), array(
 		'controller' => 'errors',
-		'template' => '404',
+		'template' => $template,
 		'layout' => 'default',
 		'request' => $params['request']
 	));
