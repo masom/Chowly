@@ -9,38 +9,27 @@
 </head>
 <body>
 	<div id="container">
-		<br />
-		<div style="height: 11px;background-image: url(/img/main_rounded_top.png);"></div>
-		<div id="content-wrapper">
-			<div id="header">
-				<div id="logo">
-					<div class="info">
-						<?php if($this->session->read('user')):?>
-							<?php echo $this->View()->render(array('element'=>'menu'));?>
-							<br />
-						<?php endif;?>
-						<?=$this->html->link('Home', array('Offers::index'));?>
-						&nbsp;|&nbsp;
-						<?=$this->html->link('About Us',array('Pages::view','args'=>'about'));?>
-						&nbsp;|&nbsp;
-						<?=$this->html->link('Your Restaurant Here', array('Tickets::add','args'=>'restaurants'));?>
-						&nbsp;|&nbsp;
-						<?=$this->html->link('Contact Us', array('Tickets::add'))?>
+		<div id="header">
+			<?php echo $this->html->link($this->html->image('logo-slogan.png', array('width' =>'212px;','alt'=>'Logo')), '/',array('escape'=>false));?>
 
-					</div>
-					<?php echo $this->html->link($this->html->image('logo.png', array('width' =>'150px;','alt'=>'Logo')), '/',array('escape'=>false));?>
-					<h2>
-						Pick. Eat. Save.
-					</h2>
-				</div>
+			<div class="info">
+				<?php if($this->session->read('user')):?>
+					<?php echo $this->View()->render(array('element'=>'menu'));?>
+					<br />
+				<?php endif;?>
+				<?=$this->html->link('Home', array('Offers::index'));?>
+				&nbsp;|&nbsp;
+				<?=$this->html->link('About Us',array('Pages::view','args'=>'about'));?>
+				&nbsp;|&nbsp;
+				<?=$this->html->link('Your Restaurant Here', array('Tickets::add','args'=>'restaurants'));?>
+				&nbsp;|&nbsp;
+				<?=$this->html->link('Contact Us', array('Tickets::add'))?>
 			</div>
-			<div id="content">
-				<?=$this->flashMessage->output(); ?>
-				<?php echo $this->content(); ?>
-			</div>
-			<div style="clear: both;"></div>
 		</div>
-		<div style="height: 11px; margin-bottom:20px; background-image: url(/img/main_rounded_bottom.png);"></div>
+		<div style="height: 10px;background: url(/img/roundtop.png) no-repeat;"></div>
+		<?=$this->flashMessage->output(); ?>
+		<?php echo $this->content(); ?>
+		<div style="clear: both; height: 6px; margin-bottom:20px; background: url(/img/roundbottom.png)  no-repeat;"></div>
 		<div class="push"></div> 
 	</div>
 	<div id="footer-container">

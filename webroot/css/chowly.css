@@ -15,7 +15,7 @@ body {
 	font-size: 14px;
 	line-height: 1.5em;
 	color: #0d0d0d;
-	background-color: #ffffff;
+	background-color: #000000;
 	background-image: url(/img/bg.png);
 }
 /*--- Basics ---*/
@@ -285,57 +285,28 @@ input, textarea {
 	min-height: 100%;
 	height: auto !important;
 	height: 100%;
-	
 	margin: 0 auto -80px;
-
 }
 #container, #footer{
-	width: 817px;
+	width: 893px;
 	margin-left: auto;
 	margin-right: auto;
 	clear: both;
 }
-
 #content-wrapper{
 	min-height: 500px;
-	padding-bottom: 10px;
+	width: 857px;
 	background-color: #fff;
 }
-#content{
-	margin: 20px;
-}
-#header_cta{
-	font-size: 1.3em;
-	height: 50px;
-	background-color: #e1ffb5;
-}
-#header_cta form{
-	float: right;
-	background-color: transparent;
-	border: 0;
-	padding: 0;
-	margin: 0;
-	-webkit-box-shadow: none;
-	-moz-box-shadow: none;
-	box-shadow: none;
-}
-#header_cta input{
-	float: left;
-	border: 0;
-	padding:0;
-	margin: 0;
-	margin-right: 20px;
-	height: 30px;
-	width: 250px;
-}
-#header_cta input[type=image]{
-	width: 147px;
-}
 #header{
+	height: 90px;
+	background: url(/img/logo-bg.png) no-repeat;
 	padding-top: 20px;
-	margin-left: 10px;
+	padding-left: 10px;
 	margin-right: 10px;
-	margin-bottom: 50px;
+}
+#header img{
+	margin-left: 15px;
 }
 #header h1 {
 	font-size: 35px;
@@ -353,17 +324,20 @@ input, textarea {
 	margin: 0;
 	padding: 0;
 	color: #888;
+	line-height: 90px;
 }
-/*--- Content ---*/
-#content-header{
-	text-align: right;
-	margin-left: 10px;
-	margin-right: 10px;
-	margin-bottom: 10px;
-	margin-top: 20px;
+#header a{
+	color: #fff;
 }
-#content-panel{
-	margin: 10px;
+
+
+ul.offers-list{
+	margin:0;
+	padding:0;
+	list-style: none;
+}
+ul.offers-list li{
+	width: 288px;
 }
 /*-- Footer --*/
 #footer-container, .push{
@@ -383,66 +357,6 @@ input, textarea {
 	margin-right: auto;
 	text-align: left;
 	font-size: 10px;
-}
-
-p.empty-results{
-	margin: 0;
-	padding: 0;
-	width: 300px;
-	font-size: 16px;
-	margin-top: 100px;
-	margin-left: auto;
-	margin-right: auto;
-	padding: 10px;
-}
-ul.venues-listing{
-	list-style: none;
-	margin: 10px;
-	text-align: left;
-}
-li.venue-listing{
-	background-color: #fff;
-	border: 1px solid #eee;
-	-moz-box-shadow: 0 0 3px rgba(0,0,0,.4);
-	-webkit-box-shadow: 0 0 3px rgba(0,0,0,.4);
-	box-shadow: 0 0 3px rgba(0,0,0,.4);
-	-moz-border-radius: 6px;
-	-webkit-border-radius: 6px;
-	border-radius: 6px;
-	padding: 10px;
-	margin: 10px;
-	padding-top: 0;
-	width: 260px;
-	cursor: pointer;
-	float: left;
-	min-height: 250px;
-}
-p.venue-informations{
-	font-style: Italic;
-}
-div.whitebox{
-	margin: 10px;
-	padding: 10px;
-	background-color: #fff;
-	text-align: justify;
-	border-radius: 9px;
-}
-div.whitebox ul{
-	list-style: none;
-	margin: 0;
-	padding: 0;
-	margin-left: 30px;
-	margin-bottom: 30px;
-	width: 300px;
-}
-div.venue-offers ul{
-	list-style: none;
-	margin:0;
-	padding: 0;
-}
-div.venue-offers h3{
-	margin:0;
-	padding: 0;
 }
 div.error{
 	margin: 10px;
