@@ -74,18 +74,7 @@ pre {
 }
 
 /*--- Lists ---*/
-li ul, li ol { margin: 0; }
-ul, ol { margin: 0 0 1em 2.75em; }
-dt, dd {
-	font-style: italic;
-	margin: .5em 0;
-}
-dt {
-	font-weight: bold;
-}
-dd {
-	margin-left: 1em;
-}
+ul, li, li ul, li ol { margin: 0; }
 
 /*--- Tables ---*/
 table {
@@ -297,6 +286,8 @@ input, textarea {
 	min-height: 500px;
 	width: 857px;
 	background-color: #fff;
+	margin:0;
+	padding-top: 1px;
 }
 #header{
 	height: 90px;
@@ -330,14 +321,49 @@ input, textarea {
 	color: #fff;
 }
 
-
 ul.offers-list{
-	margin:0;
-	padding:0;
+	margin-left: 5px;
+	margin-right: 5px;
 	list-style: none;
 }
 ul.offers-list li{
 	width: 288px;
+	height: 355px;
+	background-repeat: no-repeat;
+}
+p.offer-remaining{
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	font-size: 18px;
+	color: #456799;
+	font-weight: bold;
+}
+p.offer-name{
+	color: #010101;
+	font-size: 20px;
+	font-weight: bold;
+	text-align: center;
+}
+p.offer-countdown{
+	background: transparent url(/img/timer-bg-grey.png) no-repeat;
+	height: 36px;
+	width: 260px;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	line-height: 36px;
+}
+div.offer-venue-logo{
+	width: 255px;
+	height: 70px;
+	overflow: hidden;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 20px;
+}
+div.offer-info{
+	margin: 15px;
 }
 /*-- Footer --*/
 #footer-container, .push{

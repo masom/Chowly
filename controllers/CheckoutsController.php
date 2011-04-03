@@ -198,7 +198,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		    compact('purchase','offers','venues'),
 		    array(
 		        'controller' => 'purchases',
-		        'template'=>'purchase',
+		        'template' => 'purchase',
 		        'type' => 'pdf',
 		        'layout' =>'purchase'
 		    )
