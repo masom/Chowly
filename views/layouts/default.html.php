@@ -29,7 +29,7 @@
 		<div style="height: 10px;background: url(/img/roundtop.png) no-repeat;"></div>
 		<?=$this->flashMessage->output(); ?>
 		<?php echo $this->content(); ?>
-		<div style="clear: both; height: 6px; margin-bottom:20px; background: url(/img/roundbottom.png)  no-repeat;"></div>
+		<div style="clear: both; height: 11px; margin-bottom:20px; background: url(/img/roundbottom.png)  no-repeat;"></div>
 		<div id="informations" style="height: 200px;">
 			<div style="float: left; height: 200px; width: 281px;">
 				<div style="background-image: url(/img/bottomboxtop.png); width: 281px; height: 16px;"></div>
