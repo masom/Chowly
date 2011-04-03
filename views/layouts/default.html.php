@@ -18,11 +18,11 @@
 					<br />
 				<?php endif;?>
 				<?=$this->html->link('Home', array('Offers::index'));?>
-				&nbsp;|&nbsp;
+				&nbsp;&nbsp;
 				<?=$this->html->link('About Us',array('Pages::view','args'=>'about'));?>
-				&nbsp;|&nbsp;
+				&nbsp;&nbsp;
 				<?=$this->html->link('Your Restaurant Here', array('Tickets::add','args'=>'restaurants'));?>
-				&nbsp;|&nbsp;
+				&nbsp;&nbsp;
 				<?=$this->html->link('Contact Us', array('Tickets::add'))?>
 			</div>
 		</div>
@@ -30,19 +30,44 @@
 		<?=$this->flashMessage->output(); ?>
 		<?php echo $this->content(); ?>
 		<div style="clear: both; height: 6px; margin-bottom:20px; background: url(/img/roundbottom.png)  no-repeat;"></div>
-		<div class="push"></div> 
+		<div id="informations" style="height: 200px;">
+			<div style="float: left; height: 200px; width: 281px;">
+				<div style="background-image: url(/img/bottomboxtop.png); width: 281px; height: 16px;"></div>
+				<div style="background-color: #ffffff; width: 281px;">
+					<h1>What is Chowly?</h1>
+					<p>Lorem ipsum</p>
+				</div>
+				<div style="background-image: url(/img/bottomboxbottom.png); width: 281px; height: 16px;"></div>
+			</div>
+			<div style="float: left; height: 200px; width: 281px; margin-left: 8px; margin-right: 8px;">
+				<div style="background-image: url(/img/bottomboxtop.png); width: 281px; height: 16px;"></div>
+				<div style="background-color: #ffffff; width: 281px;">
+					<h1>What is Chowly?</h1>
+					<p>Lorem ipsum</p>
+				</div>
+				<div style="background-image: url(/img/bottomboxbottom.png); width: 281px; height: 16px;"></div>
+			</div>
+			<div style="float: left; height: 200px; width: 281px;">
+				<div style="background-image: url(/img/bottomboxtop.png); width: 281px; height: 16px;"></div>
+				<div style="background-color: #ffffff; width: 281px;">
+					<h1>What is Chowly?</h1>
+					<p>Lorem ipsum</p>
+				</div>
+				<div style="background-image: url(/img/bottomboxbottom.png); width: 281px; height: 16px;"></div>
+			</div>
+		</div>
+		
+		<div class="push"></div>
 	</div>
 	<div id="footer-container">
 		<div id="footer">
 			<div>
 				<?=$this->html->link('Our Promise To You', array('Pages::view','args'=>'guarantee'));?>
-				&nbsp;|&nbsp;
 				<?=$this->html->link('Privacy Policy', array('Pages::view','args'=>'privacy'));?>
-				&nbsp;|&nbsp;
 				<?=$this->html->link('Terms Of Service', array('Pages::view','args'=>'terms'));?>
 			</div>
 			<div id="copyright">
-				&copy; 2010 Chowly Inc. All Rights Reserved.
+				&copy; 2011 Chowly Inc. All Rights Reserved.
 			</div>
 		</div>
 	</div>

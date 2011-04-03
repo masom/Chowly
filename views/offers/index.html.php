@@ -4,12 +4,19 @@
 <div id="content-wrapper">
 	<ul class="offers-list">
 		<?php 
+			$style = true;
 			$i = 0;
-			$perLine = 3;
 		?>
 		<?php foreach($offers as $offer):?>
-			<?php $style = ($i != 1) ? 'style="background-image: url(/img/dealbg-grey.png);"' : null;?>
-			<li id="offer-<?=$offer->_id;?>" class="offer" <?php echo $style?>>
+		
+		<?php if($i == 3):?>
+			</ul>
+			<div style="width: 857px; height: 11px; background-image: url(/img/separator.png);"></div>
+			<ul class="offers-list">
+		<?php endif;?>
+		
+			<?php $listyle = ($style) ? 'style="background-image: url(/img/dealbg-grey.png);"' : null;?>
+			<li id="offer-<?=$offer->_id;?>" class="offer" <?php echo $listyle?>>
 				<div class="offer-info">
 					<div class="offer-venue-logo">
 						<?php if($offer->venue_id && isset($venues[(string)$offer->venue_id])):?>
@@ -23,9 +30,8 @@
 					<?=$this->html->link($this->html->image('buydeal-button.png'), array('controller'=>'offers','action'=>'view','id'=>$offer->_id),array('escape'=>false));?>
 				</div>
 			</li>
-		<?php 
-		$i++;
-		endforeach;?>
+		<?php $i++; $style = !$style;?>
+		<?php endforeach;?>
 	</ul>
 </div>
 <script type="text/javascript">
