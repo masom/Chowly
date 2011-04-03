@@ -1,35 +1,47 @@
+<div style="padding-left: 15px; height: 43px; line-height: 43px; color: #ffffff; font-size: 24px; font-weight: bold; background: url(/img/top-ribbon.png);">
+	<span><?=$offer->name;?></span>
+</div>
+<div id="content-wrapper">
+<div style="margin-left: 15px; margin-right: 15px; margin-top: 20px;">
 
-	<h1><?=$offer->name;?></h1>
 
-	<div class="whitebox" style="float:left; width:380px;">
-		<?php if($offer->availability > 0):?>
-			<p>Only <?=$offer->availability;?> left!</p>
-		<?php else:?>
-			<p>Sold Out!</p>
-		<?php endif;?>
+	<div class="whitebox" style="float:left; width:350px;">
+		
+		<p class="offer-remaining" style="text-align: left;">
+			<?php if($offer->availability > 0):?>
+				Only <?=$offer->availability;?> left!
+			<?php else:?>
+				Sold Out!
+			<?php endif;?>
+		</p>
 		<p id="offer-countdown" class="countdown"></p>
-		<?php if($offer->availability > 0):?>
-		<?=$this->html->link('Buy', array('Offers::buy', 'id'=>$offer->_id),array('id'=>'offer_buy'));?>
-		<?php endif;?>
+
 		<?php if($offer->image):?>
 			<?=$this->html->image("/images/{$offer->image}.jpg");?>
 		<?php endif;?>
-		<p><?php echo nl2br($offer->description);?></p>
-	<div id="map_canvas" style="width: 380px; height: 380px;"></div>
+		
+		<h3>Details</h3>
+		<p style="margin-bottom: 40px;"><?php echo nl2br($offer->description);?></p>
+		
+		<?php echo ($offer->availability) ? $this->html->link('Buy', array('Offers::buy', 'id'=>$offer->_id),array('id'=>'offer_buy')): null; ?>
 	</div>
-	<div class="whitebox" style="width: 300px; float:left;">
+	<div class="whitebox" style="width: 450px; float:right;">
+		<h3>About the venue</h3>
 		<?php if($venue->logo):?>
 			<?=$this->html->image("/images/{$venue->logo}.jpg")?>
 		<?php endif;?>
-		<h3>Location</h3>
+		<p style="margin-top: 20px;"><?php echo nl2br($venue->description);?></p>
+		
+		<h3 style="margin-top: 20px;">Location</h3>
 		<ul style="list-style: none;">
 			<li><?=$venue->name;?></li>
 			<li><?=$venue->address;?></li>
 		</ul>
-		<h3>About the venue</h3>
-		<p style="margin-top: 20px;"><?php echo nl2br($venue->description);?></p>
+		<div id="map_canvas" style="width: 380px; height: 380px; margin-top: 20px; margin-bottom: 10px;"></div>
 	</div>
-
+	<br style="clear: both;" />
+</div>
+</div>
 <script type="text/javascript">
 var map;
 var geocoder;
