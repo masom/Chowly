@@ -61,9 +61,8 @@ class OffersController extends \chowly\extensions\action\Controller{
 
 		if($this->Cart->isReadOnly()){
 			FlashMessage::set("There is currently a transaction in progress on your cart.");
-			return $this->redirect(array('Checkouts::confirm'));
+			return $this->redirect( array('Checkouts::confirm') );
 		}
-		
 		try{
 			$reserved = Offers::reserve($this->request->id, $this->Cart->_id);
 		}catch(InventoryException $e){

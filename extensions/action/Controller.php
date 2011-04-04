@@ -21,12 +21,15 @@ class Controller extends \lithium\action\Controller{
 			);
 		}
 		
-		$this->Cart = Carts::first(array('_id' => Session::read('cart.id')));
+		$conditions = array('_id' => Session::read('cart.id'));
+		$this->Cart = Carts::first(compact('conditions'));
+
 		if(!$this->Cart){
 			$this->Cart = Carts::create();
 			$this->Cart->_id = new \MongoId();
 			Session::write('cart.id', $this->Cart->_id);
 		}
+
 	}
 	protected function _getEmail(array $data, $template = null, $controller = null){
 		
