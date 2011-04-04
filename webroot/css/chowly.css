@@ -276,7 +276,7 @@ input, textarea {
 	clear: both;
 }
 #content-wrapper{
-	min-height: 400px;
+	min-height: 350px;
 	background-color: #fff;
 	padding-top: 1px;
 	padding-bottom: 1px;
@@ -284,7 +284,7 @@ input, textarea {
 #header{
 	height: 90px;
 	background: url(/img/logo-bg.png) no-repeat;
-	padding-top: 20px;
+	padding-top: 60px;
 	padding-left: 10px;
 	width: 857px;
 }
@@ -318,8 +318,17 @@ ul.offers-list{
 	margin-left: 5px;
 	margin-right: 5px;
 	list-style: none;
+	height: 355px;
+}
+ul.offers-list p{
+	margin:0;
+	padding:0;
+}
+a.offer-buy-button img{
+	margin-top:10px;
 }
 ul.offers-list li{
+	float: left;
 	width: 288px;
 	height: 355px;
 	background-repeat: no-repeat;
@@ -328,7 +337,7 @@ p.offer-remaining{
 	margin-left: auto;
 	margin-right: auto;
 	text-align: center;
-	font-size: 18px;
+	font-size: 15px;
 	color: #2d729e;
 	font-weight: bold;
 }
@@ -352,13 +361,14 @@ p.offer-countdown{
 	margin-right: auto;
 	line-height: 36px;
 }
+
 div.offer-venue-logo{
 	width: 255px;
 	height: 80px;
 	overflow: hidden;
 	margin-left: auto;
 	margin-right: auto;
-	margin-bottom: 40px;
+	margin-bottom: 35px;
 	text-align: center;
 }
 div.offer-info{
@@ -405,8 +415,6 @@ div#share{
 	overflow: hidden;
 }
 div#share ul{
-	margin:0;
-	padding:0;
 	margin-top: 4px;
 	margin-bottom: 4px;
 	list-style:none;
@@ -443,8 +451,6 @@ div#content-wrapper, div.flash-message{
 }
 ul.time-picker{
 	list-style: none;
-	margin: 0;
-	padding: 0;
 }
 ul.time-picker li{
 	float :left;
