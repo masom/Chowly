@@ -1,5 +1,8 @@
-<div style="margin-left: auto; margin-right: auto; width: 650px;">
-<h2>About Chowly</h2>
+<div style="padding-left: 15px; height: 43px; line-height: 43px; color: #ffffff; font-size: 24px; font-weight: bold; background: url(/img/top-ribbon.png);">
+	<span>About Chowly</span>
+</div>
+<div id="content-wrapper">
+<div style="margin-left: auto; margin-right: auto; margin-top: 20px; width: 650px;">
 	<p>Chowly.com offers a variety of daily deals on handpicked restaurants. By working with local restaurants,
 	Chowly is able to sell off tables that would otherwise go unused at great discounts. Our mission is
 	to provide the most comprehensive restaurant deal site available online. Unlike group buying sites,
@@ -43,4 +46,6 @@
 		<br />
 		Pick. Eat. Save.
 	</p>
+</div>
+<br />
 </div>

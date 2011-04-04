@@ -1,4 +1,8 @@
-<h2>Privacy Policy</h2>
+<div style="padding-left: 15px; height: 43px; line-height: 43px; color: #ffffff; font-size: 24px; font-weight: bold; background: url(/img/top-ribbon.png);">
+	<span>Privacy Policy</span>
+</div>
+<div id="content-wrapper">
+<div style="margin-left: auto; margin-right: auto; margin-top: 20px; width: 650px;">
 <p>
 NOTE: Please read this disclaimer in its entirety before using our web site.
 </p>
@@ -40,3 +44,6 @@ sending the Submission. You acknowledge that you are responsible for whatever ma
 and you, not the COMPANY, have full responsibility for the message, including its legality, reliability,
 appropriateness, originality, and copyright.
 </p>
+</div>
+<br />
+</div>

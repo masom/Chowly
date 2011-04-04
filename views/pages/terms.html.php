@@ -1,4 +1,8 @@
-<h1>TERMS OF USE</h1>
+<div style="padding-left: 15px; height: 43px; line-height: 43px; color: #ffffff; font-size: 24px; font-weight: bold; background: url(/img/top-ribbon.png);">
+	<span>Terms of Use</span>
+</div>
+<div id="content-wrapper">
+<div style="margin-left: auto; margin-right: auto; margin-top: 20px; width: 650px;">
 <p>By using this site (the “Site”), you (“you” or the “End User”) agree to the terms and conditions that we (“Chowly”) have provided. If you do not wish to agree to these terms and conditions (the “Terms of Use” or “Agreement”), please refrain from using the Site.</p>
 <h3>1. Terms and Conditions for Restaurant-Specific Vouchers.</h3>
 <p>For this section, “Restaurant”  shall be defined as a Merchant who offers food and beverage for sale in its regular business operations, and is making such food and beverages available to purchasers of Vouchers.</p>
@@ -126,3 +130,6 @@ Copyright@Chowly.com
 <p>All vouchers printed from the Site or any Microsite, or any other website associated with Chowly (hereinafter “Vouchers”) are promotional vouchers that may be purchased from participating merchants (“Merchants”) through Chowly to be used in exchange for goods and services at a discount from their actual cost. By placing an order for a Voucher from a Merchant through Chowly, you make an offer to purchase the Vouchers you have selected on the terms and conditions stated below. You may be required to create an account in order to purchase any Voucher. This may be required so we can provide you with easy access to print your orders, view your past purchases, modify your preferences, and to ensure permissible use of the Voucher.</p>
 
 <p>The Voucher you purchase through Chowly is redeemable for goods or services by the Merchant. The Merchant, not Chowly, is the seller of the Voucher and the goods and services and is solely responsible for redeeming any Voucher you purchase. Chowly sells a Voucher that can be redeemed in connection with your purchase of the goods or services from Merchant</p>
+</div>
+<br />
+</div>

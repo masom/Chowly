@@ -1,5 +1,8 @@
-<h2>Our Promise To You</h2>
-
+<div style="padding-left: 15px; height: 43px; line-height: 43px; color: #ffffff; font-size: 24px; font-weight: bold; background: url(/img/top-ribbon.png);">
+	<span>Our Promise To You</span>
+</div>
+<div id="content-wrapper">
+<div style="margin-left: auto; margin-right: auto; margin-top: 20px; width: 650px;">
 <p>Here at Chowly.com our customers and members mean everything to us. When we started this crazy
 site it was because like you, we had a passion for great food at great prices. If you feel in any way that
 your Chowly.com experience undelivered, we will fix it.</p>
@@ -13,3 +16,6 @@ amount.</p>
 <p>Contact Us at comments@chowly.com</p>
 
 <p>Team Chowly</p>
+</div>
+<br />
+</div>
