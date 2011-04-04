@@ -26,6 +26,7 @@
 				<?=$this->html->link('Contact Us', array('Tickets::add'))?>
 			</div>
 		</div>
+		
 		<div style="height: 10px;background: url(/img/roundtop.png) no-repeat;"></div>
 		<?=$this->flashMessage->output(); ?>
 		<?php echo $this->content(); ?>

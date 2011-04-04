@@ -282,7 +282,6 @@ input, textarea {
 }
 #content-wrapper{
 	min-height: 400px;
-	width: 857px;
 	background-color: #fff;
 	padding-top: 1px;
 }
@@ -409,22 +408,15 @@ div.error{
 	color: #990000;
 }
 div.flash-message{
-	margin: 10px;
-	padding: 10px;
-	
-	margin-left: auto;
-	margin-right: auto;
-	border: 1px solid #eee;
-	
-	-moz-box-shadow: 0 0 3px rgba(0,0,0,.4);
-	-webkit-box-shadow: 0 0 3px rgba(0,0,0,.4);
-	box-shadow: 0 0 3px rgba(0,0,0,.4);
-	-moz-border-radius: 6px;
-	-webkit-border-radius: 6px;
-	
 	text-align: center;
-	width: 50%;
 	background-color: #fff;
+}
+div.flash-message p{
+	margin-bottom: 0;
+	padding:10px;
+}
+div#content-wrapper, div.flash-message{
+	width: 857px;
 }
 ul.time-picker{
 	list-style: none;

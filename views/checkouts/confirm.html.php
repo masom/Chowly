@@ -1,25 +1,35 @@
-<h1>Purchase Confirmation</h1>
-<div id="empty_cart" style="display: none; margin-left: auto; margin-right: auto;">
-	<p>Your cart is currently empty.</p>
-	<p><?=$this->html->link('Take me back to the main page.', '/');?>
+<div style="padding-left: 15px; height: 43px; line-height: 43px; color: #ffffff; font-size: 24px; font-weight: bold; background: url(/img/top-ribbon.png);">
+	<span>Purchase Confirmation</span>
 </div>
-<div style="float:left; width:400px;" id="offers">
-<?php foreach($offers as $offer):
-$offer_id = $offer->_id;
-$cart_item = $cart_items->first(function($i) use ($offer_id) { return $i->_id == $offer_id; });
-?>
-	<div class="whitebox" id="offer_<?=$offer->_id;?>">
-		<?=$this->html->image('silk/cart_delete.png', array('id'=>"offer_{$offer->_id}_remove"))?>
-		<?php if($offer->image):?>
-			<?=$this->html->image("/images/{$offer->image}.jpg");?>
-		<?php endif;?>
-		<p><?php echo nl2br($offer->name);?></p>
-		<p><?php echo nl2br($offer->description);?></p>
-		<p>Inventory reservation expires at <?php echo date('H:i:s', $cart_item['expires']);?></p>
+<div id="content-wrapper">
+	<div id="empty_cart" style="display: none; margin-left: auto; margin-right: auto;">
+		<p>Your cart is currently empty.</p>
+		<p><?=$this->html->link('Take me back to the main page.', '/');?>
 	</div>
-<?php endforeach;?>
+	
+	<div style="margin-left: 20px; margin-right: 20px;">
+	<?php $total = 0;?>
+	<table id="offers">
+		<thead>
+			<tr><th></th><th>Expires</th><th>Name</th><th>Price</th></tr>
+		</thead>
+		<?php foreach($offers as $offer):
+		$total += $offer->cost;
+		$offer_id = $offer->_id;
+		$cart_item = $cart_items->first(function($i) use ($offer_id) { return $i->_id == $offer_id; });
+		?>
+		<tr id="offer_<?=$offer->_id;?>">
+			<td><?=$this->html->image('silk/cart_delete.png', array('id'=>"offer_{$offer->_id}_remove"))?></td>
+			<td><?php echo date('H:i:s', $cart_item['expires']);?></td>
+			<td><?=nl2br($offer->name);?></td>
+			<td>$<?=$offer->cost;?></td>
+		</tr>
+		<?php endforeach;?>
+	</table>
+	<p>Total: $<?=$total;?></p>
+	<?=$this->html->link('Proceed to Checkout', array('Checkouts::checkout'), array('id'=>'CheckoutGo'));?>
+	</div>
 </div>
-<?=$this->html->link('Proceed to Checkout', array('Checkouts::checkout'), array('id'=>'CheckoutGo'));?>
 
 <script type="text/javascript">
 $('#CheckoutGo').button();
