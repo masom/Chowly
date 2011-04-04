@@ -13,5 +13,4 @@ Team Chowly
 Pick. Eat. Save!
 </p>
 </div>
-<br />
 </div>

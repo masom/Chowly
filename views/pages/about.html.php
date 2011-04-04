@@ -47,5 +47,4 @@
 		Pick. Eat. Save.
 	</p>
 </div>
-<br />
 </div>

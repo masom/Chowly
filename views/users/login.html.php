@@ -9,5 +9,4 @@
 			<?=$this->form->submit('Login');?>
 		<?=$this->form->end();?>
 	</div>
-	<br />
 </div>

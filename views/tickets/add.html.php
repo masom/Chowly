@@ -1,4 +1,4 @@
-<div style="padding-left: 15px; height: 43px; line-height: 43px; color: #ffffff; font-size: 24px; font-weight: bold; background: url(/img/top-ribbon.png);">
+<div id="ribbon">
 	<span>Contact Us</span>
 </div>
 <div id="content-wrapper">
@@ -34,7 +34,5 @@
 		<?=$this->form->field('content', array('type'=>'textarea','style'=>'min-height: 100px;','label' => 'Fill in your comment/question/concern bellow.'));?>
 		<?=$this->form->submit('Submit');?>
 	<?=$this->form->end();?>
-	
 </div>
-<br />
 </div>

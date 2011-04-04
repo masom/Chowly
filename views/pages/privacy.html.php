@@ -45,5 +45,4 @@ and you, not the COMPANY, have full responsibility for the message, including it
 appropriateness, originality, and copyright.
 </p>
 </div>
-<br />
 </div>

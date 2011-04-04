@@ -76,7 +76,6 @@ ul, li, li ul, li ol { margin: 0; }
 
 /*--- Tables ---*/
 table {
-	clear: both;
 	width: 100%;
 	border-collapse: collapse;
 	border-spacing: 0;
@@ -280,6 +279,7 @@ input, textarea {
 	min-height: 400px;
 	background-color: #fff;
 	padding-top: 1px;
+	padding-bottom: 1px;
 }
 #header{
 	height: 90px;

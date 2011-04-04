@@ -17,5 +17,4 @@ amount.</p>
 
 <p>Team Chowly</p>
 </div>
-<br />
 </div>

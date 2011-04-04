@@ -131,5 +131,4 @@ Copyright@Chowly.com
 
 <p>The Voucher you purchase through Chowly is redeemable for goods or services by the Merchant. The Merchant, not Chowly, is the seller of the Voucher and the goods and services and is solely responsible for redeeming any Voucher you purchase. Chowly sells a Voucher that can be redeemed in connection with your purchase of the goods or services from Merchant</p>
 </div>
-<br />
 </div>
