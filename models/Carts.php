@@ -12,7 +12,8 @@ class Carts extends \lithium\data\Model{
 	 */
 	protected $_schema = array(
 		'_id' => array('type'=>'id'),
-		'items' => array('type'=>'object', 'array' => true)
+		'items' => array('type'=>'object', 'array' => true),
+		'state' => array('type' => 'string', 'default' => 'default')
 	);
 	
 	/**
