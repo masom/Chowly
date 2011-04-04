@@ -1,4 +1,4 @@
-<div style="padding-left: 15px; height: 43px; line-height: 43px; color: #ffffff; font-size: 24px; font-weight: bold; background: url(/img/top-ribbon.png);">
+<div id="ribbon">
 	<span>Why is Chowly collecting postal codes?</span>
 </div>
 <div id="content-wrapper">

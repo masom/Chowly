@@ -107,7 +107,6 @@ thead th, tfoot td {
 /*--- Forms ---*/
 form {
 	display: block;
-	clear: both;
 	background: #fafafa;
 	padding: 1em 2em 2em 2em;
 	border: 1px solid #e6e6e6;
@@ -142,7 +141,6 @@ input[type=image]{
 	padding:0;
 }
 input[type=text], input[type=password], input[type=submit], textarea {
-	clear: both;
 	display: block;
 	padding: .25em .5em;
 }
@@ -164,12 +162,10 @@ input[type=submit], input[type=button], input[type=reset], input[type=file], but
 	cursor: pointer;
 }
 select {
-	clear: both;
 	display: block;
 	margin: .5em 0 1em 0;
 }
 div.checkbox {
-	clear: both;
 	padding: 1em 0;
 }
 .checkbox label {
@@ -275,7 +271,7 @@ input, textarea {
 	margin: 0 auto -80px;
 }
 #container, #footer{
-	width: 893px;
+	width: 909px;
 	margin-left: auto;
 	margin-right: auto;
 	clear: both;
@@ -333,7 +329,7 @@ p.offer-remaining{
 	margin-right: auto;
 	text-align: center;
 	font-size: 18px;
-	color: #456799;
+	color: #2d729e;
 	font-weight: bold;
 }
 p.offer-name{
@@ -341,6 +337,8 @@ p.offer-name{
 	font-size: 22px;
 	font-weight: bold;
 	text-align: center;
+	height: 63px;
+	line-height: 63px;
 }
 p.offer-name a{
 	color: #010101;
@@ -388,6 +386,31 @@ div.offer-info{
 }
 #footer a{
 	margin-right: 20px;
+}
+div#ribbon{
+	padding-left: 15px;
+	height: 43px;
+	line-height: 43px;
+	color: #ffffff;
+	font-size: 24px;
+	font-weight: bold;
+	background: url(/img/top-ribbon.png) no-repeat;
+}
+div#share{
+	background: url(/img/social-bg.png) no-repeat;
+	height: 112px;
+	width: 52px;
+	float:right;
+	margin-top: 60px;
+	overflow: hidden;
+}
+div#share ul{
+	margin:0;
+	padding:0;
+	margin-top: 4px;
+	margin-bottom: 4px;
+	list-style:none;
+	margin-left: 15px;
 }
 div#informations h1{
 	margin-left: auto;

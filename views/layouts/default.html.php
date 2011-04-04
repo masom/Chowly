@@ -16,16 +16,23 @@
 				<?php if($this->session->read('user')):?>
 					<?php echo $this->View()->render(array('element'=>'menu'));?>
 					<br />
+				<?php else:?>
+					<?=$this->html->link('Home', array('Offers::index'));?>
+					<?=$this->html->link('About Us',array('Pages::view','args'=>'about'));?>
+					<?=$this->html->link('Your Restaurant Here', array('Tickets::add','args'=>'restaurants'));?>
+					<?=$this->html->link('Contact Us', array('Tickets::add'))?>
 				<?php endif;?>
-				<?=$this->html->link('Home', array('Offers::index'));?>
-				<?=$this->html->link('About Us',array('Pages::view','args'=>'about'));?>
-				<?=$this->html->link('Your Restaurant Here', array('Tickets::add','args'=>'restaurants'));?>
-				<?=$this->html->link('Contact Us', array('Tickets::add'))?>
 			</div>
 		</div>
-		
-		<div style="height: 10px;background: url(/img/roundtop.png) no-repeat;"></div>
+		<div style="height: 10px;background: url(/img/roundtop.png) no-repeat; clear:both;"></div>
 		<?=$this->flashMessage->output(); ?>
+		<div id="share">
+			<ul>
+				<li><img src="/img/twitter-icon.png" alt="Share with Twitter" /></li>
+				<li><img src="/img/facebook-icon.png" alt="Share with Facebook" /></li>
+				<li><img src="/img/email-icon.png" alt="Share by Email" /></li>
+			</ul>
+		</div>
 		<?php echo $this->content(); ?>
 		<div style="clear: both; height: 11px; margin-bottom:20px; background: url(/img/roundbottom.png)  no-repeat;"></div>
 		<div id="informations" style="height: 200px;">
