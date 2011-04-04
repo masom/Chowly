@@ -1,4 +1,4 @@
-<div style="padding-left: 15px; height: 43px; line-height: 43px; color: #ffffff; font-size: 24px; font-weight: bold; background: url(/img/top-ribbon.png);">
+<div id="ribbon">
 	<span>Purchase Confirmation</span>
 </div>
 <div id="content-wrapper">
@@ -44,7 +44,7 @@ $('#CheckoutGo').button();
 				  if(data.cleared){
 					  $('#offer_' + data.id).remove();
 				  }
-				  if($('#offers').children().size() == 0){
+				  if($('#offers tr').length == 1){
 					  $('#CheckoutGo').hide();
 					  $('#empty_cart').show();
 				  }

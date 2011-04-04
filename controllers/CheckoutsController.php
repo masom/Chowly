@@ -130,7 +130,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 				return compact('purchase', 'provinces');
 			}
 			
-			Logger::write('info', "Transaction Completed. E[{$purchase->email}] I[{$purchase->_id}] P[{$purchase->price}]");
+			Logger::write('info', "TC E[{$purchase->email}] I[{$purchase->_id}] P[{$purchase->price}]");
 			foreach($this->Cart->items as $item){
 				try{
 					Inventories::purchase($purchase->_id, $item->inventory_id);
@@ -155,22 +155,28 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			}
 			$to = $purchase->email;
 			
-			$transport = Swift_MailTransport::newInstance();
-			$mailer = Swift_Mailer::newInstance($transport);
-			$message = Swift_Message::newInstance();
-			$message->setSubject("Chowly Purchase Confirmation");
-			$message->setFrom(array('purchases@chowly.com' => 'Chowly'));
-			$message->setTo($to);
-			
-			if($path){
-				$message->setBody($this->_getEmail(compact('purchase'), 'purchase'));
-				$message->attach(Swift_Attachment::fromPath($path));
-			}else{
-				$message->setBody($this->_getEmail(compact('purchase'), 'generation_failure'));
-			}
-			
-			if(!$mailer->send($message)){
-				Logger::write('error', "Could not send email for purchase {$purchase->_id}");
+			try{
+				$transport = Swift_MailTransport::newInstance();
+				$mailer = Swift_Mailer::newInstance($transport);
+				$message = Swift_Message::newInstance();
+				$message->setSubject("Chowly Purchase Confirmation");
+				$message->setFrom(array('purchases@chowly.com' => 'Chowly'));
+				$message->setTo($to);
+				
+				if($path){
+					$message->setBody($this->_getEmail(compact('purchase'), 'purchase'));
+					$message->attach(Swift_Attachment::fromPath($path));
+				}else{
+					$message->setBody($this->_getEmail(compact('purchase'), 'generation_failure'));
+				}
+				
+				if(!$mailer->send($message)){
+					Logger::write('error', "Could not send email for purchase {$purchase->_id}");
+				}
+			}catch(\Exception $e){
+				Logger::write('error', $e->getMessage());
+				$this->Cart->endTransaction();
+				debug($e);die;
 			}
 			
 			$this->Cart->endTransaction();
