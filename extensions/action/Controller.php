@@ -43,7 +43,7 @@ class Controller extends \lithium\action\Controller{
 		    )
 		));
 		
-		$controller = ($controller)? $controller : $this->request->params['controller'];
+		$controller = $controller ?: $this->request->params['controller'];
 		
 		return $view->render(
 		    'template',

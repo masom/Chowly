@@ -2,7 +2,7 @@
 	<span>Thank You!</span>
 </div>
 <div id="content-wrapper">
-	<div style="margin-left: auto; margin-right: auto; width: 800px">
+	<div style="margin-left: auto; margin-right: auto; margin-top: 20px; width: 800px">
 		<div class="whitebox">
 			<h3>Your purchase has been processed.</h3>
 			<p>An email has been sent to <?=$purchase->email;?></p>

@@ -155,29 +155,24 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			}
 			$to = $purchase->email;
 			
-			try{
-				$transport = Swift_MailTransport::newInstance();
-				$mailer = Swift_Mailer::newInstance($transport);
-				$message = Swift_Message::newInstance();
-				$message->setSubject("Chowly Purchase Confirmation");
-				$message->setFrom(array('purchases@chowly.com' => 'Chowly'));
-				$message->setTo($to);
-				
-				if($path){
-					$message->setBody($this->_getEmail(compact('purchase'), 'purchase'));
-					$message->attach(Swift_Attachment::fromPath($path));
-				}else{
-					$message->setBody($this->_getEmail(compact('purchase'), 'generation_failure'));
-				}
-				
-				if(!$mailer->send($message)){
-					Logger::write('error', "Could not send email for purchase {$purchase->_id}");
-				}
-			}catch(\Exception $e){
-				Logger::write('error', $e->getMessage());
-				$this->Cart->endTransaction();
-				debug($e);die;
+			$transport = Swift_MailTransport::newInstance();
+			$mailer = Swift_Mailer::newInstance($transport);
+			$message = Swift_Message::newInstance();
+			$message->setSubject("Chowly Purchase Confirmation");
+			$message->setFrom(array('purchases@chowly.com' => 'Chowly'));
+			$message->setTo($to);
+			
+			if($path){
+				$message->setBody($this->_getEmail(compact('purchase'), 'purchase', 'purchases'));
+				$message->attach(Swift_Attachment::fromPath($path));
+			}else{
+				$message->setBody($this->_getEmail(compact('purchase'), 'generation_failure'));
 			}
+			
+			if(!$mailer->send($message)){
+				Logger::write('error', "Could not send email for purchase {$purchase->_id}");
+			}
+			
 			
 			$this->Cart->endTransaction();
 			$this->Cart->clearItems();
@@ -194,6 +189,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		array(
 
 		    'paths' => array(
+				'element' => '{:library}/views/elements/{:template}.{:type}.php',
 		        'template' => '{:library}/views/{:controller}/{:template}.{:type}.php',
 		        'layout'   => '{:library}/views/layouts/{:layout}.{:type}.php',
 		    )
