@@ -15,11 +15,8 @@ class TicketsController extends \chowly\extensions\action\Controller{
 			}
 		}
 		
-		$isRestaurant = false;
-		
-		if(in_array('restaurants',$this->request->args)){
-			$isRestaurant = true;
-		}
+		$args = $this->request->args ?: array();
+		$isRestaurant = in_array('restaurants', $args) ?: false;
 		return compact('ticket','isRestaurant');
 	}
 	public function received(){}
