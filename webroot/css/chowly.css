@@ -284,12 +284,12 @@ input, textarea {
 #header{
 	height: 90px;
 	background: url(/img/logo-bg.png) no-repeat;
-	padding-top: 60px;
+	padding-top: 40px;
 	padding-left: 10px;
 	width: 857px;
 }
 #header img{
-	margin-left: 15px;
+	margin-left: 40px;
 }
 #header h1 {
 	font-size: 35px;
@@ -333,7 +333,7 @@ ul.offers-list li{
 	height: 355px;
 	background-repeat: no-repeat;
 }
-p.offer-remaining{
+p.offer-remaining, li#offer-remaining{
 	margin-left: auto;
 	margin-right: auto;
 	text-align: center;
@@ -352,7 +352,7 @@ p.offer-name{
 p.offer-name a{
 	color: #010101;
 }
-p.offer-countdown{
+p.offer-countdown, li#offer-countdown{
 	background: transparent url(/img/timer-bg-grey.png) no-repeat;
 	height: 36px;
 	width: 260px;
@@ -460,4 +460,21 @@ ul.time-picker li{
 }
 .countdown{
 	color: #9D2208;
+}
+div#offer-information-logo{
+	text-align: center;
+	overflow:hidden;
+}
+div#offer-information-logo img{
+	border: 2px solid #eeeeee;
+}
+li#offer-remaining, li#offer-address{
+	text-align: left;
+	margin-left: 52px;
+	margin-top: 10px;
+	margin-bottom:10px;
+}
+li#offer-address{
+	color: #010101;
+	font-weight: bold;
 }
