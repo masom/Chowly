@@ -23,11 +23,29 @@ class Users extends \chowly\extensions\data\Model{
 			array('inList', 'list' => array('admin','staff','venue', 'customer'), 'message'=>'Invalid role.')	
 		)
 	);
+	/**
+	 * Holds the different possible roles a user can have
+	 * 
+	 * @var array List of roles (key => display)
+	 */
+	private $_roles = array('admin','staff','venue','customer');
 	
-	private $_roles = array('admin'=>'admin','staff'=>'staff','venue'=>'venue','customer'=>'customer');
+	/**
+	 * Returns the list of roles;
+	 * 
+	 * @return array List of roles
+	 */
 	public function roles(){
 		return $this->_roles;
 	}
+	
+	/**
+	 * Register a new user
+	 * 
+	 * @param Users $entity
+	 * @throws \Exception
+	 * @return bool
+	 */
 	public function register($entity){
 		
 		$conditions = array('email' => $entity->email);
@@ -38,21 +56,48 @@ class Users extends \chowly\extensions\data\Model{
 		if($entity->password != $entity->password_repeat){
 			throw new \Exception("Password fields do not match.");	
 		}
+		
 		unset($entity->password_repeat);
 		
 		if(!empty($entity->password)){
 			$entity->password = \lithium\util\String::hash($entity->password);
 		}
 		
-		$entity->active = true;
-		if($entity->save()){
-			return true;
+		if($user->role && in_array($user->role, $this->_roles)){
+			$user->role = $this->_roles[$user->role];
+		}else{
+			$user->role = 'customer';
 		}
-		return false;
+		
+		$entity->active = true;
+		
+		return $entity->save();
 	}
+	
+	/**
+	 * Resets password
+	 * @param Users $entity
+	 * @throws \Exception
+	 * @return bool
+	 */
 	public function resetPassword($entity){
+		
+		if($entity->password != $entity->password_repeat){
+			throw new \Exception("Password fields do not match.");	
+		}
+		$entity->password = \lithium\util\String::hash($entity->password);
+		unset($entity->password_repeat);
+		
 		return $entity->save(null,array('validate'=>false));
 	}
+	
+	/**
+	 * Set a user's role
+	 * 
+	 * @param Users $entity
+	 * @param var $role
+	 * @return bool
+	 */
 	public function setRole($entity, $role){
 		if(!in_array($role, $this->_roles)){
 			return false;
@@ -63,6 +108,14 @@ class Users extends \chowly\extensions\data\Model{
 		$entity->role = $role;
 		return $entity->save(null,array('validate'=>true,'whitelist'=>array('role')));
 	}
+	
+	/**
+	 * Activate/Deactive a user account.
+	 * 
+	 * @param Users $entity
+	 * @param bool $active
+	 * @return bool
+	 */
 	public function setActive($entity, $active){
 		$entity->active = $active;
 		return $entity->save(null,array('validate'=>true,'whitelist'=>array('active')));

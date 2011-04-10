@@ -22,8 +22,20 @@ class UsersController extends \chowly\extensions\action\Controller{
 	public function admin_add(){
 		$user = Users::create();
 		if(!empty($this->request->data)){
+			try{
+				$user->set($this->request->data);
+				$saved = $user->register();
+			}catch(\Exception $e){
+				FlashMessage::set($e->getMessage());
+				return compact('user');
+			}
 			
+			if($saved){
+				Auth::check('user', $this->request);
+				return $this->redirect('/');
+			}
 		}
+		
 		return compact('user');
 	}
 	public function admin_edit(){
@@ -33,14 +45,12 @@ class UsersController extends \chowly\extensions\action\Controller{
 		$user = Users::first(compact('conditions'));
 		
 		if(!empty($this->request->data)){
+
+			if(empty($this->request->data['password'])){
+				unset($this->request->data['password']);
+			}
 			
 			$user->set($this->request->data);
-			
-			if(empty($user->password)){
-				unset($user->password);
-			}else{
-				$user->password = \lithium\util\String::hash($user->password);
-			}
 			
 			if($user->save()){
 				FlashMessage::set("User modified.");
@@ -134,7 +144,6 @@ class UsersController extends \chowly\extensions\action\Controller{
 		if(!empty($this->request->data)){
 			try{
 				$user->set($this->request->data);
-				$user->role = 'customer';
 				$saved = $user->register();
 			}catch(\Exception $e){
 				FlashMessage::set($e->getMessage());
@@ -144,7 +153,7 @@ class UsersController extends \chowly\extensions\action\Controller{
 			if($saved){
 				Auth::check('user', $this->request);
 				return $this->redirect('/');
-			}		
+			}
 		}
 		
 		return compact('user');
