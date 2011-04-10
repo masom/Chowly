@@ -9,15 +9,15 @@ $ends = ($offer->_id)? $offer->ends->sec : time() + 60 * 60 * 24 * 30;
 	<div style="margin:20px;">
 	<?=$this->form->create($offer, array('type' => 'file', 'id'=>'form_offer')); ?>
 		<?=$this->form->field('name'); ?>
-	
 		<?=$this->form->field('description', array('type'=>'textarea')); ?>
-	
+		<?=$this->form->field('limitations', array('type'=>'textarea')); ?>
 		<?=$this->form->field('cost', array('label' => 'Price in C$', 'id'=>'offer_cost'));?>
 		<ul class="time-picker">
-			<?=$this->form->field('starts', array('value'=>date('Y-m-d H:i:s', $starts),'template'=>'<li{:wrap}>{:label}{:input}{:error}</li>','id'=>'form_offer_start_date'));?>
-			<?=$this->form->field('ends', array('value' => date('Y-m-d H:i:s', $ends ),'template'=>'<li{:wrap}>{:label}{:input}{:error}</li>','id'=>'form_offer_end_date'));?>
+			<li><?=$this->form->field('starts', array('value'=>date('Y-m-d H:i:s', $starts),'template'=>'<li{:wrap}>{:label}{:input}{:error}</li>','id'=>'form_offer_start_date'));?></li>
+			<li><?=$this->form->field('ends', array('value' => date('Y-m-d H:i:s', $ends ),'template'=>'<li{:wrap}>{:label}{:input}{:error}</li>','id'=>'form_offer_end_date'));?></li>
 		</ul>
 		<br style="clear: both;" />
+		<?=$this->form->field('expires', array('value'=>date('Y-m-d H:i:s', $ends),'template'=>'<li{:wrap}>{:label}{:input}{:error}</li>','id'=>'form_offer_expires'));?>
 		
 		<?php if(!$offer->_id):?>
 			<?=$this->form->field('availability', array('id'=>'offer_availability','label'=>'How many coupons?', 'style'=>'width: 100px;'));?>

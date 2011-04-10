@@ -33,15 +33,19 @@ class Offers extends \chowly\extensions\data\Model{
 
 	protected $_schema = array(
 		'_id' => array('type'=>'id'),
-		'venue_id' => array('type'=>'id'),
-		'state' => array('type'=>'string', 'default' => 'unpublished'),
-		'name' => array('type'=>'string','null'=>false),
-		'starts' => array('type'=>'date','null'=>false),
-		'ends'=>array('type'=>'date','null'=>false),
-		'image' => array('type'=>'id'),
-		'availability' => array('type'=>'integer'),
-		'inventoryCount' => array('type'=>'integer'),
+		'venue_id' => array('type'=>'id'), // The venue
+		'state' => array('type'=>'string', 'default' => 'unpublished'), // Either published or unpublished
+		'name' => array('type'=>'string','null'=>false), // Name of the coupon
+		'description'=>array('type'=>'string'), // Description (if any) of the coupon
+		'limitations'=>array('type'=>'string'), // Limitations regarding usage of the cuopon
+		'starts' => array('type'=>'date','null'=>false), // Publication start
+		'ends'=>array('type'=>'date','null'=>false), // Publication ends
+		'expires' => array('type'=>'date','null'=>false), //Expiry date of the offer
+		'availability' => array('type'=>'integer'), // Holds how many items are available
+		'inventoryCount' => array('type'=>'integer'), // Holds number of inventory items
+		'sold' => array('type'=>'integer'), // Holds how many where sold
 		'created'=>array('type'=>'date'),
+		'updated'=>array('type'=>'date')
 	);
 
 	public static function states(){
