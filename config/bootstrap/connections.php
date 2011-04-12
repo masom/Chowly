@@ -45,6 +45,7 @@ use \lithium\core\Environment;
 // 	'host' => 'localhost',
 // 	'database' => 'my_app'
 // ));
+
 Connections::add('default', array(
 	'type' => 'MongoDb',
 	'host' => 'localhost',

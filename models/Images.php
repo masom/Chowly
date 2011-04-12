@@ -7,7 +7,7 @@ class Images extends \chowly\extensions\data\Model{
 	
 	protected $_schema = array('_id'=>array('type'=>'id'));
 	
-	public function save($entity, $data, $options = array()){
+	public function save($entity, $data = null, array $options = array()){
 		if($data['error']){
 			return false;
 		}

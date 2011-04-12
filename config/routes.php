@@ -13,6 +13,7 @@ use \lithium\storage\Session;
 Router::connect('/images/{:id:[0-9a-f]{24}}.(jpe?g|png|gif)', array(), function($request) {
 
 	$image = chowly\models\Images::first($request->id);
+
 	if(!$image || !$image->file){	
 		return new Response(array('status' => 404));
 	}
