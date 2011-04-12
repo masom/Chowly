@@ -9,13 +9,13 @@
 		?>
 		<?php foreach($offers as $offer):?>
 		
-		<?php if($i == 3):?>
+		<?php if($i == 3): $i = 0;?>
 			</ul>
 			<div style="width: 857px; height: 11px; background-image: url(/img/separator.png);"></div>
 			<ul class="offers-list">
 		<?php endif;?>
 		
-			<?php $listyle = ($style) ? 'style="background-image: url(/img/dealbg-grey.png);"' : null;?>
+			<?php $listyle = ($style) ? 'style="background-image: url(/img/dealbg-grey.png);"' : 'style="width: 280px; overflow:hidden;"';?>
 			<li id="offer-<?=$offer->_id;?>" class="offer" <?php echo $listyle?>>
 				<div class="offer-info">
 					<div class="offer-venue-logo">

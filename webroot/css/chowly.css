@@ -315,19 +315,22 @@ input, textarea {
 	margin-right: 5px;
 }
 ul.offers-list{
-	margin-left: 5px;
-	margin-right: 5px;
+	margin-left: 0px;
+	margin-right: 0px;
 	list-style: none;
 	height: 355px;
 }
 ul.offers-list p{
 	margin:0;
 	padding:0;
+	margin-left: auto;
+	margin-right: auto;
 }
 a.offer-buy-button img{
 	margin-top:10px;
 }
 ul.offers-list li{
+	text-align: center;
 	float: left;
 	width: 288px;
 	height: 355px;
@@ -372,7 +375,7 @@ div.offer-venue-logo{
 	text-align: center;
 }
 div.offer-info{
-	margin: 15px;
+	margin-top: 15px;
 }
 /*-- Footer --*/
 #footer-container, .push{
