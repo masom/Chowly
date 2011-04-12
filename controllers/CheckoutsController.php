@@ -206,7 +206,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		    )
 		);
 	}
-	private function _writePdf($purchaseId, &$pdf){
+	private function _writePdf($purchaseId, $pdf){
 		$path = LITHIUM_APP_PATH.'/resources/purchases';
 		$filepath = $path.DIRECTORY_SEPARATOR. $purchaseId.'.pdf';
 		if(file_exists($filepath)){

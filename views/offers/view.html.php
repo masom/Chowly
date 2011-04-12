@@ -1,5 +1,6 @@
 <?php
 $address = explode(",", $venue->address);
+$expiration = ($offer->expiry) ? $offer->expiry->sec : null;
 ?>
 <div id="ribbon">
 	<span><?=$venue->name;?></span>
@@ -19,11 +20,13 @@ $address = explode(",", $venue->address);
 			<li id="offer-address"><?=$address[0];?></li>
 			<li id="offer-countdown" class="countdown"></li>
 			<li id="offer-remaining"><?=($offer->availability > 0) ? "Only {$offer->availability} left!" : "Sold Out!"; ?></li>
-			<li>Expires: <?=date('F, j, Y', $offer->expiry->sec);?></li>
+			<?php if ($expiration):?>
+				<li>Expires: <?=date('F, j, Y', $expiration);?></li>
+			<?php endif;?>
 			<li><?php echo ($offer->availability) ? $this->html->link($this->html->image('buydeal-button.png'), array('Offers::buy', 'id'=>$offer->_id), array('id'=>'offer_buy', 'escape'=>false)): null; ?></li>
 		</ul>
 		<h3>Restrictions</h3>
-		<ul>
+		<ul style="list-style: none;">
 			<li>Only valid for dinner.</li>
 			<li>Not valid on holidays.</li>
 			<li>Cannot be combined with another offer.</li>
