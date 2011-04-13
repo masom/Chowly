@@ -2,6 +2,7 @@
 	<span>Ottawa Restaurant Deals</span>
 </div>
 <div id="content-wrapper">
+	<div class="offer-name-ribbon"></div>
 	<ul class="offers-list">
 		<?php 
 			$style = true;
@@ -12,6 +13,7 @@
 		<?php if($i == 3): $i = 0;?>
 			</ul>
 			<div style="width: 857px; height: 11px; background-image: url(/img/separator.png);"></div>
+			<div class="offer-name-ribbon"></div>
 			<ul class="offers-list">
 		<?php endif;?>
 		
@@ -26,6 +28,7 @@
 
 					<p class="offer-remaining"><?=($offer->availability)? "Only {$offer->availability} left!" : 'Sold Out!' ;?></p>
 					<p class="offer-name"><?=$this->html->link($offer->name, array('Offers::view', 'id'=> $offer->_id));?></p>
+					
 					<p id="offer-countdown-<?php echo $offer->_id;?>" class="offer-countdown"></p>
 					<?=$this->html->link($this->html->image('buydeal-button.png'), array('controller'=>'offers','action'=>'view','id'=>$offer->_id),array('escape'=>false,'class'=>'offer-buy-button'));?>
 				</div>
@@ -33,6 +36,7 @@
 		<?php $i++; $style = !$style;?>
 		<?php endforeach;?>
 	</ul>
+	
 </div>
 <script type="text/javascript">
 	<?php foreach($offers as $offer):?>

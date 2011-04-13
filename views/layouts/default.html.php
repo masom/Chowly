@@ -24,7 +24,7 @@
 				<?php endif;?>
 			</div>
 		</div>
-		<div style="height: 10px;background: url(/img/roundtop.png) no-repeat; clear:both;"></div>
+		<div id="top-corners"></div>
 		<?=$this->flashMessage->output(); ?>
 		<div id="share">
 			<ul>
@@ -34,7 +34,7 @@
 			</ul>
 		</div>
 		<?php echo $this->content(); ?>
-		<div style="clear: both; height: 11px; margin-bottom:20px; background: url(/img/roundbottom.png)  no-repeat;"></div>
+		<div id="bottom-corners"></div>
 		<div id="informations" style="height: 200px;">
 			<div style="float: left; height: 200px; width: 281px;">
 				<div style="background-image: url(/img/bottomboxtop.png); width: 281px; height: 16px;"></div>
