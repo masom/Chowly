@@ -66,12 +66,26 @@
 	</div>
 	<div id="footer-container">
 		<div id="footer">
-			<div>
-				<?=$this->html->link('Our Promise To You', array('Pages::view','args'=>'guarantee'));?>
-				<?=$this->html->link('Privacy Policy', array('Pages::view','args'=>'privacy'));?>
-				<?=$this->html->link('Terms Of Service', array('Pages::view','args'=>'terms'));?>
+			<div class="footer-section">
+				<h1>Main Menu</h1>
+				<ul>
+					<li><?=$this->html->link('How It Works', array('Pages::view','args'=>'howitworks'));?></li>
+					<li><?=$this->html->link('Your Restaurant Here', array('Tickets::add','args'=>'restaurant'));?></li>
+					<li><?=$this->html->link('About Us', array('Pages::view','args'=>'about'));?></li>
+					<li><?=$this->html->link('Contact Us', array('Tickets::add'));?></li>
+				</ul>
 			</div>
-			<div id="copyright">
+			<div class="footer-section">
+				<h1>Main Menu</h1>
+				<ul>
+					<li><?=$this->html->link('FAQ', array('Pages::view','args'=>'faq'));?></li>
+					<li><?=$this->html->link('Sitemap', array('Pages::view', 'args'=>'sitemap'));?></li>	
+					<li><?=$this->html->link('Our Promise To You', array('Pages::view','args'=>'guarantee'));?></li>
+					<li><?=$this->html->link('Privacy Policy', array('Pages::view','args'=>'privacy'));?></li>
+					<li><?=$this->html->link('Terms Of Service', array('Pages::view','args'=>'terms'));?></li>
+				</ul>
+			</div>
+			<div class="footer-section">
 				&copy; 2011 Chowly Inc. All Rights Reserved.
 			</div>
 		</div>

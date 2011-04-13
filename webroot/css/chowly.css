@@ -267,7 +267,7 @@ input, textarea {
 	min-height: 100%;
 	height: auto !important;
 	height: 100%;
-	margin: 0 auto -80px;
+	margin: 0 auto -194px;
 }
 #container, #footer{
 	width: 909px;
@@ -379,7 +379,7 @@ div.offer-info{
 }
 /*-- Footer --*/
 #footer-container, .push{
-	height: 80px;
+	height: 194px;
 }
 #footer-container{
 	width: 100%;
@@ -399,6 +399,19 @@ div.offer-info{
 }
 #footer a{
 	margin-right: 20px;
+}
+div.footer-section{
+	float:left;
+	height: 100px;
+	width: 200px;
+}
+div.footer-section h1{
+	color:#ffffff;
+	margin-bottom: 20px;
+}
+div.footer-section ul{
+	list-style: none;
+	font-size: 16px;
 }
 div#ribbon{
 	padding-left: 15px;
