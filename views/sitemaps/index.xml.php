@@ -13,3 +13,24 @@
 	</url>
 	<?php endforeach; endforeach;?>
 <?php endforeach;?>
+<url>
+	<loc><?=$this->url(array('Pages::view','args'=>'howitworks'),array('absolute'=>true));?></loc>
+</url>
+<url>
+	<loc><?=$this->url(array('Tickets::add','args'=>'restaurant'),array('absolute'=>true));?></loc>
+</url>
+<url>
+	<loc><?=$this->url(array('Pages::view','args'=>'about'),array('absolute'=>true));?></loc>
+</url>
+<url>
+	<loc><?=$this->url(array('Pages::view','args'=>'faq'),array('absolute'=>true));?></loc>
+</url>
+<url>
+	<loc><?=$this->url(array('Pages::view','args'=>'guarantee'),array('absolute'=>true));?></loc>
+</url>
+<url>
+	<loc><?=$this->url(array('Pages::view','args'=>'privacy'),array('absolute'=>true));?></loc>
+</url>
+<url>
+	<loc><?=$this->url(array('Pages::view','args'=>'terms'),array('absolute'=>true));?></loc>
+</url>
