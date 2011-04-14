@@ -3,7 +3,7 @@ $starts = ($offer->_id)? $offer->starts->sec : time();
 $ends = ($offer->_id)? $offer->ends->sec : time() + 60 * 60 * 24 * 30;
 ?>
 <div id="ribbon">
-	<span><?=($offer->_id)? "Modifying Offer {$offer->name}": "New Offer for {$venue->name}";?></span>
+	<span><?=($offer->_exists)? "Modifying Offer {$offer->name}": "New Offer for {$venue->name}";?></span>
 </div>
 <div id="content-wrapper">
 	<div style="margin:20px;">
@@ -13,13 +13,13 @@ $ends = ($offer->_id)? $offer->ends->sec : time() + 60 * 60 * 24 * 30;
 		<?=$this->form->field('limitations', array('type'=>'textarea')); ?>
 		<?=$this->form->field('cost', array('label' => 'Price in C$', 'id'=>'offer_cost'));?>
 		<ul class="time-picker">
-			<li><?=$this->form->field('starts', array('value'=>date('Y-m-d H:i:s', $starts),'template'=>'<li{:wrap}>{:label}{:input}{:error}</li>','id'=>'form_offer_start_date'));?></li>
-			<li><?=$this->form->field('ends', array('value' => date('Y-m-d H:i:s', $ends ),'template'=>'<li{:wrap}>{:label}{:input}{:error}</li>','id'=>'form_offer_end_date'));?></li>
+			<?=$this->form->field('starts', array('value'=>date('Y-m-d H:i:s', $starts),'template'=>'<li{:wrap}>{:label}{:input}{:error}</li>','id'=>'form_offer_start_date'));?>
+			<?=$this->form->field('ends', array('value' => date('Y-m-d H:i:s', $ends ),'template'=>'<li{:wrap}>{:label}{:input}{:error}</li>','id'=>'form_offer_end_date'));?>
 		</ul>
 		<br style="clear: both;" />
-		<?=$this->form->field('expires', array('value'=>date('Y-m-d H:i:s', $ends),'template'=>'<li{:wrap}>{:label}{:input}{:error}</li>','id'=>'form_offer_expires'));?>
+		<?=$this->form->field('expires', array('value'=>date('Y-m-d H:i:s', $ends),'id'=>'form_offer_expires'));?>
 		
-		<?php if(!$offer->_id):?>
+		<?php if(!$offer->_exists):?>
 			<?=$this->form->field('availability', array('id'=>'offer_availability','label'=>'How many coupons?', 'style'=>'width: 100px;'));?>
 		<?php endif;?>
 		
