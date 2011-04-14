@@ -506,6 +506,11 @@ div#offer-information-logo{
 div#offer-information-logo img{
 	border: 2px solid #eeeeee;
 }
+ul#offer-details li{
+	list-style: none;
+	margin-top: 3px;
+	margin-bottom: 3px;
+}
 li#offer-remaining, li#offer-address{
 	text-align: left;
 	padding-left: 50px;
@@ -515,8 +520,6 @@ li#offer-remaining, li#offer-address{
 	margin-right: auto;
 	line-height: 36px;
 	font-weight: bold;
-	margin-top: 2px;
-	margin-bottom: 2px;
 }
 li#offer-buy{
 	text-align: center;
@@ -531,9 +534,9 @@ li#offer-address{
 div#offer-informations h3{
 	margin-top: 25px;
 }
-div#offer-informations ul{
-	margin-left: 10px;
-	list-style: none;
+
+ul#offer-restrictions{
 	margin-top: 10px;
 	margin-bottom: 20px;
+	margin-left: 20px;
 }

@@ -16,7 +16,7 @@ $expiration = ($offer->expiry) ? $offer->expiry->sec : null;
 			<?=$this->html->image("/images/{$venue->logo}.jpg")?>
 		</div>
 		
-		<ul style="list-style: none;">
+		<ul id="offer-details">
 			<li id="offer-address"><?=$address[0];?></li>
 			<li id="offer-countdown" class="countdown"></li>
 			<li id="offer-remaining"><?=($offer->availability > 0) ? "Only {$offer->availability} left!" : "Sold Out!"; ?></li>
@@ -26,7 +26,7 @@ $expiration = ($offer->expiry) ? $offer->expiry->sec : null;
 			<li id="offer-buy"><?php echo ($offer->availability) ? $this->html->link($this->html->image('buydeal-button.png'), array('Offers::buy', 'id'=>$offer->_id), array('id'=>'offer_buy', 'escape'=>false)): null; ?></li>
 		</ul>
 		<h3>Restrictions</h3>
-		<ul>
+		<ul id="offer-restrictions">
 			<li>Only valid for dinner.</li>
 			<li>Not valid on holidays.</li>
 			<li>Cannot be combined with another offer.</li>
