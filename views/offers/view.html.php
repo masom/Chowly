@@ -23,10 +23,10 @@ $expiration = ($offer->expiry) ? $offer->expiry->sec : null;
 			<?php if ($expiration):?>
 				<li>Expires: <?=date('F, j, Y', $expiration);?></li>
 			<?php endif;?>
-			<li><?php echo ($offer->availability) ? $this->html->link($this->html->image('buydeal-button.png'), array('Offers::buy', 'id'=>$offer->_id), array('id'=>'offer_buy', 'escape'=>false)): null; ?></li>
+			<li id="offer-buy"><?php echo ($offer->availability) ? $this->html->link($this->html->image('buydeal-button.png'), array('Offers::buy', 'id'=>$offer->_id), array('id'=>'offer_buy', 'escape'=>false)): null; ?></li>
 		</ul>
 		<h3>Restrictions</h3>
-		<ul style="list-style: none;">
+		<ul>
 			<li>Only valid for dinner.</li>
 			<li>Not valid on holidays.</li>
 			<li>Cannot be combined with another offer.</li>

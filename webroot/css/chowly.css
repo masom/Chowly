@@ -308,7 +308,7 @@ div#header h1 {
 	padding: 0;
 	color: #888;
 	line-height: 90px;
-	margin-right: 30px;
+	margin-right: 65px;
 }
 #header a{
 	margin-left: 5px;
@@ -508,11 +508,32 @@ div#offer-information-logo img{
 }
 li#offer-remaining, li#offer-address{
 	text-align: left;
-	margin-left: 52px;
-	margin-top: 10px;
-	margin-bottom:10px;
+	padding-left: 50px;
+	height: 36px;
+	width: 200px;
+	margin-left: auto;
+	margin-right: auto;
+	line-height: 36px;
+	font-weight: bold;
+	margin-top: 2px;
+	margin-bottom: 2px;
+}
+li#offer-buy{
+	text-align: center;
+}
+li#offer-remaining{
+	background: url(/img/saveicon.png) no-repeat;
 }
 li#offer-address{
+	background: url(/img/gmapsicon.png) no-repeat;
 	color: #010101;
-	font-weight: bold;
+}
+div#offer-informations h3{
+	margin-top: 25px;
+}
+div#offer-informations ul{
+	margin-left: 10px;
+	list-style: none;
+	margin-top: 10px;
+	margin-bottom: 20px;
 }
