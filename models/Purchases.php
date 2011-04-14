@@ -16,7 +16,7 @@ class Purchases extends \chowly\extensions\data\Model{
 		'cc_number' => array('type'=>'string'),
 		'state' => array('type'=>'string'),
 		'created' => array('type'=>'date'),
-		'modified' => array('type'=>'date'),
+		'updated' => array('type'=>'date'),
 		'offers' => array('type'=>'array', 'array'=>true)
 	);
 	

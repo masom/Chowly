@@ -8,7 +8,7 @@ class Tickets extends \chowly\extensions\data\Model{
 		'email' => array('type'=>'string','null'=>false),
 		'content' => array('type'=>'string'),
 		'created' => array('type'=>'date'),
-		'modified' => array('type'=>'date')
+		'updated' => array('type'=>'date')
 	);
 	public $validates = array(
 		'name' => array(

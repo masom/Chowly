@@ -10,7 +10,7 @@ class Model extends \lithium\data\Model{
 			$entity->created = $date;
 		}
 
-		$entity->modified = $date;
+		$entity->updated = $date;
 		return parent::save($entity, $data, $options);
 	}
 }

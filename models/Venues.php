@@ -17,7 +17,7 @@ class Venues extends \chowly\extensions\data\Model{
 		'created'=>array('type'=>'string', 'null'=>true),
 		'logo' => array('type' => 'id'),
 		'image' => array('type'=>'id'),
-		'modified' => array('type' => 'string', 'null' => true)
+		'updated' => array('type' => 'string', 'null' => true)
 	);
 	public static function states(){
 		return static::$_states;

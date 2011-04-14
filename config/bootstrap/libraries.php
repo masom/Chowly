@@ -57,6 +57,24 @@ if (!Environment::is('production')) {
  */
 Libraries::add('li3_flash_message');
 Libraries::add('li3_pdf');
+Libraries::add('li3_sitemap', array(
+	'sitemap'=> array(
+		'view'=> array(
+			'controller'=>'sitemaps',
+			'layout' => 'sitemap',
+			'type'=>'xml'
+		),
+		'controllers' => array(
+			'chowly\controllers\Offers' => array(
+				'models' => array('chowly\models\Offers' => array(
+						'order'=>array('created' => 'desc'),
+						'limit' => 20,
+						'fields'=> array('_id', 'name', 'created', 'updated')
+					)
+				)
+			)
+		)
+)));
 
 Libraries::add('swiftmailer', array(
 	'bootstrap' => 'swift_required.php'
