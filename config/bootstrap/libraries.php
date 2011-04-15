@@ -61,8 +61,7 @@ Libraries::add('li3_sitemap', array(
 	'sitemap'=> array(
 		'view'=> array(
 			'controller'=>'sitemaps',
-			'layout' => 'sitemap',
-			'type'=>'xml'
+			'layout' => 'sitemap'
 		),
 		'controllers' => array(
 			'chowly\controllers\Offers' => array(

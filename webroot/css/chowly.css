@@ -540,3 +540,6 @@ ul#offer-restrictions{
 	margin-bottom: 20px;
 	margin-left: 20px;
 }
+.sitemap ul, .sitemap li{
+	margin-left: 20px;
+}
