@@ -78,7 +78,6 @@
 			<div class="footer-section">
 				<h1>Main Menu</h1>
 				<ul>
-					<li><?=$this->html->link('FAQ', array('Pages::view','args'=>'faq'));?></li>
 					<li><?=$this->html->link('Sitemap', array('Pages::view', 'args'=>'sitemap'));?></li>	
 					<li><?=$this->html->link('Our Promise To You', array('Pages::view','args'=>'guarantee'));?></li>
 					<li><?=$this->html->link('Privacy Policy', array('Pages::view','args'=>'privacy'));?></li>
