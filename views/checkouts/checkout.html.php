@@ -23,7 +23,7 @@ endfor;
 $province = ($purchase->province)? $purchase->province : 'Ontario';
 ?>
 <div style="padding-left: 15px; height: 43px; line-height: 43px; color: #ffffff; font-size: 24px; font-weight: bold; background: url(/img/top-ribbon.png);">
-	<span>Secure Checkout</span>
+	<span>Step 2 of 2: Secure Checkout</span>
 </div>
 <div id="content-wrapper">
 	<div style="margin-left: 20px; margin-right: 20px;">
@@ -77,6 +77,8 @@ $province = ($purchase->province)? $purchase->province : 'Ontario';
 </div>
 <script type="text/javascript">
 $("#form_purchase_save").bind('click',function(){
+	$(this).attr("disabled", "true");
+	$(this).text("Processing ...");
 	$("#form_purchase").submit();
 });
 $("#form_purchase_cancel").bind('click',function(){
