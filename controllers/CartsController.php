@@ -14,7 +14,7 @@ class CartsController extends \chowly\extensions\action\Controller{
 		}
 		if($this->Cart->removeItem($this->request->id)){
 			$data['cleared'] = true;
-			Offers::releaseInventory($this->request->id, $this->Cart->_id);
+			Offers::releaseInventory($this->Cart->_id, $this->request->id);
 		}
 		$this->render(array('json' => $data));
 	}

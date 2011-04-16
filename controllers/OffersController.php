@@ -29,16 +29,18 @@ class OffersController extends \chowly\extensions\action\Controller{
 		return compact('offers', 'venues');
 	}
 	public function view(){
-		if(!$this->request->id){
+		if(!$this->request->id && !$this->request->slug){
 			FlashMessage::set("Missing data.");
 			return $this->redirect(array("Offers::index"));
 		}
 		
-		$conditions = array(
-			'_id' => $this->request->id,
-			'state'=>'published'
-		);
-		
+		$conditions = array('state'=>'published');
+		if($this->request->id){
+			$conditions['_id'] = $this->request->id;
+		}else{
+			$conditions['slug'] = $this->request->slug;
+		}
+
 		$offer = Offers::first(compact('conditions'));
 		if(!$offer){
 			FlashMessage::set("The specified offer does not exists.");
@@ -130,8 +132,30 @@ class OffersController extends \chowly\extensions\action\Controller{
 	
 	public function admin_add(){
 		$offer = Offers::create();
+		
+		//Get Venue
+		$conditions = array();
+		if($this->request->id){
+			//in this case, request->id is the venue id.
+			$conditions = array('_id' => $this->request->id);
+		}elseif ($this->request->data['venue_id']){
+			$conditions = array('_id' => $this->request->data['venue_id']);
+		}
+		if(!$conditions){
+			return $this->redirect(array('Offers::index','admin'=>true));
+		}
+		
+		$venue = Venues::first(compact('conditions'));
+		
+		if(!$venue){
+			FlashMessage::set("Venue not found.");
+			return $this->redirect($this->request->referer());
+		}
+				
 		if ($this->request->data){
 			$offer->set($this->request->data);
+			
+			$offer->slug = $offer->slug(array('prepend'=>$venue->name));
 			
 			$success = false;
 			try{
@@ -145,23 +169,6 @@ class OffersController extends \chowly\extensions\action\Controller{
 				FlashMessage::set("Offer created.");
 				return $this->redirect(array('Offers::view', 'id' => $offer->_id, 'admin'=>true));
 			}
-		}
-		
-		$conditions = array();
-		if($this->request->id){
-			//in this case, request->id is the venue id.
-			$conditions = array('_id' => $this->request->id);
-		}elseif ($this->request->data['venue_id']){
-			$conditions = array('_id' => $this->request->data['venue_id']);
-		}
-		if(!$conditions){
-			return $this->redirect(array('Offers::index','admin'=>true));
-		}
-		$venue = Venues::first(compact('conditions'));
-		
-		if(!$venue){
-			FlashMessage::set("Venue not found.");
-			return $this->redirect($this->request->referer());
 		}
 		
 		$this->_render['template'] = 'admin_edit';

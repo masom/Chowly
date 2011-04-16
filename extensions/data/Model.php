@@ -23,11 +23,14 @@ class Model extends \lithium\data\Model{
      * @return String The unique pretty url.
     */
     public function slug($entity, Array $options = array()) {
-        $options += array('field'=>'name', 'separator' => '-');
+        $options += array('field'=>'name', 'separator' => '-', 'prepend'=> '');
+        
+        extract($options);
         
         // all URLs are lowercase
-        $slug = date('y-m-d-') . strtolower($entity->{$options['field']});
-        $slug = \lithium\util\Inflector::slug($slug, $options['separator']);
+        $slug = $prepend.$separator.$entity->{$field};
+        $slug = date('Ymd'). $separator . strtolower($slug);
+        $slug = \lithium\util\Inflector::slug($slug, $separator);
         
         $conditions = array('slug' => $slug);
         $conflicts = static::count(compact('conditions'));
@@ -35,7 +38,7 @@ class Model extends \lithium\data\Model{
         if($conflicts){
 	        $i = 0;
 	        $newSlug = '';
-	        while($conficts){
+	        while($conflicts){
 	        	$i++;
 	        	$newSlug = "{$slug}-{$i}";
         		$conditions = array('slug' => $newSlug);

@@ -35,7 +35,8 @@ class Offers extends \chowly\extensions\data\Model{
 		'_id' => array('type'=>'id'),
 		'venue_id' => array('type'=>'id'), // The venue
 		'state' => array('type'=>'string', 'default' => 'unpublished'), // Either published or unpublished
-		'name' => array('type'=>'string','null'=>false), // Name of the coupon
+		'name' => array('type' => 'string','null'=>false), // Name of the coupon
+		'slug' => array('type' => 'string'), //Url friendly name
 		'description'=>array('type'=>'string'), // Description (if any) of the coupon
 		'limitations'=>array('type'=>'string'), // Limitations regarding usage of the cuopon
 		'starts' => array('type'=>'date','null'=>false), // Publication start
@@ -72,14 +73,19 @@ class Offers extends \chowly\extensions\data\Model{
 
 		return static::all(compact('conditions','order'));
 	}
+	
+	/**
+	 * Rebuilds the system inventory count
+	 * 
+	 * @throws UnexpectedValueException Thrown when the inventory collection is empty.
+	 */
 	public static function rebuildInventory(){
 		Inventories::releaseExpired();
 		$availableInventory = Inventories::getAvailable();
 
 		if(count($availableInventory) == 0){
 			if(Inventories::count() == 0){
-				//We no longer have any inventory in the system!!
-				//TODO: Send error email!
+				throw new UnexpectedValueException('No more inventory.');
 			}
 			static::update(array('availability'=>0));	
 		}
@@ -96,11 +102,20 @@ class Offers extends \chowly\extensions\data\Model{
 			static::update(compact('availability'), array('_id'=>$offer_id));
 		}
 	}
-	public static function releaseInventory($offer_id, $cart_id){
+	
+	/**
+	 * Release specified inventory and make it available again.
+	 * 
+	 * @param var $cart_id
+	 * @param var $offer_id
+	 * @return boolean
+	 */
+	public static function releaseInventory($cart_id, $offer_id){
 		try{
 			Inventories::release($cart_id, $offer_id);
 		}catch(InventoryException $e){
-			Logger::write('error', "Could not release inventor for the following reason: {$e->getMessage()}");
+			$message = $e->getMessage();
+			Logger::write('error', "Could not release inventory for the following reason: {$message}");
 			return false;
 		}
 		
