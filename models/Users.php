@@ -87,7 +87,7 @@ class Users extends \chowly\extensions\data\Model{
 	}
 	
 	public function save($entity, $data = null, array $options = array()) {
-		if($entity->_exists){
+		if($entity->exists()){
 
 		}else{
 			$conditions = array('email' => $entity->email);
