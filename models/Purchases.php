@@ -88,7 +88,7 @@ class Purchases extends \chowly\extensions\data\Model{
 
 		foreach($offers as $offer){
 			$entity->price += $offer->cost;
-			$entity->offers[] = array('_id' => $offer->_id, 'price'=> $offer->cost);
+			$entity->offers[] = $offer;
 		}
 		
 		//TODO: Actual CC Processing.

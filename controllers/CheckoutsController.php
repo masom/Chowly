@@ -106,7 +106,8 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 				$cart_items_id[] = $item->_id;
 			}
 			$conditions = array('_id'=> $cart_items_id);
-			$offers = Offers::all(compact('conditions'));
+			$fields = array('_id', 'name', 'limitations', 'description', 'cost', 'created', 'expires', 'venue_id');
+			$offers = Offers::all(compact('conditions','fields'));
 			
 			//TODO: Log transaction for history/accounting
 			try{
