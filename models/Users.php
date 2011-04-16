@@ -109,6 +109,14 @@ class Users extends \chowly\extensions\data\Model{
 		return $entity->save(null,array('validate'=>true,'whitelist'=>array('role')));
 	}
 	
+	public function updateRole($entity){
+		if(is_numeric($entity->role) && isset($entity->role, $this->_roles)){
+			$entity->role = $this->_roles[$entity->role];
+			return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * Activate/Deactive a user account.
 	 * 
