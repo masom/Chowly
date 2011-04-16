@@ -24,15 +24,13 @@ class UsersController extends \chowly\extensions\action\Controller{
 		if(!empty($this->request->data)){
 			try{
 				$user->set($this->request->data);
-				$saved = $user->register();
+				$saved = $user->save();
 			}catch(\Exception $e){
 				FlashMessage::set($e->getMessage());
 				return compact('user');
 			}
-			
 			if($saved){
-				Auth::check('user', $this->request);
-				return $this->redirect('/');
+				return $this->redirect(array("Users::index", 'admin'=>true));
 			}
 		}
 		
@@ -46,17 +44,16 @@ class UsersController extends \chowly\extensions\action\Controller{
 		
 		if(!empty($this->request->data)){
 
-			if(empty($this->request->data['password'])){
-				unset($this->request->data['password']);
-			}
-			
 			$user->set($this->request->data);
-			
-			$user->updateRole();
-			
-			if($user->save()){
+			try{
+				$saved = $user->save();
+			}catch(\Exception $e){
+				FlashMessage::set("The user could not be modified.");
+				return compact('user');
+			}
+			if($saved){
 				FlashMessage::set("User modified.");
-				return $this->redirect('Users::index');
+				return $this->redirect(array("Users::index", 'admin'=>true));
 			}else{
 				FlashMessage::set("The user could not be modified.");
 			}

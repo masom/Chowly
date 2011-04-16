@@ -40,41 +40,6 @@ class Users extends \chowly\extensions\data\Model{
 	}
 	
 	/**
-	 * Register a new user
-	 * 
-	 * @param Users $entity
-	 * @throws \Exception
-	 * @return bool
-	 */
-	public function register($entity){
-		
-		$conditions = array('email' => $entity->email);
-		if(static::first(compact('conditions'))){
-			throw new \Exception("This email address is already registered.");
-		}
-		
-		if($entity->password != $entity->password_repeat){
-			throw new \Exception("Password fields do not match.");	
-		}
-		
-		unset($entity->password_repeat);
-		
-		if(!empty($entity->password)){
-			$entity->password = \lithium\util\String::hash($entity->password);
-		}
-		
-		if($user->role && in_array($user->role, $this->_roles)){
-			$user->role = $this->_roles[$user->role];
-		}else{
-			$user->role = 'customer';
-		}
-		
-		$entity->active = true;
-		
-		return $entity->save();
-	}
-	
-	/**
 	 * Resets password
 	 * @param Users $entity
 	 * @throws \Exception
@@ -109,14 +74,6 @@ class Users extends \chowly\extensions\data\Model{
 		return $entity->save(null,array('validate'=>true,'whitelist'=>array('role')));
 	}
 	
-	public function updateRole($entity){
-		if(is_numeric($entity->role) && isset($entity->role, $this->_roles)){
-			$entity->role = $this->_roles[$entity->role];
-			return true;
-		}
-		return false;
-	}
-	
 	/**
 	 * Activate/Deactive a user account.
 	 * 
@@ -127,6 +84,46 @@ class Users extends \chowly\extensions\data\Model{
 	public function setActive($entity, $active){
 		$entity->active = $active;
 		return $entity->save(null,array('validate'=>true,'whitelist'=>array('active')));
+	}
+	
+	public function save($entity, $data = null, array $options = array()) {
+		if($entity->_exists){
+
+		}else{
+			$conditions = array('email' => $entity->email);
+			if(static::first(compact('conditions'))){
+				throw new \Exception("This email address is already registered.");
+			}
+			
+			$entity->active = true;
+		}
+		
+		
+		$entity->password = trim($entity->password);
+		
+		if($entity->_exists && !empty($entity->password)){
+			if($entity->password != $entity->password_repeat){
+				throw new \Exception("Password fields do not match.");	
+			}
+		else{
+			if($entity->password != $entity->password_repeat){
+				throw new \Exception("Password fields do not match.");	
+			}
+		}
+		
+		unset($entity->password_repeat);
+		
+		if(!empty($entity->password)){
+			$entity->password = \lithium\util\String::hash($entity->password);
+		}
+		
+		if(is_numeric($entity->role) && isset($entity->role, $this->_roles)){
+			$entity->role = $this->_roles[$entity->role];
+		}else{
+			$entity->role = 'customer';
+		}
+
+		return parent::save($entity, $data, $options);
 	}
 }
 ?>
