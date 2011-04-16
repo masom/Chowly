@@ -23,8 +23,7 @@ class UsersController extends \chowly\extensions\action\Controller{
 		$user = Users::create();
 		if(!empty($this->request->data)){
 			try{
-				$user->set($this->request->data);
-				$saved = $user->save();
+				$saved = $user->save($this->request->data);
 			}catch(\Exception $e){
 				FlashMessage::set($e->getMessage());
 				return compact('user');
@@ -48,10 +47,9 @@ class UsersController extends \chowly\extensions\action\Controller{
 		}
 		
 		if(!empty($this->request->data)){
-
-			$user->set($this->request->data);
+			
 			try{
-				$saved = $user->save();
+				$saved = $user->save($this->request->data);
 			}catch(\Exception $e){
 				FlashMessage::set("The user could not be modified.");
 				return compact('user');
@@ -144,8 +142,7 @@ class UsersController extends \chowly\extensions\action\Controller{
 		$user = Users::create();
 		if(!empty($this->request->data)){
 			try{
-				$user->set($this->request->data);
-				$saved = $user->register();
+				$saved = $user->save($this->request->data);
 			}catch(\Exception $e){
 				FlashMessage::set($e->getMessage());
 				return compact('user');

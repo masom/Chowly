@@ -90,41 +90,42 @@ class Users extends \chowly\extensions\data\Model{
 		if($entity->exists()){
 
 		}else{
-			$conditions = array('email' => $entity->email);
+			$conditions = array('email' => $data['email']);
 			if(static::first(compact('conditions'))){
 				throw new \Exception("This email address is already registered.");
 			}
 			
-			$entity->active = true;
+			$data['active'] = true;
 		}
 		
 		
-		$entity->password = trim($entity->password);
+		$data['password'] = trim($data['password']);
 		
-		if($entity->exists() && !empty($entity->password)){
-			if($entity->password != $entity->password_repeat){
+		if($entity->exists() && !empty($data['password'])){
+			if($data['password'] != $data['password_repeat']){
 				throw new \Exception("Password fields do not match.");	
 			}
 		}else{
-			if($entity->password != $entity->password_repeat){
+			if($data['password'] != $data['password_repeat']){
 				throw new \Exception("Password fields do not match.");	
 			}
 		}
 		
-		unset($entity->password_repeat);
+		unset($data['password_repeat']);
 		
-		if(empty($entity->password)){
-			unset($entity->password);
+		if(empty($data['password'])){
+			unset($data['password']);
 		}else{
-			$entity->password = \lithium\util\String::hash($entity->password);
+			$data['password'] = \lithium\util\String::hash($data['password']);
 		}
 		
-		if(is_numeric($entity->role) && isset($entity->role, $this->_roles)){
-			$entity->role = $this->_roles[$entity->role];
+		if(is_numeric($data['role']) && isset($this->_roles[$data['role']])){
+			$data['role'] = $this->_roles[$data['role']];
 		}else{
-			$entity->role = 'customer';
+			$data['role'] = 'customer';
 		}
-
+		
+		$entity->set($data);
 		return parent::save($entity);
 	}
 }
