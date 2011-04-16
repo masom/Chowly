@@ -101,7 +101,7 @@ class Users extends \chowly\extensions\data\Model{
 		
 		$entity->password = trim($entity->password);
 		
-		if($entity->_exists && !empty($entity->password)){
+		if($entity->exists() && !empty($entity->password)){
 			if($entity->password != $entity->password_repeat){
 				throw new \Exception("Password fields do not match.");	
 			}
@@ -113,7 +113,9 @@ class Users extends \chowly\extensions\data\Model{
 		
 		unset($entity->password_repeat);
 		
-		if(!empty($entity->password)){
+		if(empty($entity->password)){
+			unset($entity->password);
+		}else{
 			$entity->password = \lithium\util\String::hash($entity->password);
 		}
 		
@@ -123,7 +125,7 @@ class Users extends \chowly\extensions\data\Model{
 			$entity->role = 'customer';
 		}
 
-		return parent::save($entity, $data, $options);
+		return parent::save($entity);
 	}
 }
 ?>

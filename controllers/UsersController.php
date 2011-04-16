@@ -42,6 +42,11 @@ class UsersController extends \chowly\extensions\action\Controller{
 		);
 		$user = Users::first(compact('conditions'));
 		
+		if(!$user){
+			FlashMessage::set('User not found.');
+			return $this->redirect($this->request->referer());
+		}
+		
 		if(!empty($this->request->data)){
 
 			$user->set($this->request->data);
@@ -59,10 +64,7 @@ class UsersController extends \chowly\extensions\action\Controller{
 			}
 		}
 				
-		if(empty($user)){
-			FlashMessage::set('User not found.');
-			return $this->redirect($this->request->referer());
-		}
+
 		
 		return compact('user');
 	}
