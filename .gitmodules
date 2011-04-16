@@ -4,3 +4,6 @@
 [submodule "libraries/li3_pdf"]
 	path = libraries/li3_pdf
 	url = code@dev.lithify.me:li3_pdf.git
+[submodule "libraries/li3_sitemap"]
+	path = libraries/li3_sitemap
+	url = code@dev.lithify.me:li3_sitemap.git

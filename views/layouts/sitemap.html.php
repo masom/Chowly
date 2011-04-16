@@ -34,32 +34,7 @@
 		</div>
 		<?php echo $this->content(); ?>
 		<div id="bottom-corners"></div>
-		<div id="informations" style="height: 200px;">
-			<div style="float: left; height: 200px; width: 281px;">
-				<div style="background-image: url(/img/bottomboxtop.png); width: 281px; height: 16px;"></div>
-				<div style="background-color: #ffffff; width: 281px;">
-					<h1>What is Chowly?</h1>
-					<p>Lorem ipsum</p>
-				</div>
-				<div style="background-image: url(/img/bottomboxbottom.png); width: 281px; height: 16px;"></div>
-			</div>
-			<div style="float: left; height: 200px; width: 281px; margin-left: 8px; margin-right: 8px;">
-				<div style="background-image: url(/img/bottomboxtop.png); width: 281px; height: 16px;"></div>
-				<div style="background-color: #ffffff; width: 281px;">
-					<h1>What is Chowly?</h1>
-					<p>Lorem ipsum</p>
-				</div>
-				<div style="background-image: url(/img/bottomboxbottom.png); width: 281px; height: 16px;"></div>
-			</div>
-			<div style="float: left; height: 200px; width: 281px;">
-				<div style="background-image: url(/img/bottomboxtop.png); width: 281px; height: 16px;"></div>
-				<div style="background-color: #ffffff; width: 281px;">
-					<h1>What is Chowly?</h1>
-					<p>Lorem ipsum</p>
-				</div>
-				<div style="background-image: url(/img/bottomboxbottom.png); width: 281px; height: 16px;"></div>
-			</div>
-		</div>
+		<?=$this->view()->render(array('element'=>'bottomboxes'));?>
 		
 		<div class="push"></div>
 	</div>

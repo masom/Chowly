@@ -15,8 +15,7 @@ body {
 	font-size: 14px;
 	line-height: 1.5em;
 	color: #0d0d0d;
-	background-color: #000000;
-	background-image: url(/img/bg.png);
+	background-color: #2D3F15;
 }
 /*--- Basics ---*/
 h1, h2, h3, h4, h5, h6 {
@@ -542,4 +541,7 @@ ul#offer-restrictions{
 }
 .sitemap ul, .sitemap li{
 	margin-left: 20px;
+}
+ul#opensource li{
+	margin-left: 40px;
 }
