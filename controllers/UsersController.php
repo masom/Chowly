@@ -52,6 +52,8 @@ class UsersController extends \chowly\extensions\action\Controller{
 			
 			$user->set($this->request->data);
 			
+			$user->updateRole();
+			
 			if($user->save()){
 				FlashMessage::set("User modified.");
 				return $this->redirect('Users::index');
