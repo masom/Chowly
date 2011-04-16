@@ -105,7 +105,7 @@ class Users extends \chowly\extensions\data\Model{
 			if($entity->password != $entity->password_repeat){
 				throw new \Exception("Password fields do not match.");	
 			}
-		else{
+		}else{
 			if($entity->password != $entity->password_repeat){
 				throw new \Exception("Password fields do not match.");	
 			}
