@@ -1,5 +1,4 @@
 <?php
-use lithium\data\collection\DocumentSet;
 namespace chowly\controllers;
 
 use li3_flash_message\extensions\storage\FlashMessage;
@@ -195,6 +194,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 	 * Wraps the email sending feature for new purchases.
 	 * @param var $purchase The purchase object
 	 * @param var $pdfPath The path to the pdf to be attached.
+	 * @return bool
 	 */
 	private function _sendEmail($purchase, $pdfPath){
 		$to = $purchase->email;

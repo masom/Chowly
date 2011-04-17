@@ -4,6 +4,7 @@ namespace chowly\controllers;
 use chowly\models\Purchases;
 use chowly\models\Offers;
 use chowly\models\Venues;
+use chowly\extensions\Utils;
 use li3_flash_message\extensions\storage\FlashMessage;
 
 class PurchasesController extends \chowly\extensions\action\Controller{
@@ -74,11 +75,7 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 			return $this->redirect(array('Purchases::index'));
 		}
 		
-		$conditions = array('_id'=>array());
-		foreach($purchase->offers as $offer){
-			$conditions['_id'][] = $offer->_id;
-		}
-		$offers = Offers::all(compact('conditions'));
+		$offers = $purchase->offers;
 		
 		$conditions = array('_id'=>array());
 		foreach($offers as $offer){
@@ -103,9 +100,27 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 			FlashMessage::set('The specified purchase could not be found in the database.');
 			return $this->redirect(array('Purchases::index'));
 		}
-		if(!file_exists(Purchases::pdfPath())){
-			//TODO: Create the file.
+		
+		$offers = $purchase->offers;
+		
+		$conditions = array('_id'=>array());
+		foreach($offers as $offer){
+			$conditions['_id'][] = $offer->venue_id;
 		}
+		$venues = Venues::all(compact('conditions'));
+		
+		$pdfPath = null;
+		try{
+			$pdfPath = Utils::getPdf($purchase, $offers, $venues);
+		}catch(\Exception $e){
+			FlashMessage::set("An error occured while generating the PDF: {$e->getMessage()}");
+			return $this->redirect(array('Purchases::view', 'id'=>$purchase->_id));
+		}
+		if(!$pdfPath){
+			FlashMessage::set("Unable to retreive PDF");
+			return $this->redirect(array('Purchases::view', 'id'=>$purchase->_id));
+		}
+		
 		$to = $purchase->email;
 		
 		$transport = Swift_MailTransport::newInstance();
@@ -115,8 +130,9 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 		$message->setFrom(array('purchases@chowly.com' => 'Chowly'));
 		$message->setTo($to);
 		$message->setBody($this->_getEmail(compact('purchase'), 'purchase', 'purchases'));
-		$message->attach(Swift_Attachment::fromPath($path));
+		$message->attach(Swift_Attachment::fromPath($pdfPath));
 	}
+	
 	public function download(){
 		if(!$this->request->id){
 			FlashMessage::set("Missing download details.");
