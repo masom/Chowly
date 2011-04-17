@@ -141,19 +141,24 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 		
 		$conditions = array('_id' => $this->request->id);
 		$purchase = Purchases::first(compact('conditions'));
+		
 		if(!$purchase){
 			FlashMessage::set("The purchase could not be found");
 			return $this->redirect($this->request->referer());
 		}
+		
+		/**
 		if($purchase->downloaded){
 			FlashMessage::set("The purchase has already been downloaded. Contact Chowly support to re-download.");
 			return $this->redirect(array('Offers::index'));
-		}
-		$conditions = array('_id'=>array());
-		foreach($purchase->offers as $offer){
-			$conditions['_id'][] = $offer->_id;
-		}
-		$offers = Offers::all(compact('conditions'));
+		}*/
+		
+		$options = array('multiple' => false, 'safe' => false, 'upsert'=>false);
+		$data = array('downloaded'=>true);
+		$conditions = array('_id' => $purchase->_id);
+		Purchases::update($data, $conditions, $options);
+		
+		$offers = $purchase->offers;
 		
 		$conditions = array('_id'=>array());
 		foreach($offers as $offer){
@@ -162,6 +167,8 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 		$venues = Venues::all(compact('conditions'));
 		
 		$filename = $purchase->_id.'.pdf';
+		$this->_view['renderer'] = 'Pdf';
+		$this->_render['template'] = 'purchase';
 		return compact('purchase','venues', 'offers','filename');
 	}
 }

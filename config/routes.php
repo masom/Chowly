@@ -82,7 +82,7 @@ Router::connect('/venues/{:id:[0-9a-f]{24}}', 'Venues::view');
 
 Router::connect('/confirm', 'Checkouts::confirm');
 Router::connect('/checkout', 'Checkouts::checkout');
-Router::connect('/download/{:id:[0-9a-f]{24}}', 'Purchases::download');
+Router::connect('/download/{:id:[0-9a-f]{24}}.{:type}', 'Purchases::download');
 
 Router::connect('/contact/received', 'Tickets::received');
 Router::connect('/contact/{:args}', 'Tickets::add');
