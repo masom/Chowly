@@ -51,26 +51,23 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 	
 	public function checkout(){
 		$provinces = Purchases::getProvinces();
-		
+
 		if($this->Cart->isEmpty()){
 			FlashMessage::set("Your cart is currently empty.");
 			return $this->redirect("Offers::index");
 		}
-		
-		//Secure inventory so it does not expire while in checkout.
-		$this->_secureInventory();
 		
 		if(!$this->Cart->startTransaction()){
 			FlashMessage::set("There is a transaction in progress on your cart. Please try again.");
 			return $this->redirect("Offers::index");
 		}
 		
-		$purchase = Purchases::create();
+		//Secure inventory so it does not expire while in checkout.
+		$this->_secureInventory();
 		
+		$purchase = Purchases::create();
 		//TODO: Credit Card data processing...
 		if($this->request->data){
-			
-			
 			$purchase->set($this->request->data);
 			$purchase->status = 'new';
 			
@@ -79,7 +76,6 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 				$this->Cart->endTransaction();
 				return compact('purchase', 'provinces');
 			}
-			
 			
 			$offers = $this->_getCartOffers();
 			
@@ -102,14 +98,13 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 				FlashMessage::set("The purchase could not be completed.");
 				
 				$this->Cart->endTransaction();
-				
 				return compact('purchase', 'provinces');
 			}
 			
 			Logger::write('info', "TC E[{$purchase->email}] I[{$purchase->_id}] P[{$purchase->price}]");
 			
 			$this->_markItemsPurchased($purchase);
-			
+
 			$venues = $this->_getVenues($offers);
 
 			$path = null;
@@ -120,7 +115,6 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			}
 			
 			$sent = $this->_sendEmail($purchase, $path);
-			
 			
 			$this->Cart->endTransaction();
 			$this->Cart->clearItems();
@@ -206,7 +200,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		$message->setFrom(array('purchases@chowly.com' => 'Chowly'));
 		$message->setTo($to);
 		
-		if($path){
+		if($pdfPath){
 			$message->setBody(parent::_getEmail(compact('purchase'), 'purchase', 'purchases'));
 			$message->attach(Swift_Attachment::fromPath($pdfPath));
 		}else{

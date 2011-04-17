@@ -14,15 +14,14 @@ class Utils extends \lithium\core\StaticObject{
 	 * @throws \Exception
 	 * @return var Full path to the pdf file
 	 */
-	public static function getPdf($purchase, $offers = null, $venues = null){
+	public static function getPdf(&$purchase, &$offers = null, &$venues = null){
 		$path = Purchases::pdfPath();
 		$filepath = $path . DIRECTORY_SEPARATOR . $purchase->_id .'.pdf';
 		
 		if(file_exists($filepath)){
 			return $filepath;
 		}
-		
-		return static::writePdf($path, $purchase->_id, static::getPdf($purchase, $offers, $venues));
+		return static::_writePdf($path, $purchase->_id, static::_generatePdf($purchase, $offers, $venues));
 	}
 	
 	/**
@@ -32,7 +31,7 @@ class Utils extends \lithium\core\StaticObject{
 	 * @param var $offers The offers collection
 	 * @param var $venues The venues collection
 	 */
-	public static function generatePdf($purchase, $offers, $venues){
+	private static function _generatePdf($purchase, $offers, $venues){
 		$view  = new View(
 		array(
 
@@ -64,9 +63,8 @@ class Utils extends \lithium\core\StaticObject{
 	 * @throws \Exception
 	 * @return Full path to pdf file
 	 */
-	public static function writePdf($path, $purchaseId, $pdf){
+	private static function _writePdf($path, $purchaseId, $pdf){
 		$filepath = $path. DIRECTORY_SEPARATOR . $purchaseId.'.pdf';
-
 		if(!is_writable($path)){
 			throw new \Exception("File path is not writable.");
 		}
