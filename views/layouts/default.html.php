@@ -44,7 +44,6 @@
 			<div class="footer-section">
 				<h1>Main Menu</h1>
 				<ul>
-					<li><?=$this->html->link('How It Works', array('Pages::view','args'=>'howitworks'));?></li>
 					<li><?=$this->html->link('Your Restaurant Here', array('Tickets::add','args'=>'restaurant'));?></li>
 					<li><?=$this->html->link('About Us', array('Pages::view','args'=>'about'));?></li>
 					<li><?=$this->html->link('Contact Us', array('Tickets::add'));?></li>

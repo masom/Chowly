@@ -16,6 +16,10 @@ class Carts extends \lithium\data\Model{
 		'state' => array('type' => 'string', 'default' => 'default')
 	);
 	
+	public function items($entity){
+		return $entity->items;
+	}
+	
 	/**
 	 * End a transaction on a cart.
 	 * @return var A Carts entity -or- null if the transaction could not be ended.

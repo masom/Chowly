@@ -64,14 +64,14 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 	public function admin_download(){
 		if(!$this->request->id){
 			FlashMessage::set("Missing download details.");
-			return $this->redirect(array('Offers::index'));
+			return $this->redirect(array('Purchases::index'));
 		}
 		
 		$conditions = array('_id' => $this->request->id);
 		$purchase = Purchases::first(compact('conditions'));
 		if(!$purchase){
 			FlashMessage::set("The purchase could not be found");
-			return $this->redirect($this->request->referer());
+			return $this->redirect(array('Purchases::index'));
 		}
 		
 		$conditions = array('_id'=>array());
@@ -90,6 +90,32 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 		$this->_view['renderer'] = 'Pdf';
 		$this->_render['template'] = 'purchase';
 		return compact('purchase','venues', 'offers','filename');
+	}
+	
+	/**
+	 * Resend a purchase
+	 */
+	public function admin_resend(){
+		$conditions = array('_id' => $this->request->id);
+		
+		$purchase = Purchases::first(compact('conditions'));
+		if(!$purchase){
+			FlashMessage::set('The specified purchase could not be found in the database.');
+			return $this->redirect(array('Purchases::index'));
+		}
+		if(!file_exists(Purchases::pdfPath())){
+			//TODO: Create the file.
+		}
+		$to = $purchase->email;
+		
+		$transport = Swift_MailTransport::newInstance();
+		$mailer = Swift_Mailer::newInstance($transport);
+		$message = Swift_Message::newInstance();
+		$message->setSubject("Chowly Purchase Confirmation");
+		$message->setFrom(array('purchases@chowly.com' => 'Chowly'));
+		$message->setTo($to);
+		$message->setBody($this->_getEmail(compact('purchase'), 'purchase', 'purchases'));
+		$message->attach(Swift_Attachment::fromPath($path));
 	}
 	public function download(){
 		if(!$this->request->id){

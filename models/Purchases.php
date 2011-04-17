@@ -4,6 +4,8 @@ namespace chowly\models;
 
 class Purchases extends \chowly\extensions\data\Model{
 	
+	private static $_pdfBasePath = '/resources/purchases';
+	
 	public $error = null;
 	protected $_schema = array(
 		'_id' => array('type'=>'id'),
@@ -71,6 +73,9 @@ class Purchases extends \chowly\extensions\data\Model{
 		'Yukon' => 'Yukon'
 	);
 	
+	public static function pdfPath(){
+		return LITHIUM_APP_PATH . static::$_pdfBasePath;
+	}
 	public function validates($entity, array $options = array()){
 		$this->validates['province'][0]['list'] = static::$_provinces;
 		return parent::validates($entity,$options);

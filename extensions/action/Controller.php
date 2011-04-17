@@ -31,6 +31,14 @@ class Controller extends \lithium\action\Controller{
 		}
 
 	}
+	/**
+	 * Generates an email test
+	 * @param array $data Information used by the templates
+	 * @param var $template Template to be used
+	 * @param var $controller Folder containing the template (based on controller name). Defaults to the current controller name
+	 * @throws \lithium\core\ConfigException
+	 * @return var The email text
+	 */
 	protected function _getEmail(array $data, $template = null, $controller = null){
 		
 		if(!$template){
