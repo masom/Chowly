@@ -154,7 +154,7 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 		}*/
 		
 		$options = array('multiple' => false, 'safe' => false, 'upsert'=>false);
-		$data = array('downloaded'=>true);
+		$data = array('$set'=>array('downloaded'=>true));
 		$conditions = array('_id' => $purchase->_id);
 		Purchases::update($data, $conditions, $options);
 		
@@ -164,6 +164,7 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 		foreach($offers as $offer){
 			$conditions['_id'][] = $offer->venue_id;
 		}
+		
 		$venues = Venues::all(compact('conditions'));
 		
 		$filename = $purchase->_id.'.pdf';
