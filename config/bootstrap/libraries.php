@@ -68,7 +68,8 @@ Libraries::add('li3_sitemap', array(
 				'models' => array('chowly\models\Offers' => array(
 						'order'=>array('created' => 'desc'),
 						'limit' => 20,
-						'fields'=> array('_id', 'name', 'created', 'updated')
+						'fields'=> array('_id', 'name', 'created', 'updated'),
+						'conditions' => array( 'state' => 'published' )
 					)
 				)
 			)

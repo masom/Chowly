@@ -114,13 +114,13 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 				Logger::write('error', "Could not generate pdf due to: ". $e->getMessage());
 			}
 			
-			$sent = $this->_sendEmail($purchase, $path);
+			$emailSent = $this->_sendEmail($purchase, $path);
 			
 			$this->Cart->endTransaction();
 			$this->Cart->clearItems();
 			
 			$this->_render['template'] = 'success';
-			return compact('purchase','emailSent');
+			return compact('purchase', 'emailSent');
 		}
 		
 		$this->Cart->endTransaction();
