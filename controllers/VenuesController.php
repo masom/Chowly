@@ -1,4 +1,5 @@
 <?php
+
 namespace chowly\controllers;
 
 use chowly\models\Venues;
@@ -10,25 +11,25 @@ class VenuesController extends \chowly\extensions\action\Controller{
 		$limit = 20;
 		$page = $this->request->page ?: 1;
 		$order = array('name' => 'ASC');
-		
+
 		$total = Venues::count();
 		$venues = Venues::all(compact('order','limit','page'));
-		
+
 		return compact('venues', 'total', 'page', 'limit');
 	}
 	public function admin_add(){
 		$venue = Venues::create();
 		if (($this->request->data)){
 			$success = $venue->save($this->request->data);
-			if($success){
+			if ($success){
 				FlashMessage::set("Venue added.");
 				return $this->redirect(array('Venues::view', 'id' => $venue->_id));
 			}
 		}
 		$this->_render['template'] = 'admin_edit';
-		
+
 		$publishedOptions = $venue->states();
-		
+
 		return compact('venue','publishedOptions');
 	}
 	public function admin_edit(){
@@ -42,52 +43,56 @@ class VenuesController extends \chowly\extensions\action\Controller{
 			FlashMessage::set("Venue modified.");
 			return $this->redirect('Venues::index');
 		}
-		
+
 		$publishedOptions = $venue->states();
 		return compact('venue','publishedOptions');
 	}
-	
+
 	public function admin_view(){
 
-		if(!$this->request->id){
+		if (!$this->request->id){
 			FlashMessage::set("Missing data.");
 			return $this->redirect(array('Venues::index'));
 		}
-		
+
 		$conditions = array('_id'=>$this->request->id);
-		
+
 		$venue = Venues::first(compact('conditions'));
-		if(!$venue){
+		if (!$venue){
 			FlashMessage::set("The specified venue does not exists.");
 			return $this->redirect($this->request->referer());
 		}
-		
+
 		$conditions = array('venue_id' => $venue->_id);
 		$offers = Offers::all(compact('conditions'));
 		return compact('venue', 'offers');
 	}
-	
+
 	public function index(){
 		$conditions = array('state' => 'published');
 		$venues = Venues::all(compact('conditions'));
 		return compact('venues');
 	}
+
 	public function view(){
-		if(!$this->request->id){
+		if (!$this->request->id){
 			FlashMessage::set("Missing data.");
 			return $this->redirect(array('Venues::index'));
 		}
 		$conditions = array('_id'=>$this->request->id, 'state'=>'published');
 		$venue = Venues::first(compact('conditions'));
-		
-		if(!$venue){
+
+		if (!$venue){
 			FlashMessage::set("The specified venue does not exists.");
 			return $this->redirect($this->request->referer());
 		}
-		
-		$conditions = array('venue_id' => $this->request->id, 'state'=>'published', 'availability' => array('$gt'=> 0));
+
+		$conditions = array('venue_id' => $this->request->id, 'state'=>'published',
+			'availability' => array('$gt'=> 0)
+		);
 		$offers = Offers::all(compact('conditions'));
 		return compact('venue','offers');
 	}
 }
+
 ?>

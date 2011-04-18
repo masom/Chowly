@@ -14,7 +14,7 @@ Router::connect('/images/{:id:[0-9a-f]{24}}.(jpe?g|png|gif)', array(), function(
 
 	$image = chowly\models\Images::first($request->id);
 	if(!$image || !$image->file){	
-		return new Response(array('status' => 404));
+		return new \lithium\action\Response(array('status' => 404));
 	}
 	return new \lithium\action\Response(array(
 		'headers' => array('Content-type' => $image->type),
