@@ -11,7 +11,6 @@ use chowly\models\Purchases;
 use chowly\models\Offers;
 use chowly\models\Venues;
 use chowly\extensions\Utils;
-use lithium\action\Response;
 use li3_flash_message\extensions\storage\FlashMessage;
 
 class PurchasesController extends \chowly\extensions\action\Controller{
@@ -163,12 +162,12 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 			return $this->redirect($this->request->referer());
 		}
 
-		if ($purchase->downloaded){
+		/*if ($purchase->downloaded){
 			$message = "The purchase has already been downloaded.";
 			$message .= " Contact Chowly support to re-download.";
 			FlashMessage::set($message);
 			return $this->redirect(array('Offers::index'));
-		}
+		}*/
 
 		$options = array('multiple' => false, 'safe' => false, 'upsert'=>false);
 		$data = array('$set'=>array('downloaded'=>true));
@@ -178,12 +177,11 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 		$path = Purchases::pdfPath() . DIRECTORY_SEPARATOR . $purchase->_id . '.pdf';
 
 		if (file_exists($path)){
-			debug();die;
 			$this->_render['auto'] = false;
 			$this->response->headers('Content-Type', 'application/pdf');
 			$this->response->headers('download', $purchase->_id . '.pdf');
 			$this->response->body = file_get_contents($path);
-			return $this->response->render();
+			return;
 		}
 
 		$offers = $purchase->offers;

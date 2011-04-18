@@ -11,7 +11,7 @@
 				<p>If there is still no email after 30 minutes, please contact Chowly support: support@chowly.com</p>
 			<?php else:?>
 				<p>An error occured while sending the email. Make sure you download your coupon (following the link bellow) and save/print the PDF right away.</p>
-				<p><?=$this->html->link('Download your Coupon', array('Purchases::download', 'id'=>$purchase->_id));?></p>
+				<p><?=$this->html->link('Download your Coupon', array('Purchases::download', 'id'=> $purchase->_id, 'type'=>'pdf'));?></p>
 			<?php endif;?>
 		</div>
 		<table cellspacing="0" cellpadding="0">

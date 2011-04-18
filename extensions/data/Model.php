@@ -22,8 +22,8 @@ class Model extends \lithium\data\Model{
 
 	/**
      * Generate a unique slug
-     * @param $entity lithium\data\Entity
-     * @param $options Array
+     * @param object $entity
+     * @param array $options
      *      - field: The field used to generate the slug
      *      - separator: The optional separator symbol for spaces (default: -)
      * @return String The unique pretty url.
