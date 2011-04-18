@@ -11,6 +11,7 @@ use chowly\models\Purchases;
 use chowly\models\Offers;
 use chowly\models\Venues;
 use chowly\extensions\Utils;
+use lithium\action\Response;
 use li3_flash_message\extensions\storage\FlashMessage;
 
 class PurchasesController extends \chowly\extensions\action\Controller{
@@ -178,10 +179,10 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 		$path = Purchases::pdfPath() . DIRECTORY_SEPARATOR . $purchase->_id . '.pdf';
 
 		if (file_exists($path)){
-			return new \lithium\action\Response(array(
-				'headers' => array('Content-type' => 'application/pdf'),
-				'body' => file_get_contents($path)
-			));
+			$this->response->type = 'application/pdf';
+			$this->response->headers('download', $purchase->_id . '.pdf');
+			$this->response->body = file_get_contents($path);
+			return $this->response->render();
 		}
 
 		$offers = $purchase->offers;
