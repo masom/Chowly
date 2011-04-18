@@ -163,13 +163,12 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 			return $this->redirect($this->request->referer());
 		}
 
-		/**
-		if($purchase->downloaded){
+		if ($purchase->downloaded){
 			$message = "The purchase has already been downloaded.";
 			$message .= " Contact Chowly support to re-download.";
 			FlashMessage::set($message);
 			return $this->redirect(array('Offers::index'));
-		}*/
+		}
 
 		$options = array('multiple' => false, 'safe' => false, 'upsert'=>false);
 		$data = array('$set'=>array('downloaded'=>true));
@@ -179,8 +178,9 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 		$path = Purchases::pdfPath() . DIRECTORY_SEPARATOR . $purchase->_id . '.pdf';
 
 		if (file_exists($path)){
+			debug();die;
 			$this->_render['auto'] = false;
-			$this->response->type = 'application/pdf';
+			$this->response->headers('Content-Type', 'application/pdf');
 			$this->response->headers('download', $purchase->_id . '.pdf');
 			$this->response->body = file_get_contents($path);
 			return $this->response->render();
@@ -192,7 +192,6 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 		foreach ($offers as $offer){
 			$conditions['_id'][] = $offer->venue_id;
 		}
-
 		$venues = Venues::all(compact('conditions'));
 
 		$filename = $purchase->_id . '.pdf';
