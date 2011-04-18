@@ -39,7 +39,12 @@ class Users extends \chowly\extensions\data\Model{
 	 * Holds the different possible roles a user can have
 	 * @var array List of roles (key => display)
 	 */
-	private $_roles = array('admin','staff','venue','customer');
+	private $_roles = array(
+		'admin' => 'Administrator',
+		'staff' => 'Staff',
+		'venue' => 'Restaurant',
+		'customer' => 'Guest'
+	);
 
 	/**
 	 * Returns the list of roles;
@@ -122,9 +127,7 @@ class Users extends \chowly\extensions\data\Model{
 			$data['password'] = \lithium\util\String::hash($data['password']);
 		}
 
-		if (is_numeric($data['role']) && isset($this->_roles[$data['role']])){
-			$data['role'] = $this->_roles[$data['role']];
-		}else{
+		if (!isset($this->_roles[$data['role']])){
 			$data['role'] = 'customer';
 		}
 
