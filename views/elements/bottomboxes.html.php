@@ -19,7 +19,7 @@
 		<div style="background-image: url(/img/bottomboxtop.png); width: 281px; height: 16px;"></div>
 		<div style="background-color: #ffffff; width: 281px; height: 130px;">
 			<h1>Feature Your Restaurant</h1>
-			<p>Want to be featured or learn more about Chowly.com? Send a email to restaurants@chowly.com and we will be happy to talk Ch</p>
+			<p>Want to be featured or learn more about Chowly.com? Send a email to restaurants@chowly.com and we will be happy to talk Chowly.</p>
 		</div>
 		<div style="background-image: url(/img/bottomboxbottom.png); width: 281px; height: 16px;"></div>
 	</div>

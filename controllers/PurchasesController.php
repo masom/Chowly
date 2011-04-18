@@ -179,6 +179,7 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 		$path = Purchases::pdfPath() . DIRECTORY_SEPARATOR . $purchase->_id . '.pdf';
 
 		if (file_exists($path)){
+			$this->_render['auto'] = false;
 			$this->response->type = 'application/pdf';
 			$this->response->headers('download', $purchase->_id . '.pdf');
 			$this->response->body = file_get_contents($path);
