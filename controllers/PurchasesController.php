@@ -24,7 +24,7 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 	public function admin_view(){
 		$conditions = array('_id' => $this->request->id);
 		$purchase = Purchases::first(compact('conditions'));
-		
+
 		if (!$purchase){
 			FlashMessage::set("The specified purchase could not be found.");
 			return $this->redirect($this->request->referer());
@@ -35,7 +35,7 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 			$conditions['_id'][] = $offer->_id;
 		}
 		$offers = Offers::all(compact('conditions'));
-		
+
 		$conditions = array('_id'=>array());
 		foreach ($offers as $offer){
 			$conditions['_id'][] = $offer->venue_id;
@@ -52,7 +52,7 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 				break;
 			case "name":
 				$conditions = array('name' => $this->request->data['search']['value']);
-				break;				
+				break;
 			default:
 				FlashMessage::set("Invalid search parameters");
 				return $this->redirect(array('Purchases::index','admin'=>true));
@@ -69,7 +69,7 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 			FlashMessage::set("Missing download details.");
 			return $this->redirect(array('Purchases::index'));
 		}
-		
+
 		$conditions = array('_id' => $this->request->id);
 		$purchase = Purchases::first(compact('conditions'));
 		if (!$purchase){
@@ -85,7 +85,7 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 		}
 		$venues = Venues::all(compact('conditions'));
 
-		$filename = $purchase->_id.'.pdf';
+		$filename = $purchase->_id . '.pdf';
 		$this->_view['renderer'] = 'Pdf';
 		$this->_render['template'] = 'purchase';
 		return compact('purchase','venues', 'offers','filename');
@@ -159,7 +159,9 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 
 		/**
 		if($purchase->downloaded){
-			FlashMessage::set("The purchase has already been downloaded. Contact Chowly support to re-download.");
+			$message = "The purchase has already been downloaded.";
+			$message .= " Contact Chowly support to re-download.";
+			FlashMessage::set($message);
 			return $this->redirect(array('Offers::index'));
 		}*/
 
@@ -168,7 +170,7 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 		$conditions = array('_id' => $purchase->_id);
 		Purchases::update($data, $conditions, $options);
 
-		$path = Purchases::pdfPath(). DIRECTORY_SEPARATOR . $purchase->_id.'.pdf';
+		$path = Purchases::pdfPath() . DIRECTORY_SEPARATOR . $purchase->_id . '.pdf';
 
 		if (file_exists($path)){
 			return new \lithium\action\Response(array(
@@ -186,7 +188,7 @@ class PurchasesController extends \chowly\extensions\action\Controller{
 
 		$venues = Venues::all(compact('conditions'));
 
-		$filename = $purchase->_id.'.pdf';
+		$filename = $purchase->_id . '.pdf';
 		$this->_view['renderer'] = 'Pdf';
 		$this->_render['template'] = 'purchase';
 		return compact('purchase','venues', 'offers','filename');

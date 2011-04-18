@@ -1,4 +1,5 @@
 <?php
+
 namespace chowly\models;
 
 class Tickets extends \chowly\extensions\data\Model{
@@ -10,6 +11,7 @@ class Tickets extends \chowly\extensions\data\Model{
 		'created' => array('type'=>'date'),
 		'updated' => array('type'=>'date')
 	);
+
 	public $validates = array(
 		'name' => array(
 			array('notEmpty', 'message'=>'To better serve you, we need to know your name.')
@@ -27,6 +29,6 @@ class Tickets extends \chowly\extensions\data\Model{
 			array('inList', 'list'=> array('new','closed','in_progress'))
 		)
 	);
-	
 }
+
 ?>

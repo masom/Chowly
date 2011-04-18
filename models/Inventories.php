@@ -1,4 +1,5 @@
 <?php
+
 namespace chowly\models;
 
 use chowly\extensions\data\InventoryException;
@@ -8,34 +9,43 @@ class Inventories extends \chowly\extensions\data\Model{
 		'_id' => array('type'=>'id'),
 		'offer_id' => array('type'=>'id'),
 		'customer_id' => array('type'=>'_id'),
-		'state' => array('type'=>'string', 'default' => 'available'),
+		'state' => array('type'=>'string', 'default' => 'available')
 	);
-	
-	protected static $_states = array('available'=>'available', 'reserved'=>'reserved', 'purchased'=>'purchased');
-	
+
+	protected static $_states = array(
+		'available'=>'available',
+		'reserved'=>'reserved',
+		'purchased'=>'purchased'
+	);
+
 	public static function states(){
 		return static::$_states;
 	}
-	
+
 	public static function defaultState(){
 		return 'available';
 	}
+
 	public static function getAvailable(){
 		$conditions = array('state'=>'available');
 		return static::all(compact('conditions'));
 	}
+
 	public static function releaseExpired(){
 		$data = array('$set'=> array('state'=>'available', 'expires'=>null, 'purchase_id'=> null));
-		$conditions = array('state'=> 'reserved', 'expires'=>array('$lt' => new \MongoDate(time())));
+		$conditions = array('state'=> 'reserved',
+			'expires'=>array('$lt' => new \MongoDate( time() ))
+		);
 		return static::update( $data , $conditions);
 	}
+
 	public static function release($customer_id, $offer_id){
 		$command = array(
-			'findAndModify' => static::meta('source'), 
+			'findAndModify' => static::meta('source'),
 			'query' => array(
 				'offer_id' => new \MongoId($offer_id),
 				'state' => 'reserved'
-			), 
+			),
 			'update'=> array(
 				'$set' => array(
 					'state'=> 'available',
@@ -44,43 +54,43 @@ class Inventories extends \chowly\extensions\data\Model{
 				)
 			)
 		);
-		
+
 		$result = static::connection()->connection->command($command);
-		
-		if(isset($result['errmsg'])){
+
+		if (isset($result['errmsg'])){
 			throw new InventoryException($result['errmsg']);
 		}
 
 		$inventory = new \lithium\data\entity\Document();
 		$inventory->set($result['value']);
-
 		return $inventory;
 	}
+
 	/**
-	 * 
 	 * Reserve a inventory item for a limited duration.
-	 * @param var $customer_id
 	 * @param var $offer_id
+	 * @param var $customer_id
 	 * @todo Add indexes to inventory
 	 */
 	public static function reserve($offer_id, $customer_id){
 		$command = array(
-			'findAndModify' => static::meta('source'), 
+			'findAndModify' => static::meta('source'),
 			'query' => array(
 				'offer_id' => new \MongoId($offer_id),
 				'state' => 'available'
-			), 
+			),
 			'update'=> array(
 				'$set' => array(
 					'state'=> 'reserved',
 					'customer_id' => $customer_id,
-					'expires' => new \MongoDate(time() + 20 * 60) // 15 minutes to buy the offer at the UI, 5 minutes buffer
+					//15 minutes to buy the offer at the UI, 5 minutes buffer
+					'expires' => new \MongoDate(time() + 20 * 60)
 				)
 			)
 		);
 		$result = static::connection()->connection->command($command);
-		
-		if(isset($result['errmsg'])){
+
+		if (isset($result['errmsg'])){
 			throw new InventoryException($result['errmsg']);
 		}
 
@@ -89,31 +99,33 @@ class Inventories extends \chowly\extensions\data\Model{
 
 		return $inventory;
 	}
+
 	public static function secure($inventory_id){
 		$command = array(
-			'findAndModify' => static::meta('source'), 
+			'findAndModify' => static::meta('source'),
 			'query' => array(
-				'_id' => $inventory_id,
-			), 
+				'_id' => $inventory_id
+			),
 			'update'=> array(
 				'$set' => array(
 					'expires' => new \MongoDate(time() + 15 * 60) //15 minutes of "security"
 				)
 			)
 		);
-		
+
 		$result = static::connection()->connection->command($command);
-		if(isset($result['errmsg'])){
+		if (isset($result['errmsg'])){
 			throw new InventoryException($result['errmsg']);
-		}		
+		}
 		return true;
 	}
+
 	public static function purchase($purchase_id, $inventory_id){
 		$command = array(
-			'findAndModify' => static::meta('source'), 
+			'findAndModify' => static::meta('source'),
 			'query' => array(
-				'_id' => new \MongoId($inventory_id),
-			), 
+				'_id' => new \MongoId($inventory_id)
+			),
 			'update'=> array(
 				'$set' => array(
 					'state' => 'purchased',
@@ -121,20 +133,21 @@ class Inventories extends \chowly\extensions\data\Model{
 				)
 			)
 		);
-		
+
 		$result = static::connection()->connection->command($command);
-		if(isset($result['errmsg'])){
+		if (isset($result['errmsg'])){
 			throw new InventoryException($result['errmsg']);
 		}
 		return true;
 	}
+
 	public static function createForOffer($offer_id){
 		$inventory = static::create();
 		$inventory->state = static::defaultState();
 		$inventory->offer_id = $offer_id;
 		return $inventory->save();
 	}
-	
+
 	public static function deleteForOffer($offer_id){
 		$conditions = array(
 			'offer_id' => $offer_id,
@@ -143,4 +156,5 @@ class Inventories extends \chowly\extensions\data\Model{
 		return static::remove($conditions);
 	}
 }
+
 ?>
