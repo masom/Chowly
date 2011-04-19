@@ -8,13 +8,16 @@
 namespace chowly\extensions\action;
 
 use lithium\net\http\Router;
+use lithium\core\Environment;
 use lithium\template\View;
 use lithium\storage\Session;
 use chowly\models\Carts;
+use chowly\models\GenericAnalytics;
 
 class Controller extends \lithium\action\Controller{
 
 	protected $Cart;
+	protected $requestDate;
 
 	protected function _init(){
 		parent::_init();
@@ -29,6 +32,8 @@ class Controller extends \lithium\action\Controller{
 			);
 		}
 
+		$this->requestDate = new \MongoDate();
+
 		$conditions = array('_id' => Session::read('cart.id'));
 		$this->Cart = Carts::first(compact('conditions'));
 
@@ -37,6 +42,8 @@ class Controller extends \lithium\action\Controller{
 			$this->Cart->_id = new \MongoId();
 			Session::write('cart.id', $this->Cart->_id);
 		}
+
+		GenericAnalytics::log($this->Cart->_id, $this->request, $this->requestDate);
 	}
 
 	/**

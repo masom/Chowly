@@ -9,6 +9,7 @@ namespace chowly\controllers;
 
 use chowly\models\Offers;
 use chowly\models\Venues;
+use chowly\models\ViewAnalytics;
 use chowly\extensions\data\OfferException;
 use chowly\extensions\data\InventoryException;
 
@@ -35,6 +36,7 @@ class OffersController extends \chowly\extensions\action\Controller{
 	}
 
 	public function view(){
+
 		if (!$this->request->id && !$this->request->slug){
 			FlashMessage::set("Missing data.");
 			return $this->redirect(array("Offers::index"));
@@ -52,6 +54,8 @@ class OffersController extends \chowly\extensions\action\Controller{
 			FlashMessage::set("The specified offer does not exists.");
 			return $this->redirect(array("Offers::index"));
 		}
+
+		ViewAnalytics::log($this->Cart->_id, $offer->_id, $this->request, $this->requestDate);
 
 		$conditions = array('_id' => $offer->venue_id);
 		$venue = Venues::first(compact('conditions'));
