@@ -7,12 +7,11 @@
 		<div style="margin-top: 20px;">
 			<?php if($emailSent):?>
 				<p>An email has been sent to <?=$purchase->email;?></p>
-				<p>If you do not receive a email, please check your Spam/Junk folders.</p>
-				<p>If there is still no email after 30 minutes, please contact Chowly support: support@chowly.com</p>
+				<p>If you do not receive an email, please check your Spam/Junk folders.</p>
 			<?php else:?>
 				<p>An error occured while sending the email. Make sure you download your coupon (following the link bellow) and save/print the PDF right away.</p>
-				<p><?=$this->html->link('Download your Coupon', array('Purchases::download', 'id'=> $purchase->_id, 'type'=>'pdf'));?></p>
 			<?php endif;?>
+			<p><?=$this->html->link('Download your Coupon', array('Purchases::download', 'id'=> $purchase->_id, 'type'=>'pdf'));?></p>
 		</div>
 		<table cellspacing="0" cellpadding="0">
 			<tr><td>Purchase id</td><td><?=$purchase->_id;?></td></tr>
