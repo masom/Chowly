@@ -24,7 +24,6 @@ ul#panel li a:hover{
 	<span>Dashboard</span>
 </div>
 <div id="content-wrapper">
-	
 		<ul id="panel">
 			<li style="font-weight: bold; font-size: 16px;">Menu</li>
 		<?php if($user->role == 'admin'):?>

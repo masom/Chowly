@@ -280,6 +280,12 @@ div#content-wrapper{
 	padding-top: 1px;
 	padding-bottom: 1px;
 }
+div#content-wrapper a{
+	color: #00a8e6;
+}
+div#content-wrapper a:hover{
+	color: #E67700;	
+}
 div#header{
 	height: 90px;
 	background: url(/img/logo-bg.png) no-repeat;

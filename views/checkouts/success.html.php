@@ -3,21 +3,23 @@
 </div>
 <div id="content-wrapper">
 	<div style="margin-left: auto; margin-right: auto; margin-top: 20px; width: 800px">
-		<h3>Your purchase has been processed.</h3>
-		<div style="margin-top: 20px;">
+		<div style="margin-top: 40px;">
+			<p style="font-weight: bold; font-size: 22px; text-align: center;"><?=$this->html->link('Download your voucher', array('Purchases::download', 'id'=> $purchase->_id, 'type'=>'pdf'));?></p>
+			<div style="font-size: 11px; text-align: center; margin-left: auto; margin-right: auto; width: 600px;">
 			<?php if($emailSent):?>
-				<p>An email has been sent to <?=$purchase->email;?></p>
-				<p>If you do not receive an email, please check your Spam/Junk folders.</p>
+				<p>We have also sent an email to <?=$purchase->email;?>. Please check your Spam/Junk folders if it does not appear in your inbox.</p>
 			<?php else:?>
-				<p>An error occured while sending the email. Make sure you download your coupon (following the link bellow) and save/print the PDF right away.</p>
+				<p style="background-color: #FFE91A; border: 1px solid #FFB91A;">We could not send a confirmation email, make sure you download your coupon and save/print the PDF right away.</p>
 			<?php endif;?>
-			<p><?=$this->html->link('Download your Coupon', array('Purchases::download', 'id'=> $purchase->_id, 'type'=>'pdf'));?></p>
+			<p>Questions? Comments? Problems? Contact Chowly at <a href="mailto:support@chowly.com">support@chowly.com</a></p>
+			</div>
 		</div>
-		<table cellspacing="0" cellpadding="0">
-			<tr><td>Purchase id</td><td><?=$purchase->_id;?></td></tr>
-			<tr><td>date</td><td><?=date('Y-m-d H:i:s', $purchase->created->sec);?></td></tr>
-			<tr><td>Transaction id</td><td><?=$purchase->trans_id;?></td></tr>
-			<tr><td>Auth $</td><td><?=$purchase->auth;?></td></tr>
-		</table>
+		<div style="width: 400px; margin-left: auto; margin-right: auto; text-align: center; margin-top: 30px;">
+			<table cellspacing="0" cellpadding="0">
+				<tr><td>#</td><td><?=$purchase->_id;?></td></tr>
+				<tr><td>Date</td><td><?=date('Y-m-d H:i:s', $purchase->created->sec);?></td></tr>
+				<tr><td>Transaction</td><td><?=$purchase->trans_id;?></td></tr>
+			</table>
+		</div>
 	</div>
 </div>

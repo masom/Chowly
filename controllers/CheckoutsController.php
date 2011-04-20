@@ -23,6 +23,12 @@ use Swift_Attachment;
 
 class CheckoutsController extends \chowly\extensions\action\Controller{
 
+	public function success(){ 
+		$purchase = Purchases::create();
+		$emailSent = true;
+		return compact('purchase','emailSent');
+	}
+
 	protected function _init(){
 		parent::_init();
 		/** TODO: lets wait before requiring this
