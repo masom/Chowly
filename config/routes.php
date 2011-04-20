@@ -36,7 +36,6 @@ if (!Environment::is('production')) {
  * to use (in this case, /app/views/pages/home.html.php)...
  */
 
-Router::connect('/success', 'Checkouts::success');
 Router::connect('/', 'Offers::index');
 Router::connect('/login', 'Users::login');
 Router::connect('/logout', 'Users::logout');
