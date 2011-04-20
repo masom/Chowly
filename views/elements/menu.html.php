@@ -13,7 +13,7 @@
 		<?=$this->html->link('Venues', array('Venues::index',$user['role']=>true));?>
 		&nbsp;|&nbsp;
 	<?php endif;?>
-<?=$this->html->link('Your Profile',array('Users::view'));?>
+<?=$this->html->link('Dashboard',array('Users::dashboard'));?>
 &nbsp;|&nbsp;
 <?=$this->html->link('Logout',array('Users::logout'));?>
 </div>

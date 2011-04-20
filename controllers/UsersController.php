@@ -13,7 +13,15 @@ use lithium\security\Auth;
 use lithium\storage\Session;
 
 class UsersController extends \chowly\extensions\action\Controller{
+	public function dashboard(){
+		if(!Auth::check('user')){
+			FlashMessage::set('Only logged-in users can access this page.');
+			return $this->redirect('Users::login');
+		}
 
+		$user = Users::find(Session::read('user._id'));
+		return compact('user');
+	}
 	public function admin_index(){
 		$limit = 20;
 		$page = $this->request->page ?: 1;
@@ -129,7 +137,7 @@ class UsersController extends \chowly\extensions\action\Controller{
 	public function login(){
 		if (!empty($this->request->data)){
 			if (Auth::check('user', $this->request)){
-				return $this->redirect('Offers::index');
+				return $this->redirect('Users::dashboard');
 			}else{
 				FlashMessage::set("Wrong email or password.");
 			}

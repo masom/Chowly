@@ -38,38 +38,27 @@ if (!Environment::is('production')) {
 
 Router::connect('/', 'Offers::index');
 
-
 Router::connect('/login', 'Users::login');
 Router::connect('/logout', 'Users::logout');
 Router::connect('/register', 'Users::add');
+Router::connect('/dashboard', 'Users::dashboard');
 
 //TODO: add only when auth
 if(Session::read('user')){
-	Router::connect('/profile', 'Users::view');
 	Router::connect('/settings', 'Users::edit');
-	
-	if(Session::read('user.role') == 'admin'){
+
+	if (Session::read('user.role') == 'admin'){
 		Router::connect('/admin/{:controller}/{:action}/page:{:page:[0-9]+}', array('admin' => true), array('persist' => array('controller')));
 		Router::connect('/admin/{:controller}/{:action}/{:id:[0-9a-f]{24}}.{:type}', array('id' => null, 'admin' => true), array('persist' => array('controller')));
 		Router::connect('/admin/{:controller}/{:action}/{:id:[0-9a-f]{24}}', array('admin' => true), array('persist' => array('controller')));
 		Router::connect('/admin/{:controller}/{:action}/{:args}', array('admin' => true), array('persist' => array('controller')));
 	}
-	if(in_array(Session::read('user.role'), array('admin','venue','staff'))){
+	if (in_array(Session::read('user.role'), array('admin','venue','staff'))){
 		Router::connect('/offers/add/{:id:[0-9a-f]{24}}', array('controller'=>'Offers','action'=>'add'));
 		Router::connect('/offers/publish/{:id:[0-9a-f]{24}}', 'Offers::publish');
 		Router::connect('/offers/unpublish/{:id:[0-9a-f]{24}}', 'Offers::unpublish');
 	}
 }
-
-
-// Finally, connect the default routes.
-
-/**
-Router::connect('/{:controller}/{:action}/{:id:[0-9a-f]{24}}.{:type}', array('id' => null));
-Router::connect('/{:controller}/{:action}/{:id:[0-9a-f]{24}}');
-Router::connect('/{:controller}/{:action}/{:args}');
-*/
-
 
 Router::connect('/cart/remove/{:id:[0-9a-f]{24}}', 'Carts::remove');
 
@@ -90,8 +79,6 @@ Router::connect('/contact/{:args}', 'Tickets::add');
 /**
  * ...and connect the rest of 'Pages' controller's urls.
  */
-
-
 Router::connect('/{:args}', 'Pages::view');
 
 ?>
