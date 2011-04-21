@@ -25,11 +25,12 @@ $expiration = ($offer->expiry) ? $offer->expiry->sec : null;
 			<?php endif;?>
 			<li id="offer-buy"><?php echo ($offer->availability) ? $this->html->link($this->html->image('buydeal-button.png'), array('Offers::buy', 'id'=>$offer->_id), array('id'=>'offer_buy', 'escape'=>false)): null; ?></li>
 		</ul>
-		<h3>Restrictions</h3>
+		<h3>Limitations</h3>
 		<ul id="offer-restrictions">
-			<li>Only valid for dinner.</li>
-			<li>Not valid on holidays.</li>
-			<li>Cannot be combined with another offer.</li>
+			<?php if($offer->limitations): $limitations = preg_split( '/\r\n|\r|\n/', $offer->limitations); else: $limitations = array(); endif;?>
+			<?php foreach($limitations as $limitation):?>
+				<li><?=$limitation;?></li>
+			<?php endforeach;?>
 		</ul>
 	</div>
 	
@@ -43,10 +44,10 @@ $expiration = ($offer->expiry) ? $offer->expiry->sec : null;
 		<p style="margin-top: 20px;"><?php echo nl2br($h($venue->description));?></p>
 	</div>
 	<br style="clear: both;" />
-	<div id="map_container" style="margin-top: 20px; margin-bottom: 10px; margin-left: auto; margin-right: auto;">
+	<div id="map_container" style="margin-top: 20px; margin-bottom: 10px;">
 		<h3>Location</h3>
-		<div id="map_canvas" style="width: 750px; height: 400px;"></div>
-		<div id="map_error" style="margin-left: auto; margin-right: auto; width: 500px; margin-top: 10px;">
+		<div id="map_canvas" style="width: 700px; margin-top: 20px; height: 400px; margin-left: auto; margin-right: auto;"></div>
+		<div id="map_error" style="display: none; margin-left: auto; margin-right: auto; width: 500px; margin-top: 10px;">
 			<div style="padding: 10px; border: 1px solid #B9121B; background-color: #FF1914; color:#ffffff; text-align: center;">
 				Sorry, we cannot display a map of the restaurant location.
 			</div>
@@ -86,6 +87,7 @@ function initialize_maps() {
 			});
 		}else{
 			$('#map_canvas').remove();
+			$('#map_error').show();
 		}
 	});
 }
