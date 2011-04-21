@@ -171,7 +171,7 @@ class Offers extends \chowly\extensions\data\Model{
 
 		$created = 0;
 		for ($i = 0; $i < $entity->inventoryCount; $i++){
-			if (Inventories::createForOffer($entity->_id)){
+			if (Inventories::createForOffer($entity->_id, $i)){
 				$created++;
 			}else{
 				Logger::write('error', "Could not create inventory item for {$entity->_id}.");

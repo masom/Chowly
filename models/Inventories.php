@@ -146,8 +146,19 @@ class Inventories extends \chowly\extensions\data\Model{
 		return true;
 	}
 
-	public static function createForOffer($offer_id){
+	/**
+	 * Create a inventory item for a offer
+	 * @param var $offer_id
+	 * @param numeric $sequence_number
+	 * @return Entity A inventory entity
+	 */
+	public static function createForOffer($offer_id, $sequence_number = null){
 		$inventory = static::create();
+
+		if ($i){
+			$inventory->sequence_number = $sequence_number;
+		}
+
 		$inventory->state = static::defaultState();
 		$inventory->offer_id = $offer_id;
 		return $inventory->save();
