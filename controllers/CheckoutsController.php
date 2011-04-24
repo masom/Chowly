@@ -89,7 +89,10 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 				$purchase->process($offers);
 			}catch(\Exception $e){
 				unset($purchase->cc_number, $purchase->cc_sc);
-				Logger::write('notice', "Could not process purchase due to: " . $e->getMessage());
+				Logger::write('notice',
+					"C[{$cart->_id}] Could not process purchase due to: " . $e->getMessage(),
+					array('name'=>'transactions')
+				);
 				FlashMessage::set("Some processing errors occured.");
 
 				$this->Cart->endTransaction();
@@ -99,15 +102,18 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			unset($purchase->cc_number, $purchase->cc_sc);
 
 			if (!$purchase->isCompleted()){
-				Logger::write('notice', "Transaction not completed due to : {$purchase->error}");
+				Logger::write('notice',
+					"C[{$cart->_id}] Transaction failed: {$purchase->error}.",
+					array('name'=>'transactions')
+				);
 				FlashMessage::set("The purchase could not be completed.");
 
 				$this->Cart->endTransaction();
 				return compact('purchase', 'provinces');
 			}
 
-			$message = "TC E[{$purchase->email}] I[{$purchase->_id}] P[{$purchase->price}]";
-			Logger::write('info', $message);
+			$message = "P[{$purchase->_id}] Transaction completed.";
+			Logger::write('info', $message, array('name'=>'transactions'));
 
 			$this->_markItemsPurchased($purchase);
 
@@ -117,7 +123,10 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			try{
 				$path = Utils::getPdf($purchase, $offers, $venues);
 			} catch (\Exception $e){
-				Logger::write('error', "Could not generate pdf due to: " . $e->getMessage());
+				Logger::write('error',
+					"P[{$purchase->_id}] Could not generate pdf due to: " . $e->getMessage(),
+					array('name'=>'transactions')
+				);
 			}
 
 			$emailSent = $this->_sendEmail($purchase, $path);
@@ -156,11 +165,10 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			try{
 				Inventories::purchase($purchase->_id, $item->inventory_id);
 			}catch(InventoryException $e){
-				$message = "Could not mark inventory as purchased.";
-				$message .= "Purchase: {$purchase->_id}";
-				$message .= " Item: {$item->inventory_id}";
+				$message = "P[{$purchase->_id}]";
+				$message .= " Could not mark inventory [{$item->inventory_id}] as purchased.";
 				$message .= " Reason: " . $e->getMessage();
-				Logger::write('warning', $message);
+				Logger::write('error', $message, array('name'=>'transactions'));
 			}
 		}
 	}
@@ -191,7 +199,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 				Inventories::secure($item->inventory_id);
 			}catch(InventoryException $e){
 				$message = "Could not secure {$item->inventory_id} Reason: " . $e->getMessage();
-				Logger::write('warning', $message);
+				Logger::write('warning', $message, array('name'=>'transactions'));
 				//TODO: Do we fail at that point or still sell the item?
 			}
 		}
@@ -221,7 +229,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		}
 
 		if (!$mailer->send($message)){
-			Logger::write('error', "Could not send email for purchase {$purchase->_id}");
+			Logger::write('error', "P[{$purchase->_id}] Could not send email", array('name'=>'transactions'));
 			return false;
 		}
 

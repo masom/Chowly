@@ -1,5 +1,5 @@
 <div id="ribbon">
-	<span>Ottawa Restaurant Deals</span>
+	<span>Tonight's Deals</span>
 </div>
 <div id="content-wrapper">
 	<div class="offer-name-ribbon"></div>
@@ -16,7 +16,6 @@
 			<div class="offer-name-ribbon"></div>
 			<ul class="offers-list">
 		<?php endif;?>
-		
 			<?php $listyle = ($style) ? 'style="background-image: url(/img/dealbg-grey.png);"' : 'style="width: 280px; overflow:hidden;"';?>
 			<li id="offer-<?=$offer->_id;?>" class="offer" <?php echo $listyle?>>
 				<div class="offer-info">
@@ -40,7 +39,6 @@
 		<?php $i++; $style = !$style;?>
 		<?php endforeach;?>
 	</ul>
-	
 </div>
 <script type="text/javascript">
 	<?php foreach($offers as $offer):?>

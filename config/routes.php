@@ -42,7 +42,6 @@ Router::connect('/logout', 'Users::logout');
 Router::connect('/register', 'Users::add');
 Router::connect('/dashboard', 'Users::dashboard');
 
-//TODO: add only when auth
 if(Session::read('user')){
 	Router::connect('/settings', 'Users::edit');
 

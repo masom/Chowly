@@ -155,7 +155,7 @@ class Inventories extends \chowly\extensions\data\Model{
 	public static function createForOffer($offer_id, $sequence_number = null){
 		$inventory = static::create();
 
-		if ($i){
+		if ($sequence_number){
 			$inventory->sequence_number = $sequence_number;
 		}
 

@@ -11,7 +11,10 @@ use lithium\net\http\Media;
  * Then, set up a basic logging configuration that will write to a file.
  */
 Logger::config(array(
-	'error' => array('adapter' => 'File')
+	'default' => array('adapter' => 'File'),
+	'transactions' => array('adapter' => 'File',
+		'file' => function($data, $config) { return "transactions.log"; }
+	)
 ));
 
 
