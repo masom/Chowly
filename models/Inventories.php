@@ -11,10 +11,11 @@ use chowly\extensions\data\InventoryException;
 
 class Inventories extends \chowly\extensions\data\Model{
 	protected $_schema = array(
-		'_id' => array('type'=>'id'),
-		'offer_id' => array('type'=>'id'),
-		'customer_id' => array('type'=>'_id'),
-		'state' => array('type'=>'string', 'default' => 'available')
+		'_id' => array('type' => 'id'),
+		'offer_id' => array('type' => 'id'),
+		'customer_id' => array('type' => 'id'),
+		'state' => array('type' => 'string', 'default' => 'available'),
+		'expires' => array('type' => 'date')
 	);
 
 	protected static $_states = array(
@@ -39,16 +40,24 @@ class Inventories extends \chowly\extensions\data\Model{
 	public static function releaseExpired(){
 		$data = array('$set'=> array('state'=>'available', 'expires'=>null, 'purchase_id'=> null));
 		$conditions = array('state'=> 'reserved',
-			'expires'=>array('$lt' => new \MongoDate( time() ))
+			'expires'=> array('$lt' => new \MongoDate())
 		);
 		return static::update( $data , $conditions);
 	}
 
+	/**
+	 * Releases inventory for a given customer and offer
+	 * @param var $customer_id
+	 * @param var $offer_id
+	 * @throws InventoryException
+	 * @return object Inventory instance
+	 */
 	public static function release($customer_id, $offer_id){
 		$command = array(
 			'findAndModify' => static::meta('source'),
 			'query' => array(
-				'offer_id' => new \MongoId($offer_id),
+				'customer_id' => $customer_id,
+				'offer_id' => $offer_id,
 				'state' => 'reserved'
 			),
 			'update'=> array(

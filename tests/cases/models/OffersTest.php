@@ -4,37 +4,37 @@ namespace chowly\tests\cases\models;
 use chowly\models\Offer;
 use \lithium\data\entity\Document;
 
-class OfferTest extends \lithium\test\Unit{
+class OffersTest extends \lithium\test\Unit{
 
 	public function setUp() {
-		Offer::config(array('connection' => 'test'));
+		Offers::config(array('connection' => 'test'));
 	}
 
 	public function tearDown() {
-		Offer::remove();
+		Offers::remove();
 	}
 	
 	public function testCreate() {
-		$offer = Offer::create();
+		$offer = Offers::create();
 		$this->assertTrue($offer instanceof Document);
 	}
 	
 	public function testDefaultState(){
-		$this->assertTrue(in_array(Offer::defaultState(), Offer::states()));
+		$this->assertTrue(in_array(Offers::defaultState(), Offers::states()));
 	}
 	
 	public function testCreateWithoutName(){
-		$offer = Offer::create();
+		$offer = Offers::create();
 		$offer->name = null;
-		$offer->state = Offer::defaultState();
+		$offer->state = Offers::defaultState();
 		$offer->starts = new \MongoDate();
 		$offer->ends = new \MongoDate();
 		$offer->venue_id = new \MongoId();
 		$offer->cost = 22;
 		$this->assertFalse($offer->save());
 		
-		$offer = Offer::create();
-		$offer->state = Offer::defaultState();
+		$offer = Offers::create();
+		$offer->state = Offers::defaultState();
 		$offer->starts = new \MongoDate();
 		$offer->ends = new \MongoDate();
 		$offer->venue_id = new \MongoId();
@@ -43,18 +43,18 @@ class OfferTest extends \lithium\test\Unit{
 	}
 	
 	public function testCreateWithoutAvailability(){
-		$offer = Offer::create();
+		$offer = Offers::create();
 		$offer->name = "test";
-		$offer->state = Offer::defaultState();
+		$offer->state = Offers::defaultState();
 		$offer->starts = new \MongoDate();
 		$offer->ends = new \MongoDate();
 		$offer->venue_id = new \MongoId();
 		$offer->cost = 22;
 		$this->assertFalse($offer->save());
 		
-		$offer = Offer::create();
+		$offer = Offers::create();
 		$offer->name = "test";
-		$offer->state = Offer::defaultState();
+		$offer->state = Offers::defaultState();
 		$offer->starts = new \MongoDate();
 		$offer->ends = new \MongoDate();
 		$offer->venue_id = new \MongoId();
@@ -65,7 +65,7 @@ class OfferTest extends \lithium\test\Unit{
 	public function testCurrent(){
 		
 		//Past
-		$offer = Offer::create();
+		$offer = Offers::create();
 		$offer->state = 'published';
 		$offer->starts = new \MongoDate(time() - 120);
 		$offer->ends = new \MongoDate(time() - 60);
@@ -76,7 +76,7 @@ class OfferTest extends \lithium\test\Unit{
 		$this->assertTrue($offer->save());
 		
 		//Current
-		$offer = Offer::create();
+		$offer = Offers::create();
 		$offer->state = 'published';
 		$offer->starts = new \MongoDate(time() - 60);
 		$offer->ends = new \MongoDate(time() + 60);
@@ -88,7 +88,7 @@ class OfferTest extends \lithium\test\Unit{
 		$good = $offer;
 		
 		//Future
-		$offer = Offer::create();
+		$offer = Offers::create();
 		$offer->state = 'published';
 		$offer->starts = new \MongoDate(time() + 360);
 		$offer->ends = new \MongoDate(time() + 360);
@@ -98,12 +98,12 @@ class OfferTest extends \lithium\test\Unit{
 		$offer->availability = 11;
 		$this->assertTrue($offer->save());
 
-		$this->assertEqual(Offer::current()->to('array'), array($good->to('array')) );
+		$this->assertEqual(Offers::current()->to('array'), array($good->to('array')) );
 	}
 
 	public function testReserveNonExistent(){
 		$this->expectException();
-		$this->assertFalse(Offer::reserve(new \MongoId(), new \MongoId()));
+		$this->assertFalse(Offers::reserve(new \MongoId(), new \MongoId()));
 	}
 }
 ?>
