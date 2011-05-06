@@ -60,7 +60,8 @@ class Carts extends \lithium\data\Model{
 	 * @return var The mongodb command structure.
 	 */
 	protected function _transaction($entity, $from = 'default', $to = 'transaction'){
-		return array( 'findAndModify' => static::meta('source'),
+		return array(
+			'findAndModify' => static::meta('source'),
 			'query' => array( 
 				'_id' => $entity->_id,
 				'state' => $from
