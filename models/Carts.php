@@ -59,17 +59,16 @@ class Carts extends \lithium\data\Model{
 	 * @param var $to
 	 * @return var The mongodb command structure.
 	 */
-	private function _transaction($entity, $from = 'default', $to = 'transaction'){
-		return array(
-			'findAndModify' => static::meta('source'),
-			'query' => array(
+	protected function _transaction($entity, $from = 'default', $to = 'transaction'){
+		return array( 'findAndModify' => static::meta('source'),
+			'query' => array( 
 				'_id' => $entity->_id,
 				'state' => $from
 			),
 			'update'=> array(
 				'$set' => array(
-					'state'=> $to
-				)
+					'state'=> $to 
+				) 
 			)
 		);
 	}
@@ -80,11 +79,11 @@ class Carts extends \lithium\data\Model{
 	 * @param var $inventory_id Inventory item
 	 * @param var $expires Item expiration date as a UNIX timestamp
 	 */
-	private function _newItem($offer_id, $inventory_id, $expires){
+	protected function _newItem($offer_id, $inventory_id, $expires){
 		return array(
-			'_id'=> new \MongoId($offer_id),
-			'inventory_id'=>$inventory_id,
-			'expires'=> $expires
+			'_id' => $offer_id,
+			'inventory_id' => $inventory_id,
+			'expires' => $expires
 		);
 	}
 

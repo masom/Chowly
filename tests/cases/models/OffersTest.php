@@ -1,7 +1,7 @@
 <?php
 namespace chowly\tests\cases\models;
 
-use chowly\models\Offer;
+use chowly\models\Offers;
 use \lithium\data\entity\Document;
 
 class OffersTest extends \lithium\test\Unit{

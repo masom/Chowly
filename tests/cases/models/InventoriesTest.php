@@ -145,6 +145,10 @@ class InventoriesTest extends \lithium\test\Unit{
 		$this->assertTrue(Inventories::deleteForOffer($offer_id));
 		$this->assertEqual(1, count(Inventories::all()));
 		
+		//Try deleting for a `random` id.
+		Inventories::deleteForOffer(new \MongoId());
+		$this->assertEqual(1, count(Inventories::all()));
+		
 	}
 }
 
