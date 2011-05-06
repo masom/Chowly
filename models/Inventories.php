@@ -56,15 +56,10 @@ class Inventories extends \chowly\extensions\data\Model{
 		$command = array(
 			'findAndModify' => static::meta('source'),
 			'query' => array(
-				'customer_id' => $customer_id,
-				'offer_id' => $offer_id,
-				'state' => 'reserved'
+				'customer_id' => $customer_id, 'offer_id' => $offer_id, 'state' => 'reserved'
 			),
-			'update'=> array(
-				'$set' => array(
-					'state'=> 'available',
-					'customer_id' => null,
-					'expires' => null
+			'update'=> array( '$set' => array(
+					'state'=> 'available', 'customer_id' => null, 'expires' => null
 				)
 			)
 		);
@@ -90,11 +85,9 @@ class Inventories extends \chowly\extensions\data\Model{
 		$command = array(
 			'findAndModify' => static::meta('source'),
 			'query' => array(
-				'offer_id' => new \MongoId($offer_id),
-				'state' => 'available'
+				'offer_id' => $offer_id, 'state' => 'available'
 			),
-			'update'=> array(
-				'$set' => array(
+			'update'=> array('$set' => array(
 					'state'=> 'reserved',
 					'customer_id' => $customer_id,
 					//15 minutes to buy the offer at the UI, 5 minutes buffer
@@ -117,11 +110,8 @@ class Inventories extends \chowly\extensions\data\Model{
 	public static function secure($inventory_id){
 		$command = array(
 			'findAndModify' => static::meta('source'),
-			'query' => array(
-				'_id' => $inventory_id
-			),
-			'update'=> array(
-				'$set' => array(
+			'query' => array( '_id' => $inventory_id ),
+			'update'=> array( '$set' => array(
 					'expires' => new \MongoDate(time() + 15 * 60) //15 minutes of "security"
 				)
 			)
@@ -137,13 +127,9 @@ class Inventories extends \chowly\extensions\data\Model{
 	public static function purchase($purchase_id, $inventory_id){
 		$command = array(
 			'findAndModify' => static::meta('source'),
-			'query' => array(
-				'_id' => new \MongoId($inventory_id)
-			),
-			'update'=> array(
-				'$set' => array(
-					'state' => 'purchased',
-					'purchase_id' => $purchase_id
+			'query' => array( '_id' => $inventory_id ),
+			'update'=> array( '$set' => array(
+					'state' => 'purchased', 'purchase_id' => $purchase_id
 				)
 			)
 		);
@@ -159,9 +145,10 @@ class Inventories extends \chowly\extensions\data\Model{
 	 * Create a inventory item for a offer
 	 * @param var $offer_id
 	 * @param numeric $sequence_number
-	 * @return Entity A inventory entity
+	 * @return boolean
 	 */
 	public static function createForOffer($offer_id, $sequence_number = null){
+
 		$inventory = static::create();
 
 		if ($sequence_number){
@@ -174,7 +161,7 @@ class Inventories extends \chowly\extensions\data\Model{
 	}
 
 	public static function deleteForOffer($offer_id){
-		$conditions = array(
+		$conditions = array( 
 			'offer_id' => $offer_id,
 			'state' => array('available', 'reserved')
 		);

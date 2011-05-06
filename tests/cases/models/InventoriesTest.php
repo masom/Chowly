@@ -80,10 +80,13 @@ class InventoriesTest extends \lithium\test\Unit{
 		
 		$released = Inventories::release($customer_id, $inventory->offer_id);
 		$this->assertTrue($released instanceof Document);
-		$this->assertEqual(1, Inventories::getAvailable());
+		$this->assertEqual(1, count(Inventories::getAvailable()));
+		
+		$this->expectException();
+		$released = Inventories::release($customer_id, new \MongoId());
 	}
-	
-	
+
+
 	public function testReserve(){
 		$inventory = Inventories::create();
 		$inventory->offer_id = new \MongoId();
@@ -119,5 +122,30 @@ class InventoriesTest extends \lithium\test\Unit{
 		$this->expectException();
 		Inventories::purchase(new \MongoId(), new \MongoId());
 	}
+	
+	public function testCreateForOffer(){
+		$this->assertTrue(Inventories::createForOffer(new \MongoId()));
+		
+		//Generate with a `random` sequence number. Randomness from my fingers.
+		$this->assertTrue( Inventories::createForOffer(new \MongoId(), 3424));
+	}
+	public function testDeleteForOffer(){
+		$offer_id = new \MongoId();
+		for ($i = 0; $i < 10; $i++){
+			$inventory = Inventories::create();
+			$inventory->offer_id = $offer_id;
+			$inventory->save();
+		}
+		
+		//Create one that should not be deleted.
+		$inventory = Inventories::create();
+		$inventory->offer_id = new \MongoId();
+		$inventory->save();
+		
+		$this->assertTrue(Inventories::deleteForOffer($offer_id));
+		$this->assertEqual(1, count(Inventories::all()));
+		
+	}
 }
+
 ?>
