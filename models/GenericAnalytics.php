@@ -10,7 +10,9 @@ namespace chowly\models;
 class GenericAnalytics extends \lithium\data\Model{
 
 	protected $_meta = array('connection'=>'analytics');
-
+	protected $_schema = array(
+		'params' => array('type'=>'array', 'array' => true)
+	);
 	/**
 	 * Logs every request made to chowly.
 	 * @param var $cart_id The cart id we are logging data from
