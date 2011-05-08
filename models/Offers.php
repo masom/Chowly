@@ -82,6 +82,9 @@ class Offers extends \chowly\extensions\data\Model{
 	/**
 	 * Rebuilds the system inventory count
 	 * @throws UnexpectedValueException Thrown when the inventory collection is empty.
+	 * @return integer Possible values:
+	 * 		- 0 : Inventory sold out
+	 * 		- 1 - inf: Number of offers modified.
 	 */
 	public static function rebuildInventory(){
 		Inventories::releaseExpired();
@@ -89,9 +92,12 @@ class Offers extends \chowly\extensions\data\Model{
 
 		if (count($availableInventory) == 0){
 			if (Inventories::count() == 0){
-				throw new UnexpectedValueException('No more inventory.');
+				throw new \UnexpectedValueException('No more inventory.');
 			}
-			static::update(array('availability'=>0));
+			//Update all items as no longer available.
+			$conditions = array('state' => 'published');
+			static::update(array('availability' => 0), $conditions);
+			return 0;
 		}
 
 		$offersInventory = array();
@@ -105,6 +111,7 @@ class Offers extends \chowly\extensions\data\Model{
 		foreach ($offersInventory as $offer_id => $availability){
 			static::update(compact('availability'), array('_id'=>$offer_id));
 		}
+		return $offersInventory;
 	}
 
 	/**

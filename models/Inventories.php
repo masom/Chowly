@@ -151,7 +151,8 @@ class Inventories extends \chowly\extensions\data\Model{
 
 		$inventory = static::create();
 
-		if ($sequence_number){
+		//Need to do type checking to differentiate 0 and null
+		if ($sequence_number !== null){
 			$inventory->sequence_number = $sequence_number;
 		}
 
