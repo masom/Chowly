@@ -69,7 +69,7 @@ class OffersTest extends \lithium\test\Unit{
 		$this->assertFalse($offer->save());
 	}
 	public function testCurrent(){
-		
+
 		//Past
 		$offer = Offers::create();
 		$offer->state = 'published';
@@ -80,7 +80,7 @@ class OffersTest extends \lithium\test\Unit{
 		$offer->cost = 22;
 		$offer->availability = 11;
 		$this->assertTrue($offer->save());
-		
+
 		//Current
 		$offer = Offers::create();
 		$offer->state = 'published';
@@ -92,7 +92,7 @@ class OffersTest extends \lithium\test\Unit{
 		$offer->availability = 11;
 		$this->assertTrue($offer->save());
 		$good = $offer;
-		
+
 		//Future
 		$offer = Offers::create();
 		$offer->state = 'published';
@@ -117,54 +117,77 @@ class OffersTest extends \lithium\test\Unit{
 		Offers::rebuildInventory();
 	}
 	public function testRebuildInventorySoldOut(){
-		
+
 		$inventory = Inventories::create();
 		$inventory->offer_id = new \MongoId();
 		$inventory->state = 'reserved';
 		$this->assertTrue($inventory->save());
-		
+
 		//Here we expect no available inventory found.
 		$this->assertEqual(0, Offers::rebuildInventory());
 		
 	}
-	
+	public function testReleaseInventory(){
+
+		$this->assertFalse(Offers::releaseInventory(new \MongoId(), new \MongoId()));
+		
+		$offer = $this->_offerFactory();
+		$offer->availability = 1;
+		$offer->createWithInventory();
+
+		//Verify we cannot release inventory that has not been reserved or sold
+		$conditions = array('offer_id' => $offer->_id);
+		$inventory = Inventories::first(compact('conditions'));
+		$this->assertFalse(Offers::releaseInventory(new \MongoId(), $offer->_id));
+
+		$inventory->state = 'purchased';
+		$inventory->save();
+
+		$this->assertFalse(Offers::releaseInventory(new \MongoId(), $offer->_id));
+
+		//We should be able to release inventory for a offer a customer has reserved.
+		$inventory->state = 'reserved';
+		$inventory->customer_id = new \MongoId();
+		$inventory->save();
+
+		$this->assertTrue(Offers::releaseInventory($inventory->customer_id, $offer->_id));
+	}
 	public function testRebuildInventory(){
 
 		$expected = array();
-		
+
 		$offer = $this->_offerFactory();
 		$offer->state = 'published';
 		$offer->availability = 10;
 		$offer->createWithInventory();
-		
+
 		//Update 5 items to be purchased
 		$data = array('state'=>'purchased', 'expires' => time() - 60 * 30);
 		$conditions = array('sequence_number' => array('$lt' => 5));
 		Inventories::update($data, $conditions);
-		
+
 		$expected[(string)$offer->_id] = 5;
-		
+
 		//Create 2 more offers
 		$offer = $this->_offerFactory();
 		$offer->state = 'published';
 		$offer->availability = 10;
 		$offer->createWithInventory();
-		
+
 		$expected[(string)$offer->_id] = 10;
-		
+
 		$offer = $this->_offerFactory();
 		$offer->state = 'published';
 		$offer->availability = 6;
 		$offer->createWithInventory();
-		
+
 		$expected[(string)$offer->_id] = 6;
-		
+
 		//Update the inventory of 2 offers and let the 3rd one be at default
 		$data = array('state'=>'reserved', 'expires' => new \MongoDate(time() - 60 * 30));
 		$conditions = array('offer_id' => array('$ne' => $offer->_id), 'state' => array('$ne' => 'purchased'));
 		Inventories::update($data, $conditions);
-		
-		debug($expected);
+
 		// We should only have updated 2 offers inventory
 		$this->assertEqual($expected, Offers::rebuildInventory());
 		

@@ -124,7 +124,7 @@ class Offers extends \chowly\extensions\data\Model{
 		try{
 			Inventories::release($cart_id, $offer_id);
 		}catch(InventoryException $e){
-			$message =  "Could not release inventory for the following reason: {$message}";
+			$message =  "Could not release inventory for the following reason: {$e->getMessage()}";
 			Logger::write('error', $message);
 			return false;
 		}
