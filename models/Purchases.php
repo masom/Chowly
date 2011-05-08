@@ -9,7 +9,7 @@ namespace chowly\models;
 
 class Purchases extends \chowly\extensions\data\Model{
 
-	private static $_pdfBasePath = '/resources/purchases';
+	protected static $_pdfBasePath = '/resources/purchases';
 
 	public $error = null;
 	protected $_schema = array(
@@ -94,7 +94,7 @@ class Purchases extends \chowly\extensions\data\Model{
 	 * @param array $options Options sent to parent::validate
 	 */
 	public function validates($entity, array $options = array()){
-		$this->validates['province'][0]['list'] = static::$_provinces;
+		$this->validates['province'][0]['list'] = array_keys(static::$_provinces);
 		return parent::validates($entity,$options);
 	}
 
