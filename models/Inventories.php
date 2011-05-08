@@ -67,7 +67,7 @@ class Inventories extends \chowly\extensions\data\Model{
 		$result = static::connection()->connection->command($command);
 
 		if (isset($result['errmsg'])){
-			throw new InventoryException($result['errmsg']);
+			throw new InventoryException(null, $result['errmsg']);
 		}
 
 		$inventory = new \lithium\data\entity\Document();
@@ -98,7 +98,7 @@ class Inventories extends \chowly\extensions\data\Model{
 		$result = static::connection()->connection->command($command);
 
 		if (isset($result['errmsg'])){
-			throw new InventoryException($result['errmsg']);
+			throw new InventoryException(null,$result['errmsg']);
 		}
 
 		$inventory = new \lithium\data\entity\Document();
@@ -119,7 +119,7 @@ class Inventories extends \chowly\extensions\data\Model{
 
 		$result = static::connection()->connection->command($command);
 		if (isset($result['errmsg'])){
-			throw new InventoryException($result['errmsg']);
+			throw new InventoryException($inventory_id, $result['errmsg']);
 		}
 		return true;
 	}
@@ -136,7 +136,7 @@ class Inventories extends \chowly\extensions\data\Model{
 
 		$result = static::connection()->connection->command($command);
 		if (isset($result['errmsg'])){
-			throw new InventoryException($result['errmsg']);
+			throw new InventoryException($inventory_id, $result['errmsg']);
 		}
 		return true;
 	}

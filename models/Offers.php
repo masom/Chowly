@@ -25,7 +25,7 @@ class Offers extends \chowly\extensions\data\Model{
 		),
 		'availability' => array(
 			array('numeric', 'message'=>'Please enter a number.'),
-			array('inRange', 'upper'=>255,'lower'=>1,
+			array('inRange', 'upper'=>256,'lower'=>0,
 				'message'=>'Please enter a number between 1 and 255')
 		),
 		'venue_id' => array(
@@ -37,7 +37,7 @@ class Offers extends \chowly\extensions\data\Model{
 	);
 
 	protected $_schema = array(
-		'_id' => array('type'=>'id'),
+		'_id' => array('type' => 'id'),
 		'venue_id' => array('type'=>'id'), // The venue
 		'state' => array('type'=>'string', 'default' => 'unpublished'),
 		'name' => array('type' => 'string','null'=>false), // Name of the coupon
@@ -131,6 +131,7 @@ class Offers extends \chowly\extensions\data\Model{
 	 * Reserve an item in the inventory
 	 * @param var $offer_id The offer id
 	 * @param var $cart_id The cart id the item is reserved for.
+	 * @return var Inventory id that got reserved
 	 */
 	public static function reserve($offer_id, $cart_id){
 		$date = new \MongoDate();
@@ -141,22 +142,28 @@ class Offers extends \chowly\extensions\data\Model{
 			'state'=> 'published'
 		);
 
-		$offer = static::first(array('conditions'=> $conditions));
+		$offer = static::first(compact('conditions'));
 		if (!$offer){
 			throw new OfferException("Offer not found.");
 		}
 
+		$error = null;
 		try{
 			$inventory = Inventories::reserve($offer_id, $cart_id);
 			$offer->availability--;
-			if ($offer->availability <= 0){
-				$offer->availability = 0;
-			}
-			$offer->save(null,array('validate'=>false));
-		}catch(InventoryException $e){
+		}catch (InventoryException $e){
 			$offer->availability = 0;
-			$offer->save(null, array('validate' => false));
-			throw $e;
+			$error = $e;
+		}
+
+		if ($offer->availability < 0){
+			$offer->availability = 0;
+		}
+
+		$offer->save(null, array('validate' => false, 'whitelist' => array('availability')));
+
+		if ($error){
+			throw $error;	
 		}
 
 		return $inventory->_id;
@@ -181,6 +188,7 @@ class Offers extends \chowly\extensions\data\Model{
 		if ($created != $entity->inventoryCount){
 			throw new \InventoryException("Only {$created} item created.");
 		}
+		
 		return true;
 	}
 
