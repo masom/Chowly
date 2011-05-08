@@ -11,17 +11,19 @@ class Purchases extends \chowly\extensions\data\Model{
 
 	protected static $_pdfBasePath = '/resources/purchases';
 
-	public $error = null;
 	protected $_schema = array(
 		'_id' => array('type'=>'id'),
 		'customer_id' => array('type'=>'id'),
-		'name'=>array('type'=>'string'),
-		'address'=>array('type'=>'string'),
+		'name' => array('type'=>'string'),
+		'email' => array('type'=>'string'),
+		'address' => array('type'=>'string'),
 		'city' => array('type'=>'string'),
-		'phone'=>array('type'=>'string'),
+		'phone' => array('type'=>'string'),
 		'postal' => array('type'=>'string'),
 		'cc_number' => array('type'=>'string'),
-		'state' => array('type'=>'string'),
+		'cc_sc' => array('type' => 'string'),
+		'status' => array('type' => 'string'),
+		'province' => array('type'=>'string'),
 		'created' => array('type'=>'date'),
 		'updated' => array('type'=>'date'),
 		'offers' => array('type'=>'array', 'array'=>true)
@@ -107,12 +109,9 @@ class Purchases extends \chowly\extensions\data\Model{
 	 */
 	public function process($entity, $offers){
 		if (empty($offers)){
-			$entity->error = "There are no offers matching the cart items.";
-			throw new \Exception();
+			throw new \Exception("There are no offers matching the cart items.");
 		}
-		if ($entity->cc_sc == 999){
-			return false;
-		}
+
 		$entity->price = 0.00;
 
 		foreach ($offers as $offer){
@@ -126,8 +125,7 @@ class Purchases extends \chowly\extensions\data\Model{
 		unset($entity->cc_sc, $entity->cc_e_month, $entity->cc_e_year);
 
 		if (!$entity->save(null,array('validate'=>false))){
-			$this->error = "Transaction Error";
-			throw new \Exception();
+			throw new \Exception("The purchase could not be saved.");
 		}
 		return true;
 	}
@@ -138,9 +136,6 @@ class Purchases extends \chowly\extensions\data\Model{
 	 * @return boolean
 	 */
 	public function isCompleted($entity){
-		if ($entity->cc_sc == 999){
-			return false;
-		}
 		return ($entity->status == 'completed') ? true : false;
 	}
 
