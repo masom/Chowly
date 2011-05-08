@@ -43,7 +43,9 @@ class Controller extends \lithium\action\Controller{
 			Session::write('cart.id', $this->Cart->_id);
 		}
 
-		GenericAnalytics::log($this->Cart->_id, $this->request, $this->requestDate);
+		if(!isset($this->request->params['admin'])){
+			GenericAnalytics::log($this->Cart->_id, $this->request, $this->requestDate);
+		}
 	}
 
 	/**
