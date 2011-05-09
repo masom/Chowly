@@ -55,7 +55,6 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 	}
 
 	public function checkout(){
-		$provinces = Purchases::getProvinces();
 
 		if ($this->Cart->isEmpty()){
 			FlashMessage::set("Your cart is currently empty.");
@@ -71,7 +70,9 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		$this->_secureInventory();
 
 		$purchase = Purchases::create();
+		$provinces = Purchases::getProvinces();
 
+		//Display checkout form
 		if (!$this->request->data){
 			$this->Cart->endTransaction();
 			return compact('provinces', 'purchase');
@@ -97,22 +98,11 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			return compact('purchase', 'provinces');
 		}
 
-		$message = "P[{$purchase->_id}] Transaction completed.";
-		Logger::write('info', $message, array('name'=>'transactions'));
-
 		$this->_markItemsPurchased($purchase);
 
 		$venues = $this->_getVenues($offers);
 
-		$pdfPath = null;
-		try{
-			$pdfPath = Utils::getPdf($purchase, $offers, $venues);
-		} catch (\Exception $e){
-			Logger::write('error',
-				"P[{$purchase->_id}] Could not generate pdf due to: " . $e->getMessage(),
-				array('name'=>'transactions')
-			);
-		}
+		$pdfPath = $this->_getPdfPath();
 
 		$emailSent = $this->_sendEmail($purchase, $pdfPath);
 
@@ -121,6 +111,28 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 
 		$this->_render['template'] = 'success';
 		return compact('purchase', 'emailSent', 'pdfPath');
+	}
+
+	/**
+	 * Get the path to the purchase PDF. The pdf could be generated.
+	 * @param object $purchase Current purchase being processed.
+	 * @param object $offers DocumentSet of offers
+	 * @param object $venues DocumentSet of venues
+	 */
+	private function _getPdfPath($purchase, $offers, $venues){
+		$pdfPath = null;
+
+		try{
+			$pdfPath = Utils::getPdf($purchase, $offers, $venues);
+		} catch (\Exception $e){
+			Logger::write('error',
+				"P[{$purchase->_id}] Could not generate pdf due to: " . $e->getMessage(),
+				array('name'=>'transactions')
+			);
+			$pdfPath = null;
+		}
+
+		return $pdfPath;
 	}
 
 	/**
@@ -151,6 +163,9 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 			FlashMessage::set("The purchase could not be completed.");
 			return false;
 		}
+
+		$message = "P[{$purchase->_id}] Transaction completed.";
+		Logger::write('info', $message, array('name'=>'transactions'));
 
 		return true;
 	}
