@@ -18,18 +18,20 @@ class TicketsController extends \chowly\extensions\action\Controller{
 
 		$ticket = Tickets::create();
 		if ($this->request->data){
+
 			$ticket->state = 'new';
-			if ($ticket->save($this->request->data)){
+			$saved = $ticket->save($this->request->data);
 
-				$transport = Swift_MailTransport::newInstance();
-				$mailer = Swift_Mailer::newInstance($transport);
-				$message = Swift_Message::newInstance();
-				$message->setSubject("Chowly - New Ticket");
-				$message->setFrom(array('no-reply@chowly.com' => 'Chowly'));
-				$message->setTo(array('msamson@chowly.com'));
-				$message->setBody($this->_getEmail(compact('ticket'), 'new'));
-				$mailer->send($message);
-
+			$transport = Swift_MailTransport::newInstance();
+			$mailer = Swift_Mailer::newInstance($transport);
+			$message = Swift_Message::newInstance();
+			$message->setSubject("Chowly - New Ticket");
+			$message->setFrom(array('no-reply@chowly.com' => 'Chowly'));
+			$message->setTo(array('restaurants@chowly.com'));
+			$message->setBody($this->_getEmail(compact('ticket'), 'new'));
+			$sent = $mailer->send($message);
+			
+			if($sent || $saved){
 				return $this->redirect(array('Tickets::received'));
 			}else{
 				FlashMessage::set('Sorry, there is something wrong with the provided information.');
