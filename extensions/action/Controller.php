@@ -32,6 +32,14 @@ class Controller extends \lithium\action\Controller{
 			);
 		}
 
+		//TODO Make this better
+		if($this->request->admin){
+			$user = \lithium\security\Auth::check('user', $this->request);
+			if(!$user['role'] == 'admin'){
+				return $this->redirect('/');
+			}
+		}
+
 		$this->requestDate = new \MongoDate();
 
 		$conditions = array('_id' => Session::read('cart.id'));
