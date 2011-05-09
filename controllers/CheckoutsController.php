@@ -71,77 +71,89 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 		$this->_secureInventory();
 
 		$purchase = Purchases::create();
-		//TODO: Credit Card data processing...
-		if ($this->request->data){
-			$purchase->set($this->request->data);
-			$purchase->status = 'new';
 
-			if (!$purchase->validates()){
-				unset($purchase->cc_number, $purchase->cc_sc);
-				$this->Cart->endTransaction();
-				return compact('purchase', 'provinces');
-			}
-
-			$offers = $this->_getCartOffers();
-
-			//TODO: Log transaction for history/accounting
-			try{
-				$purchase->process($offers);
-			}catch(\Exception $e){
-				unset($purchase->cc_number, $purchase->cc_sc);
-				Logger::write('notice',
-					"C[{$cart->_id}] Could not process purchase due to: " . $e->getMessage(),
-					array('name'=>'transactions')
-				);
-				FlashMessage::set("Some processing errors occured.");
-
-				$this->Cart->endTransaction();
-				return compact('purchase', 'provinces');
-			}
-
-			unset($purchase->cc_number, $purchase->cc_sc);
-
-			if (!$purchase->isCompleted()){
-				Logger::write('notice',
-					"C[{$cart->_id}] Transaction failed: {$purchase->error}.",
-					array('name'=>'transactions')
-				);
-				FlashMessage::set("The purchase could not be completed.");
-
-				$this->Cart->endTransaction();
-				return compact('purchase', 'provinces');
-			}
-
-			$message = "P[{$purchase->_id}] Transaction completed.";
-			Logger::write('info', $message, array('name'=>'transactions'));
-
-			$this->_markItemsPurchased($purchase);
-
-			$venues = $this->_getVenues($offers);
-
-			$path = null;
-			try{
-				$path = Utils::getPdf($purchase, $offers, $venues);
-			} catch (\Exception $e){
-				Logger::write('error',
-					"P[{$purchase->_id}] Could not generate pdf due to: " . $e->getMessage(),
-					array('name'=>'transactions')
-				);
-			}
-
-			$emailSent = $this->_sendEmail($purchase, $path);
-
+		if (!$this->request->data){
 			$this->Cart->endTransaction();
-			$this->Cart->clearItems();
-
-			$this->_render['template'] = 'success';
-			return compact('purchase', 'emailSent');
+			return compact('provinces', 'purchase');
 		}
 
+		$purchase->set($this->request->data);
+		$purchase->status = 'new';
+
+		if (!$purchase->validates()){
+			unset($purchase->cc_number, $purchase->cc_sc);
+			$this->Cart->endTransaction();
+			return compact('purchase', 'provinces');
+		}
+
+		$offers = $this->_getCartOffers();
+		//TODO: Credit Card data processing...
+		$sucessfull = $this->_processPurchase($purchase, $offers);
+
+		unset($purchase->cc_number, $purchase->cc_sc);
+
+		if(!$sucessfull){
+			$this->Cart->endTransaction();
+			return compact('purchase', 'provinces');
+		}
+
+		$message = "P[{$purchase->_id}] Transaction completed.";
+		Logger::write('info', $message, array('name'=>'transactions'));
+
+		$this->_markItemsPurchased($purchase);
+
+		$venues = $this->_getVenues($offers);
+
+		$pdfPath = null;
+		try{
+			$pdfPath = Utils::getPdf($purchase, $offers, $venues);
+		} catch (\Exception $e){
+			Logger::write('error',
+				"P[{$purchase->_id}] Could not generate pdf due to: " . $e->getMessage(),
+				array('name'=>'transactions')
+			);
+		}
+
+		$emailSent = $this->_sendEmail($purchase, $pdfPath);
+
 		$this->Cart->endTransaction();
-		return compact('provinces', 'purchase');
+		$this->Cart->clearItems();
+
+		$this->_render['template'] = 'success';
+		return compact('purchase', 'emailSent', 'pdfPath');
 	}
 
+	/**
+	 * Purchase processing handling
+	 * @param var $purchase The purchase object
+	 * @param var $offers The offers being purchased
+	 * @return boolean
+	 */
+	private function _processPurchase($purchase, $offers){
+
+		$processed = false;
+
+		try{
+			$processed = $purchase->process($offers);
+		}catch(\Exception $e){
+			Logger::write('notice',
+				"C[{$cart->_id}] Could not process purchase due to: " . $e->getMessage(),
+				array('name'=>'transactions')
+			);
+			FlashMessage::set("Some processing errors occured.");
+			return false;
+		}
+		if (!$purchase->isCompleted()){
+			Logger::write('notice',
+				"C[{$cart->_id}] Transaction failed: {$purchase->error}.",
+				array('name'=>'transactions')
+			);
+			FlashMessage::set("The purchase could not be completed.");
+			return false;
+		}
+
+		return true;
+	}
 	/**
 	 * Get the venues associated with the offers.
 	 * @param DocumentSet $offers The offers collection to get venues for.
