@@ -9,16 +9,14 @@
 			With Chowly, you are in control and decide how many customers you want and when. 
 			Turn the volume up or down on demand!
 		</p>
-		<ul style="list-decoration: disc;">
-			<li>Advertise at without risk and with full control</li>
-			<li>Reach a targeted audience that is looking for restaurant deals on the nights you want more customers</li>
-			<li>Watch your deals get circulated between family and friends. Buzz, word-of-mouth and viral.</li>
-			<li>Watch new customers turn into returning customers</li>
-			<li>Focus only on times that you have extra capacity</li>
-		</ul>
-		<p>
-			CHOWLY + YOUR RESTAURANT + MEMBERS + FAMILY AND FRIENDS = WIN/WIN
-		</p>
+		<h3>Risk Free Advertising</h3>
+		<p>There are no up front costs with Chowly. Use us to sell off your excess capacity while receiving compensation for every deal sold.</p>
+		<h3>Reach the Right Audience</h3>
+		<p>Chowly connects spontaneous last minute dinners with the best local restaurants. Chowly is only for meals meaning 100% of the visitors to our site are looking to eat somewhere today!</p>
+		<h3>Get Word-Of-Mouth Buzz</h3>
+		<p>Let Chowly users promote your restaurant online without you lifting a finger. Friends will talk about the deal and get other friends to go as well.</p>
+		<h3>New and Returning Customers</h3>
+		<p>Chowly will help get you infront of the online crowd and send you a predictable and reliable stream of customers.</p>
 	<?php else:?>
 		<p>Being one of the first to sign up for our service has its advantages. <br /> Let us know what you would like to see from Chowly.com.</p>
 		<p>Think of this as your suggestion box with direct access to our executive team! <br /> Our users are our customers and we will only develop the features and functionality you want to let us serve you better.</p>
