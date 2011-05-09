@@ -30,9 +30,9 @@
 					
 					<p id="offer-countdown-<?php echo $offer->_id;?>" class="offer-countdown"></p>
 					<?php if($offer->slug):?>
-						<?=$this->html->link($this->html->image('buydeal-button.png'), array('controller'=>'offers','action'=>'view','slug'=>$offer->slug),array('escape'=>false,'class'=>'offer-buy-button'));?>
+						<?=$this->html->link($this->html->image('view-deal.png'), array('controller'=>'offers','action'=>'view','slug'=>$offer->slug),array('escape'=>false,'class'=>'offer-buy-button'));?>
 					<?php else:?>
-						<?=$this->html->link($this->html->image('buydeal-button.png'), array('controller'=>'offers','action'=>'view','id'=>$offer->_id),array('escape'=>false,'class'=>'offer-buy-button'));?>
+						<?=$this->html->link($this->html->image('view-deal.png'), array('controller'=>'offers','action'=>'view','id'=>$offer->_id),array('escape'=>false,'class'=>'offer-buy-button'));?>
 					<?php endif;?>
 				</div>
 			</li>
