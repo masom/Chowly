@@ -8,6 +8,7 @@
 namespace chowly\controllers;
 
 use chowly\models\Offers;
+use chowly\models\OfferTemplates;
 use chowly\models\Venues;
 use chowly\models\ViewAnalytics;
 use chowly\extensions\data\OfferException;
@@ -155,31 +156,10 @@ class OffersController extends \chowly\extensions\action\Controller{
 	}
 
 	public function admin_add(){
+
 		$offer = Offers::create();
-
-		//Get Venue
-		$conditions = array();
-		if ($this->request->id){
-			//in this case, request->id is the venue id.
-			$conditions = array('_id' => $this->request->id);
-		}elseif ($this->request->data['venue_id']){
-			$conditions = array('_id' => $this->request->data['venue_id']);
-		}
-
-		if (!$conditions){
-			return $this->redirect(array('Offers::index','admin'=>true));
-		}
-
-		$venue = Venues::first(compact('conditions'));
-
-		if (!$venue){
-			FlashMessage::set("Venue not found.");
-			return $this->redirect($this->request->referer());
-		}
-
 		if ($this->request->data){
 			$offer->set($this->request->data);
-
 			$offer->slug = $offer->slug(array('prepend'=>$venue->name));
 
 			$success = false;
@@ -196,8 +176,31 @@ class OffersController extends \chowly\extensions\action\Controller{
 			}
 		}
 
+		$venues = Venues::find('list');
+
+		if (!count($venues)){
+			FlashMessage::set("No venues in the system.");
+			return $this->redirect(array('controller'=>'venues','action'=>'add', 'admin'=>true));
+		}
+
+		if($this->request->id){
+			$conditions = array('_id' => $this->request->id);
+			$template = OfferTemplates::first(compact('conditions'));
+		}else{
+			$template = null;
+		}
+
+		if ($template){
+			$data = $offer->to('array');
+			$template = $template->to('array');
+			$offer->template_id = $template['_id'];
+			unset($template['_id'], $template['created'], $template['modified']);
+			$data += $template;
+			$offer->set($data);
+		}
+
 		$this->_render['template'] = 'admin_edit';
-		return compact('venue', 'offer');
+		return compact('venues', 'offer');
 	}
 
 	public function admin_edit(){
