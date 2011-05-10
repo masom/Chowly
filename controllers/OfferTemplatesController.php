@@ -16,10 +16,10 @@ class OfferTemplatesController extends \chowly\extensions\action\Controller{
 		$page = $this->request->page ?: 1;
 		$order = array('created' => 'DESC');
 
-		$total = Offers::count();
-		$offers = Offers::all(compact('order','limit','page'));
+		$total = OfferTemplates::count();
+		$templates = OfferTemplates::all(compact('order','limit','page'));
 
-		return compact('offers', 'total', 'page', 'limit');
+		return compact('templates', 'total', 'page', 'limit');
 	}
 
 	public function admin_view(){
