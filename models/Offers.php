@@ -38,6 +38,7 @@ class Offers extends \chowly\extensions\data\Model{
 
 	protected $_schema = array(
 		'_id' => array('type' => 'id'),
+		'template_id' => array('type' => 'id'),
 		'venue_id' => array('type'=>'id'), // The venue
 		'state' => array('type'=>'string', 'default' => 'unpublished'),
 		'name' => array('type' => 'string','null'=>false), // Name of the coupon
