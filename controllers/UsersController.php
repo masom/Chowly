@@ -11,6 +11,7 @@ use chowly\models\Users;
 use li3_flash_message\extensions\storage\FlashMessage;
 use lithium\security\Auth;
 use lithium\storage\Session;
+use lithium\analysis\Logger;
 
 class UsersController extends \chowly\extensions\action\Controller{
 	public function dashboard(){

@@ -159,8 +159,7 @@ class Offers extends \chowly\extensions\data\Model{
 			$inventory = Inventories::reserve($offer_id, $cart_id);
 			$offer->availability--;
 		}catch (InventoryException $e){
-			$offer->availability = 0;
-			$error = $e;
+			throw $error;
 		}
 
 		if ($offer->availability < 0){
@@ -168,11 +167,6 @@ class Offers extends \chowly\extensions\data\Model{
 		}
 
 		$offer->save(null, array('validate' => false, 'whitelist' => array('availability')));
-
-		if ($error){
-			throw $error;	
-		}
-
 		return $inventory->_id;
 	}
 

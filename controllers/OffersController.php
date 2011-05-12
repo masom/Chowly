@@ -82,6 +82,9 @@ class OffersController extends \chowly\extensions\action\Controller{
 		try{
 			$reserved = Offers::reserve($this->request->id, $this->Cart->_id);
 		}catch(InventoryException $e){
+			Logger::write('error',
+				"Could not add item to cart due to: " . $e->getMessage()
+			);
 			FlashMessage::set("Sorry, The item could not be added to your cart");
 			return $this->redirect($this->request->referer());
 		}catch(OfferException $e){
