@@ -2,8 +2,8 @@
 	<span>New Offer: Template Selection</span>
 </div>
 <div id="content-wrapper">
-	<div style="margin:20px;">
-	<select id="template_select">
+	<div style="margin-top: 60px; margin-left: auto; margin-right: auto; width: 500px; text-align: center;">
+	<select id="template_select" style="padding: 10px; width: 480px;">
 		<?php foreach($templates as $key => $name):?>
 			<option value="<?=$key;?>"><?=$name;?></option>		
 		<?php endforeach;?>

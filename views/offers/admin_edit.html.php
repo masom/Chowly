@@ -50,7 +50,7 @@ foreach(range(10, 100, 10) as $value){
 			</div>
 			</div>
 		<?=$this->form->end(); ?>
-		<div style="width: 200px; height: 50px;">
+		<div style="width: 200px; height: 50px; margin-left: auto; margin-right: auto;">
 			<button id="offer-create-previous" style="float: left;">Previous</button>
 			<button id="offer-create-next" style="float: right;">Next</button>
 		</div>
