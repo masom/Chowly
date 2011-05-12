@@ -43,7 +43,7 @@ class Offers extends \chowly\extensions\data\Model{
 		'name' => array('type' => 'string','null'=>false), // Name of the coupon
 		'slug' => array('type' => 'string'), //Url friendly name
 		'description'=>array('type'=>'string'), // Description (if any) of the coupon
-		'limitations'=>array('type'=>'string'), // Limitations regarding usage of the cuopon
+		'limitations' => array('type'=>'array', 'array'=>true),
 		'starts' => array('type'=>'date','null'=>false), // Publication start
 		'ends'=>array('type'=>'date','null'=>false), // Publication ends
 		'expires' => array('type'=>'date','null'=>false), //Expiry date of the offer

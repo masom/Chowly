@@ -45,7 +45,7 @@ class OfferLimitationsController extends \chowly\extensions\action\Controller{
 		if ($this->request->data){
 			if ($limitation->save($this->request->data)){
 				FlashMessage::set("Limitation modified.");
-				return $this->redirect(array('OfferLimitations::view', 'id' => $venue->_id));
+				return $this->redirect(array('OfferLimitations::index','admin'=>true));
 			}
 		}
 		return compact('limitation');

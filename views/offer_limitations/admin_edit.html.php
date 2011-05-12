@@ -14,7 +14,6 @@
 
 <script type="text/javascript">
 $("#form_limitation_save").bind('click',function(){
-	e.preventDefault();
 	$("#form_limitation").submit();
 });
 $("#form_limitation_cancel").bind('click',function(){

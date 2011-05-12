@@ -9,6 +9,7 @@ namespace chowly\controllers;
 
 use chowly\models\Offers;
 use chowly\models\OfferTemplates;
+use chowly\models\OfferLimitations;
 use chowly\models\Venues;
 use chowly\models\ViewAnalytics;
 use chowly\extensions\data\OfferException;
@@ -207,9 +208,10 @@ class OffersController extends \chowly\extensions\action\Controller{
 			$data += $template;
 			$offer->set($data);
 		}
-
+		
+		$limitations = OfferLimitations::find('list');
 		$this->_render['template'] = 'admin_edit';
-		return compact('venues', 'offer');
+		return compact('venues', 'offer', 'limitations');
 	}
 
 	public function admin_edit(){
@@ -225,7 +227,7 @@ class OffersController extends \chowly\extensions\action\Controller{
 				return $this->redirect(array('Offers::view', 'id' => $venue->_id));
 			}
 		}
-
+		$limitations = OfferLimitations::find('list');
 		$publishOptions = $offer->states();
 		return compact('offer','publishOptions');
 	}

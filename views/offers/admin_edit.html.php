@@ -28,7 +28,22 @@ foreach(range(10, 100, 10) as $value){
 				<?=$this->form->field('description', array('type'=>'textarea')); ?>
 			</div>
 			<div>
-				<?=$this->form->field('limitations', array('type'=>'textarea', 'label'=>'Limitations')); ?>
+				<div style="height: 200px; width: 500px;">
+					<div style="width: 500px; height: 30px;">
+						<span style="float: left;">Assigned Limitations</span>
+						<span style="float: right;">Unassigned Limitations</span>
+					</div>
+					<select id="offer-limitations" multiple="multiple" name="limitations" style="float: left; height: 200px; width: 200px;background-color: #ffffff;">
+					<?php foreach($offer->limitations as $key => $name):?>
+						<option value="<?=$key;?>"><?=$name;?></option>
+					<?php endforeach;?>
+					</select>
+					<select id="offer-limitations-selection" multiple="multiple" style="float: right; height: 200px; width: 200px;background-color: #ffffff;">
+						<?php foreach ($limitations as $key => $name):?>
+							<option value="<?=$name;?>"><?=$name;?></option>
+						<?php endforeach;?>
+					</select>
+				</div>
 			</div>
 	
 			<div>
@@ -58,7 +73,7 @@ foreach(range(10, 100, 10) as $value){
 </div>
 
 <script type="text/javascript">
-var OfferSteps = {
+var OfferWizard = {
 	init: function(container){
 		this._container = container;
 		this._steps = $(container).children();
@@ -72,6 +87,10 @@ var OfferSteps = {
 
 		$('#offer-create-previous').bind('click', this.onPreviousClicked);
 		$('#offer-create-next').bind('click', this.onNextClicked);
+
+		this._limitation = {selected: $('#offer-limitations'), available: $('#offer-limitations-selection')};
+		this._limitation['selected'].bind('click', this.onLimitationSelectedClicked);
+		this._limitation['available'].bind('click', this.onLimitationAvailableClicked);
 	},
 	start: function(){
 		this._current.fadeIn(200);
@@ -85,17 +104,17 @@ var OfferSteps = {
 			$('#offer-create-previous').show();
 		}
 
-		OfferSteps._currentStep++;
+		OfferWizard._currentStep++;
 
-		if(OfferSteps._currentStep == OfferSteps._stepCount){
+		if(OfferWizard._currentStep == OfferWizard._stepCount){
 			$('#offer-create-next').hide();
 		}
 
 		$(this._current).fadeOut(200, function(){
 			$(this).next().fadeIn(200, function(){
-				OfferSteps._updateStep();
-				OfferSteps._current = this;
-				OfferSteps._enableButtons();
+				OfferWizard._updateStep();
+				OfferWizard._current = this;
+				OfferWizard._enableButtons();
 			});
 		});
 	},
@@ -108,17 +127,17 @@ var OfferSteps = {
 			$('#offer-create-next').show();
 		}
 
-		OfferSteps._currentStep--;
+		OfferWizard._currentStep--;
 
-		if(OfferSteps._currentStep == 1){
+		if(OfferWizard._currentStep == 1){
 			$('#offer-create-previous').hide();
 		}
 
 		$(this._current).fadeOut(200, function(){
-			OfferSteps._updateStep();
+			OfferWizard._updateStep();
 			$(this).prev().fadeIn(200, function(){
-				OfferSteps._current = this;
-				OfferSteps._enableButtons();
+				OfferWizard._current = this;
+				OfferWizard._enableButtons();
 			});
 		});
 	},
@@ -142,19 +161,35 @@ var OfferSteps = {
 	},
 	onPreviousClicked: function(e){
 		e.preventDefault();
-		OfferSteps._disableButtons();
-		OfferSteps.previous();
+		OfferWizard._disableButtons();
+		OfferWizard.previous();
 	},
 	onNextClicked: function(e){
 		e.preventDefault();
-		OfferSteps._disableButtons();
-		OfferSteps.next();
+		OfferWizard._disableButtons();
+		OfferWizard.next();
+	},
+	onLimitationSelectedClicked: function(e){
+		if(!$(e.target).is('option')){
+			return false;
+		}
+		$(e.target).removeAttr("selected");
+		$(e.target).detach();
+		$(e.target).appendTo(OfferWizard._limitation['available']);		
+	},
+	onLimitationAvailableClicked : function(e){
+		if(!$(e.target).is('option')){
+			return false;
+		}
+		$(e.target).removeAttr("selected");
+		$(e.target).detach();
+		$(e.target).appendTo(OfferWizard._limitation['selected']);
 	}
 };
 
 $(function() {
-	OfferSteps.init('#offer-create-steps');
-	OfferSteps.start();
+	OfferWizard.init('#offer-create-steps');
+	OfferWizard.start();
 });
 
 
