@@ -65,7 +65,7 @@ class OfferTemplatesController extends \chowly\extensions\action\Controller{
 				return $this->redirect(array('OfferTemplates::view', 'id' => $venue->_id));
 			}
 		}
-		return compact('templates');
+		return compact('template');
 	}
 }
 

@@ -19,8 +19,8 @@ $limitationsPresent = array();
 		<h3>Step <span id="offer-create-step-number"></span></h3>
 		<div id="offer-create-steps" style="margin: 20px;">
 			<?php if(!$offer->exists()):?>
-				<div>
-					<?=$this->form->field('venue_id', array('type'=>'select', 'list' => $venues, 'label'=>'Select the venue')); ?>
+				<div style="margin-left: auto; margin-right: auto; width: 200px;">
+					<?=$this->form->field('venue_id', array('type'=>'select', 'list' => $venues, 'label'=>'Select the venue', 'style'=>'padding: 5px; width: 200px;')); ?>
 				</div>
 			<?php endif;?>
 			
@@ -62,7 +62,7 @@ $limitationsPresent = array();
 					<?=$this->form->hidden('template_id', array('value'=> $offer->template_id));?>
 				<?php endif;?>
 			</div>
-			<div>
+			<div style="width: 200px; height: 50px; margin-left: auto; margin-right: auto;">
 				<button id="offer-save" onclick="return false;">Save</button>
 				<button id="offer-cancel" onclick="return false;">Cancel</button>
 			</div>
@@ -106,7 +106,7 @@ var OfferWizard = {
 		$('#offer-save').attr('disabled', true);
 		$('#offer-cancel').attr('disabled', true);
 		e.preventDefault();
-		$('#offer-limitations').children.remove();
+		$('#offer-limitations').children().remove();
 		$('#offer-limitations-selected').children().detach().appendTo($('#offer-limitations'));
 		$('#offer-limitations').children().attr('selected', true);
 		$("#form_template").trigger('submit');

@@ -15,7 +15,6 @@ $expiration = ($offer->expiry) ? $offer->expiry->sec : null;
 		<div id="offer-information-logo">
 			<?=$this->html->image("/images/{$venue->logo}.jpg")?>
 		</div>
-		
 		<ul id="offer-details">
 			<li id="offer-address"><?=$address[0];?></li>
 			<li id="offer-countdown" class="countdown"></li>
@@ -23,12 +22,11 @@ $expiration = ($offer->expiry) ? $offer->expiry->sec : null;
 			<?php if ($expiration):?>
 				<li>Expires: <?=date('F, j, Y', $expiration);?></li>
 			<?php endif;?>
-			<li id="offer-buy"><?php echo ($offer->availability) ? $this->html->link($this->html->image('buydeal-button.png'), array('Offers::buy', 'id'=>$offer->_id), array('id'=>'offer_buy', 'escape'=>false)): null; ?></li>
+			<li id="offer-buy"><?php echo ($offer->availability) ? $this->html->link($this->html->image('buydeal-button.png'), array('Offers::buy', 'id'=>$offer->_id), array('id'=>'offer-buy-link', 'escape'=>false)): null; ?></li>
 		</ul>
 		<h3>Limitations</h3>
 		<ul id="offer-restrictions">
-			<?php if($offer->limitations): $limitations = preg_split( '/\r\n|\r|\n/', $offer->limitations); else: $limitations = array(); endif;?>
-			<?php foreach($limitations as $limitation):?>
+			<?php foreach($offer->limitations as $limitation):?>
 				<li><?=$limitation;?></li>
 			<?php endforeach;?>
 		</ul>
@@ -56,6 +54,20 @@ $expiration = ($offer->expiry) ? $offer->expiry->sec : null;
 	</div>
 </div>
 </div>
+<div id="offer-buy-limitations-popup" style="display: none; z-index: 200; position: absolute; width: 350px; min-height: 100px; margin: 20px; padding: 20px; background-color: #ffffff; border: 4px solid #dddddd;">
+	<h4>The Fine Print</h4>
+	<div style="min-height: 50px; margin-left: 20px; margin-right: 20px;">
+		<ul>
+			<?php foreach($offer->limitations as $limitation):?>
+				<li><?=$limitation;?></li>
+			<?php endforeach;?>
+		</ul>
+	</div>
+	<div style="margin-top: 20px; text-align: center;">
+	<?php echo ($offer->availability) ? $this->html->link($this->html->image('buydeal-button.png'), array('Offers::buy', 'id'=>$offer->_id), array('id'=>'offer-buy-confirmed', 'escape'=>false)): null; ?>
+	</div>
+</div>
+<div id="offer-buy-popup-bg" style="position: absolute; top: 0px; left: 0px; background-color: #444444; opacity: 0.4; display: none; width: 100%;"></div>
 <script type="text/javascript">
 var map;
 var geocoder;
@@ -92,6 +104,21 @@ function initialize_maps() {
 	});
 }
 $(function () {
+	$('#offer-buy-popup-bg').bind('click', function(e){
+		e.preventDefault();
+		$('#offer-buy-limitations-popup').fadeOut(200);
+		$(this).fadeOut(200);
+	});
+	$('#offer-buy-link').bind('click',function(e){
+		e.preventDefault();
+		var link = $(e.target).parent().attr('href');
+		var pos = $("#offer-buy").offset();
+		var top = pos.top - $("#offer-buy-limitations-popup").height() / 2;
+		$("#offer-buy-limitations-popup").css( { "left": (pos.left - 20) + "px", "top": top + "px" } );
+		$('#offer-buy-popup-bg').css({'height' : $(document).height()});
+		$('#offer-buy-popup-bg').fadeIn(400);
+		$("#offer-buy-limitations-popup").fadeIn(400);
+	});
 	function loadScript() {
 		  var script = document.createElement("script");
 		  script.type = "text/javascript";

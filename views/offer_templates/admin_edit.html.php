@@ -6,7 +6,6 @@
 	<?=$this->form->create($template, array('type' => 'file', 'id'=>'form_template')); ?>
 		<?=$this->form->field('name'); ?>
 		<?=$this->form->field('description', array('type'=>'textarea')); ?>
-		<?=$this->form->field('limitations', array('type'=>'textarea')); ?>
 		<?=$this->form->field('cost', array('label' => 'Price in C$', 'id'=>'template_cost'));?>
 		<br style="clear: both;" />
 		<button id="form_template_save" onclick="return false;">Save</button>
