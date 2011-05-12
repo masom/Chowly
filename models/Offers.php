@@ -16,23 +16,22 @@ class Offers extends \chowly\extensions\data\Model{
 	protected static $_states = array('published'=>'published', 'unpublished'=>'unpublished');
 	public $validates = array(
 		'name' => array(
-			array('notEmpty','message'=>'Please enter a name'),
-			array('lengthBetween', 'min'=>1,'max'=>255,
-				'message' => 'Please enter a name that is between 1 and 255')
+			array('notEmpty','message'=>'Please enter a name.')
 		),
+		'description' => array('notEmpty', 'message' => 'Please enter a description.'),
 		'state' => array(
 			array('inList', 'list' => array('published', 'unpublished'))
 		),
 		'availability' => array(
 			array('numeric', 'message'=>'Please enter a number.'),
 			array('inRange', 'upper'=>256,'lower'=>0,
-				'message'=>'Please enter a number between 1 and 255')
+				'message'=>'Please enter a number between 1 and 255.')
 		),
 		'venue_id' => array(
 			array('notEmpty', 'message'=>'There is a relationship problem...')
 		),
 		'cost' => array(
-			array('numeric','message'=>'Must be a monetary amount (ex: 33.00)')
+			array('numeric','message'=>'Must be a monetary amount (ex: 33.00).')
 		)
 	);
 

@@ -11,7 +11,11 @@ foreach(range(10, 100, 10) as $value){
 </div>
 <div id="content-wrapper">
 	<div style="margin-top: 40px; margin-left: auto; margin-right: auto; width: 620px;">
+		<?php if($offer->errors()):?>
+			<h4>There is <?=count($offer->errors());?> validation errors.</h4>
+		<?php endif;?>
 		<?=$this->form->create($offer, array('type' => 'file', 'id'=>'form_template')); ?>
+		<h3>Step <span id="offer-create-step-number"></span></h3>
 		<div id="offer-create-steps" style="margin: 20px;">
 			<?php if(!$offer->exists()):?>
 				<div>
@@ -60,7 +64,7 @@ var OfferSteps = {
 		this._steps = $(container).children();
 		this._stepCount = this._steps.length;
 		this._currentStep = 1;
-
+		this._updateStep();
 		$(container).children().hide();
 		$('#offer-create-previous').hide();
 
@@ -89,6 +93,7 @@ var OfferSteps = {
 
 		$(this._current).fadeOut(200, function(){
 			$(this).next().fadeIn(200, function(){
+				OfferSteps._updateStep();
 				OfferSteps._current = this;
 				OfferSteps._enableButtons();
 			});
@@ -110,12 +115,15 @@ var OfferSteps = {
 		}
 
 		$(this._current).fadeOut(200, function(){
-
+			OfferSteps._updateStep();
 			$(this).prev().fadeIn(200, function(){
 				OfferSteps._current = this;
 				OfferSteps._enableButtons();
 			});
 		});
+	},
+	_updateStep: function(){
+		$('#offer-create-step-number').text(this._currentStep + ' of ' + this._stepCount);
 	},
 	_enableButtons: function(){
 		$('#offer-create-previous').attr('disabled',false);
