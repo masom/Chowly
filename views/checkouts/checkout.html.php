@@ -22,7 +22,7 @@ endfor;
 
 $province = ($purchase->province)? $purchase->province : 'Ontario';
 ?>
-<div style="padding-left: 15px; height: 43px; line-height: 43px; color: #ffffff; font-size: 24px; font-weight: bold; background: url(/img/top-ribbon.png);">
+<div id="ribbon">
 	<span>Step 2 of 2: Secure Checkout</span>
 </div>
 <div id="content-wrapper">
