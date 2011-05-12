@@ -3,7 +3,7 @@
 </div>
 <div id="content-wrapper">
 	<div style="margin:20px;">
-		<?=$this->html->link("{$this->html->image('silk/add.png')} Create a new Offer", array('action'=>'add','admin'=>true),array('escape'=>false));?>
+		<?=$this->html->link("{$this->html->image('silk/add.png')} Create a new Offer", array('action'=>'select_template','admin'=>true),array('escape'=>false));?>
 		<?=$this->html->link("{$this->html->image('silk/cog.png')} Rebuild Inventory", array('action'=>'rebuild_inventory','admin'=>true),array('escape'=>false));?>
 		<table>
 			<thead>

@@ -155,6 +155,11 @@ class OffersController extends \chowly\extensions\action\Controller{
 		return $this->redirect($this->request->referer());
 	}
 
+	public function admin_select_template(){
+		$templates = OfferTemplates::find('list');
+		return compact('templates');
+	}
+
 	public function admin_add(){
 
 		$offer = Offers::create();
