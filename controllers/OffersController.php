@@ -165,6 +165,10 @@ class OffersController extends \chowly\extensions\action\Controller{
 		$offer = Offers::create();
 		if ($this->request->data){
 			$offer->set($this->request->data);
+
+			$conditions = array('_id' => $offer->venue_id);
+			$venue = Venues::first(compact('conditions'));
+
 			$offer->slug = $offer->slug(array('prepend'=>$venue->name));
 
 			$success = false;

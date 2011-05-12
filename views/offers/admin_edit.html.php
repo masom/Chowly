@@ -1,6 +1,10 @@
 <?php 
 $starts = ($offer->_id)? $offer->starts->sec : time();
 $ends = ($offer->_id)? $offer->ends->sec : time() + 60 * 60 * 24 * 30;
+$availability = array();
+foreach(range(10, 100, 10) as $value){
+	$availability[$value] = $value;
+}
 ?>
 <div id="ribbon">
 	<span><?=($offer->exists())? "Modifying Offer {$offer->name}": "New Offer";?></span>
@@ -32,7 +36,7 @@ $ends = ($offer->_id)? $offer->ends->sec : time() + 60 * 60 * 24 * 30;
 				</ul>
 				<br style="clear: both;" />
 				<?php if(!$offer->exists()):?>
-					<?=$this->form->field('availability', array('tyle'=>'select', 'list'=> range(10, 100, 10),'id'=>'offer_availability','label'=>'How many coupons?', 'style'=>'width: 100px;'));?>
+					<?=$this->form->field('availability', array('tyle'=>'select', 'list'=> $availability,'id'=>'offer_availability','label'=>'How many coupons?', 'style'=>'width: 100px;'));?>
 					<?=$this->form->hidden('template_id', array('value'=> $offer->template_id));?>
 				<?php endif;?>
 			</div>
