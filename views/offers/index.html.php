@@ -2,7 +2,9 @@
 	<span>Tonight's Deals</span>
 </div>
 <div id="content-wrapper">
-	<div class="offer-name-ribbon"></div>
+	<?php if(count($offers)): ?>
+		<div class="offer-name-ribbon"></div>
+	<?php endif;?>
 	<ul class="offers-list">
 		<?php 
 			$style = true;

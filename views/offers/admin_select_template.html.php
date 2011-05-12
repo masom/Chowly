@@ -23,6 +23,6 @@ $('#template_select_submit').bind('click', function(e){
 	}
 	e.preventDefault();
 	$('#template_error').hide();
-	window.location = '<?=$this->url(array('action'=>'add','admin'=>true));?>';
+	window.location = '<?=$this->url(array('action'=>'add','admin'=>true));?>/' + $('#template_select').val();
 });
 </script>
