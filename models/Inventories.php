@@ -53,6 +53,11 @@ class Inventories extends \chowly\extensions\data\Model{
 	 * @return object Inventory instance
 	 */
 	public static function release($customer_id, $offer_id){
+
+		if(!is_object($offer_id)){
+			$offer_id = new \MongoId($offer_id);
+		}
+
 		$command = array(
 			'findAndModify' => static::meta('source'),
 			'query' => array(
@@ -82,6 +87,11 @@ class Inventories extends \chowly\extensions\data\Model{
 	 * @todo Add indexes to inventory
 	 */
 	public static function reserve($offer_id, $customer_id){
+
+		if(!is_object($offer_id)){
+			$offer_id = new \MongoId($offer_id);
+		}
+
 		$command = array(
 			'findAndModify' => static::meta('source'),
 			'query' => array(
@@ -95,6 +105,7 @@ class Inventories extends \chowly\extensions\data\Model{
 				)
 			)
 		);
+
 		$result = static::connection()->connection->command($command);
 
 		if (isset($result['errmsg'])){
