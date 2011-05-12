@@ -106,6 +106,7 @@ var OfferWizard = {
 		$('#offer-save').attr('disabled', true);
 		$('#offer-cancel').attr('disabled', true);
 		e.preventDefault();
+		$('#offer-limitations').children.remove();
 		$('#offer-limitations-selected').children().detach().appendTo($('#offer-limitations'));
 		$('#offer-limitations').children().attr('selected', true);
 		$("#form_template").trigger('submit');
