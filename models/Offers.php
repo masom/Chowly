@@ -159,7 +159,7 @@ class Offers extends \chowly\extensions\data\Model{
 			$inventory = Inventories::reserve($offer_id, $cart_id);
 			$offer->availability--;
 		}catch (InventoryException $e){
-			throw $error;
+			throw $e;
 		}
 
 		if ($offer->availability < 0){
