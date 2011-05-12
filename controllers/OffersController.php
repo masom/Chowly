@@ -14,7 +14,7 @@ use chowly\models\Venues;
 use chowly\models\ViewAnalytics;
 use chowly\extensions\data\OfferException;
 use chowly\extensions\data\InventoryException;
-
+use lithium\analysis\Logger;
 use li3_flash_message\extensions\storage\FlashMessage;
 
 class OffersController extends \chowly\extensions\action\Controller{
