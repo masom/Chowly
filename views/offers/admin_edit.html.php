@@ -5,6 +5,7 @@ $availability = array();
 foreach(range(10, 100, 10) as $value){
 	$availability[$value] = $value;
 }
+$limitationsPresent = array();
 ?>
 <div id="ribbon">
 	<span><?=($offer->exists())? "Modifying Offer {$offer->name}": "New Offer";?></span>
@@ -33,19 +34,21 @@ foreach(range(10, 100, 10) as $value){
 						<span style="float: left;">Assigned Limitations</span>
 						<span style="float: right;">Unassigned Limitations</span>
 					</div>
-					<select id="offer-limitations" multiple="multiple" name="limitations" style="float: left; height: 200px; width: 200px;background-color: #ffffff;">
-					<?php foreach($offer->limitations as $key => $name):?>
-						<option value="<?=$key;?>"><?=$name;?></option>
-					<?php endforeach;?>
+					<select id="offer-limitations-selected" style="float: left; height: 200px; width: 200px;background-color: #ffffff;" multiple="multiple">
+						<?php foreach($offer->limitations as $name): $limitationsPresent[] = $name;?>
+							<option value="<?=$name;?>"><?=$name;?></option>
+						<?php endforeach;?>
 					</select>
 					<select id="offer-limitations-selection" multiple="multiple" style="float: right; height: 200px; width: 200px;background-color: #ffffff;">
-						<?php foreach ($limitations as $key => $name):?>
+						<?php foreach ($limitations as $key => $name):
+							if(in_array($name, $limitationsPresent)): continue; endif;
+						?>
 							<option value="<?=$name;?>"><?=$name;?></option>
 						<?php endforeach;?>
 					</select>
 				</div>
 			</div>
-	
+
 			<div>
 				<?=$this->form->field('cost', array('label' => 'Price in C$', 'id'=>'offer_cost'));?>
 				<ul class="time-picker">
@@ -60,10 +63,13 @@ foreach(range(10, 100, 10) as $value){
 				<?php endif;?>
 			</div>
 			<div>
-				<button id="form_template_save" onclick="return false;">Save</button>
-				<button id="form_template_cancel" onclick="return false;">Cancel</button>
+				<button id="offer-save" onclick="return false;">Save</button>
+				<button id="offer-cancel" onclick="return false;">Cancel</button>
 			</div>
-			</div>
+		</div>
+		<div style="display: none;">
+			<select id="offer-limitations" name="limitations[]" multiple="multiple"></select>
+		</div>
 		<?=$this->form->end(); ?>
 		<div style="width: 200px; height: 50px; margin-left: auto; margin-right: auto;">
 			<button id="offer-create-previous" style="float: left;">Previous</button>
@@ -88,9 +94,26 @@ var OfferWizard = {
 		$('#offer-create-previous').bind('click', this.onPreviousClicked);
 		$('#offer-create-next').bind('click', this.onNextClicked);
 
-		this._limitation = {selected: $('#offer-limitations'), available: $('#offer-limitations-selection')};
+		this._limitation = {selected: $('#offer-limitations-selected'), available: $('#offer-limitations-selection')};
 		this._limitation['selected'].bind('click', this.onLimitationSelectedClicked);
 		this._limitation['available'].bind('click', this.onLimitationAvailableClicked);
+		$("#offer_cost").numeric();
+
+		$("#offer-save").bind('click', this.onSave);
+		$('#offer-cancel').bind('click', this.onCancel);
+	},
+	onSave: function(e){
+		$('#offer-save').attr('disabled', true);
+		$('#offer-cancel').attr('disabled', true);
+		e.preventDefault();
+		$('#offer-limitations-selected').children().detach().appendTo($('#offer-limitations'));
+		$('#offer-limitations').children().attr('selected', true);
+		$("#form_template").trigger('submit');
+	},
+	onCancel: function(e){
+		e.preventDefault();
+		$('#offer-save').attr('disabled', true);
+		history.back();
 	},
 	start: function(){
 		this._current.fadeIn(200);
@@ -190,16 +213,5 @@ var OfferWizard = {
 $(function() {
 	OfferWizard.init('#offer-create-steps');
 	OfferWizard.start();
-});
-
-
-$("#template_availability").numeric();
-$("#otemplate_cost").numeric();
-$("#form_template_save").bind('click',function(){
-	$("#form_template").submit();
-});
-$("#form_template_cancel").bind('click',function(){
-	$('#form_template_save').hide();
-	history.back();
 });
 </script>
