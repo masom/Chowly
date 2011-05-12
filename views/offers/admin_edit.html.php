@@ -77,14 +77,15 @@ var OfferSteps = {
 			$('#offer-create-previous').show();
 		}
 
+		OfferSteps._currentStep++;
+
+		if(OfferSteps._currentStep == OfferSteps._stepCount){
+			$('#offer-create-next').hide();
+		}
+
 		$(this._current).fadeOut(200, function(){
 			$(this).next().fadeIn(200, function(){
 				OfferSteps._current = this;
-				OfferSteps._currentStep++;
-
-				if(OfferSteps._currentStep == OfferSteps._stepCount){
-					$('#offer-create-next').hide();
-				}
 				OfferSteps._enableButtons();
 			});
 		});
@@ -98,14 +99,16 @@ var OfferSteps = {
 			$('#offer-create-next').show();
 		}
 
+		OfferSteps._currentStep--;
+
+		if(OfferSteps._currentStep == 1){
+			$('#offer-create-previous').hide();
+		}
+
 		$(this._current).fadeOut(200, function(){
+
 			$(this).prev().fadeIn(200, function(){
 				OfferSteps._current = this;
-				OfferSteps._currentStep--;
-
-				if(OfferSteps._currentStep == 1){
-					$('#offer-create-previous').hide();
-				}
 				OfferSteps._enableButtons();
 			});
 		});
