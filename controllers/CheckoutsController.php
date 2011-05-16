@@ -108,6 +108,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 
 		$this->Cart->endTransaction();
 		$this->Cart->clearItems();
+		Session::write('cart.id', new \MongoId());
 
 		$this->_render['template'] = 'success';
 		return compact('purchase', 'emailSent', 'pdfPath');
