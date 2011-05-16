@@ -102,7 +102,7 @@ class CheckoutsController extends \chowly\extensions\action\Controller{
 
 		$venues = $this->_getVenues($offers);
 
-		$pdfPath = $this->_getPdfPath();
+		$pdfPath = $this->_getPdfPath($purchase, $offers, $venues);
 
 		$emailSent = $this->_sendEmail($purchase, $pdfPath);
 
