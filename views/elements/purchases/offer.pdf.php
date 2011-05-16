@@ -42,14 +42,16 @@ $this->Pdf->SetFont('', '');
 $this->Pdf->MultiCell(80, 0, $venue->name .",\n". $venue->address,
 	0, 'L', false, 0, 20, '', true, 0, true, true, 20
 );
-$offer->limitations += array(
+
+$limitations = $offer->limitations->to('array');
+$limitations += array(
 "Not valid for cash back (unless required by law).",
 "Must use in one visit.",
 "Doesn't cover tax or gratuity.",
 "Can't be combined with other offers.");
 
 $this->Pdf->SetFontSize(8);
-$this->Pdf->MultiCell(80,0, $conditions, 0, 'L', false, 0, 110, '', true);	
+$this->Pdf->MultiCell(80,0, implode("\n", $limitations), 0, 'L', false, 0, 110, '', true);	
 $this->Pdf->Ln();
 
 $this->Pdf->SetY(225);
