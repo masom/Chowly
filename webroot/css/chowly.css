@@ -464,6 +464,10 @@ div#share ul{
 	list-style:none;
 	margin-left: 15px;
 }
+div#share a{
+	width: 30px;
+	height: 30px;
+}
 div#informations h1{
 	margin-left: auto;
 	margin-right: auto;

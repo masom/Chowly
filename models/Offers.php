@@ -10,6 +10,7 @@ namespace chowly\models;
 use chowly\models\Images;
 use chowly\extensions\data\InventoryException;
 use chowly\extensions\data\OfferException;
+use lithium\analysis\Logger;
 
 class Offers extends \chowly\extensions\data\Model{
 	protected static $_states = array('published'=>'published', 'unpublished'=>'unpublished');
