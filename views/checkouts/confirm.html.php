@@ -3,12 +3,7 @@
 	<span>Step 1 of 2: Purchase Summary</span>
 </div>
 <div id="content-wrapper">
-	<div style="margin-left: 20px; margin-right: 20px; margin-top: 30px; margin-bottom: 10px;">
-		<div id="empty_cart" style="display: none; margin-left: auto; margin-right: auto; width: 500px;">
-			<p>Your cart is currently empty.</p>
-			<p><?=$this->html->link('Take me back to the main page.', '/');?>
-		</div>
-		
+	<div style="margin-left: 20px; margin-right: 20px; margin-top: 30px; margin-bottom: 10px;">		
 		<h1>Your Purchase</h1>
 		<table id="offers">
 			<thead>
@@ -27,6 +22,10 @@
 			</tr>
 			<?php endforeach;?>
 		</table>
+		<div id="empty_cart" style="display: none; margin-left: auto; margin-right: auto; width: 500px;">
+			<p>Your cart is currently empty.</p>
+			<p><?=$this->html->link('Take me back to the main page.', '/');?>
+		</div>
 		<div style="width: 200px; font-weight: bold; margin-left: auto; margin-right:auto; text-align: center; margin-bottom: 10px; margin-top: 10px;">Total $<?=$total;?></div>
 		<div style="margin-left: auto; margin-right: auto; width: 260px;">
 			<?=$this->html->link($this->html->image('checkoutbutton.png'),  array('Checkouts::checkout'), array('escape'=>false));?>

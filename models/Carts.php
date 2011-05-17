@@ -82,8 +82,8 @@ class Carts extends \lithium\data\Model{
 	 */
 	protected function _newItem($offer_id, $inventory_id, $expires){
 		return array(
-			'_id' => $offer_id,
-			'inventory_id' => $inventory_id,
+			'_id' => new \MongoId($offer_id),
+			'inventory_id' => new \MongoId($inventory_id),
 			'expires' => $expires
 		);
 	}
