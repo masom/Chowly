@@ -7,3 +7,6 @@
 [submodule "libraries/li3_sitemap"]
 	path = libraries/li3_sitemap
 	url = code@dev.lithify.me:li3_sitemap.git
+[submodule "libraries/li3_facebook"]
+	path = libraries/li3_facebook
+	url = git://github.com/masom/li3_facebook.git

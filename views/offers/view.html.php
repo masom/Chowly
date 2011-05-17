@@ -30,7 +30,7 @@ $expiration = ($offer->expiry) ? $offer->expiry->sec : null;
 				<li><?=$limitation;?></li>
 			<?php endforeach;?>
 		</ul>
-		<a href="http://twitter.com/share" class="twitter-share-button" data-text="<?=$offer->name;?>" data-count="horizontal">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+		<div id="share-offer-twitter"></div>
 		<?=$this->facebook->like();?>
 	</div>
 	
@@ -121,16 +121,25 @@ $(function () {
 		$('#offer-buy-popup-bg').fadeIn(400);
 		$("#offer-buy-limitations-popup").fadeIn(400);
 	});
+	function loadTwitter(){
+		  var script = document.createElement("script");
+		  script.type = "text/javascript";
+		  script.src = "http://platform.twitter.com/widgets.js";
+		  document.body.appendChild(script);
+		  $('#share-offer-twitter').append($('<a href="http://twitter.com/share" class="twitter-share-button" data-text="<?=$offer->name;?>" data-count="horizontal">Tweet</a>'));
+	}
 	function loadScript() {
 		  var script = document.createElement("script");
 		  script.type = "text/javascript";
 		  script.src = "http://maps.google.com/maps/api/js?v=3.2&sensor=false&callback=initialize_maps";
 		  document.body.appendChild(script);
 	}
-	loadScript();
 
 	var couponEnd = new Date();
 	couponEnd = new Date(<?php echo $offer->ends->sec * 1000;?>);
 	$("#offer-countdown").countdown({until: couponEnd, layout: 'Ends in {dn} {dl}, {hnn}{sep}{mnn}{sep}{snn}'});	
+
+	loadTwitter();
+	loadScript();
 });
 </script>
