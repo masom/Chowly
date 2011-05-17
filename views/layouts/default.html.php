@@ -26,13 +26,6 @@
 		</div>
 		<div id="top-corners"></div>
 		<?=$this->flashMessage->output(); ?>
-		<div id="share">
-			<ul>
-				<li><img src="/img/twitter-icon.png" alt="Share with Twitter" /></li>
-				<li><img src="/img/facebook-icon.png" alt="Share with Facebook" /></li>
-				<li><img src="/img/email-icon.png" alt="Share by Email" /></li>
-			</ul>
-		</div>
 		<?php echo $this->content(); ?>
 		<div id="bottom-corners"></div>
 		<?=$this->view()->render(array('element'=>'bottomboxes'));?>

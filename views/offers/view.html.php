@@ -24,14 +24,17 @@ $expiration = ($offer->expiry) ? $offer->expiry->sec : null;
 			<?php endif;?>
 			<li id="offer-buy"><?php echo ($offer->availability) ? $this->html->link($this->html->image('buydeal-button.png'), array('Offers::buy', 'id'=>$offer->_id), array('id'=>'offer-buy-link', 'escape'=>false)): null; ?></li>
 		</ul>
+		<div id="share-offer" style="margin-top: 20px; width: 270px; overflow: hidden;">
+			<div id="share-offer-twitter"></div>
+			<?=$this->facebook->like();?>
+		</div>
 		<h3>Limitations</h3>
 		<ul id="offer-restrictions">
 			<?php foreach($offer->limitations as $limitation):?>
 				<li><?=$limitation;?></li>
 			<?php endforeach;?>
 		</ul>
-		<div id="share-offer-twitter"></div>
-		<?=$this->facebook->like();?>
+
 	</div>
 	
 	<div id="venue-informations" style="width: 550px; float:right;">

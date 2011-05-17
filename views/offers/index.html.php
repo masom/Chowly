@@ -1,3 +1,14 @@
+<?php 
+$here = urlencode($this->url(null, array('absolute'=>true)));
+$shareText = urlencode("Great Ottawa restaurant deals!");
+?>
+<div id="share">
+	<ul>
+		<li><a id="share-twitter" href="http://twitter.com/share?text=<?=$shareText;?>&counturl=<?=$here;?>" target="_blank"><img src="/img/twitter-icon.png" alt="Share with Twitter" /></a></li>
+		<li><a id="share-facebook" target="_blank" href="http://www.facebook.com/sharer.php?u=<?=$here;?>&t=<?=$shareText?>"><img src="/img/facebook-icon.png" alt="Share with Facebook" /></a></li>
+		<li><img src="/img/email-icon.png" alt="Share by Email" /></li>
+	</ul>
+</div>
 <div id="ribbon">
 	<span>Tonight's Deals</span>
 </div>
@@ -11,7 +22,7 @@
 			$i = 0;
 		?>
 		<?php foreach($offers as $offer):?>
-		
+
 		<?php if($i == 3): $i = 0;?>
 			</ul>
 			<div style="width: 857px; height: 11px; background-image: url(/img/separator.png);"></div>
@@ -43,11 +54,21 @@
 	</ul>
 </div>
 <script type="text/javascript">
+$(function () {
+	var share = function(e){
+		e.preventDefault();
+		var w = window.open($(this).attr('href'), 'chowly-share', 'height=300,width=400');
+		if(w.focus){ w.focus();}
+		return false;
+	}
+	$('#share-facebook').bind('click', share);
+	$('#share-twitter').bind('click', share);
+
+	var couponEnd;
 	<?php foreach($offers as $offer):?>
-		$(function () {
-			var couponEnd = new Date();
 			couponEnd = new Date(<?php echo $offer->ends->sec * 1000;?>);
 			$("#offer-countdown-<?php echo $offer->_id;?>").countdown({until: couponEnd, layout: 'Ends in {dn} {dl}, {hnn}{sep}{mnn}{sep}{snn}'});
-		});
+		
 	<?php endforeach;?>
+});
 </script>
