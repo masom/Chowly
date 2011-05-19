@@ -16,6 +16,7 @@ use chowly\extensions\Utils;
 use chowly\extensions\data\InventoryException;
 use lithium\net\http\Router;
 use lithium\analysis\Logger;
+use lithium\storage\Session;
 use Swift_MailTransport;
 use Swift_Mailer;
 use Swift_Message;
