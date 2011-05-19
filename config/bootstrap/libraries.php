@@ -80,7 +80,7 @@ Libraries::add('swiftmailer', array(
 	'bootstrap' => 'swift_required.php'
 ));
 
-//Libraries::add('li3_facebook', array( 'appId' => 217578628271605, 'secret' => '263ef97b548cd19bdac70c28d0359b69' ));
+Libraries::add('li3_facebook', array( 'appId' => 217578628271605, 'secret' => '263ef97b548cd19bdac70c28d0359b69' ));
 // Libraries::add('li3_docs');
 
 ?>
