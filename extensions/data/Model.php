@@ -55,6 +55,20 @@ class Model extends \lithium\data\Model{
         }
         return $slug;
     }
+
+    protected function mapReduce($map, $reduce, $out = null){
+    	$options = array(
+		    "mapreduce" => static::meta('source'), 
+		    "map" => $map,
+		    "reduce" => $reduce,
+		);
+
+		if($out){
+			$options['out'] = $out;
+		}
+
+    	return static::connection()->connection->command($options);
+    }
 }
 
 ?>
