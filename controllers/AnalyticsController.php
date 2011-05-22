@@ -38,9 +38,11 @@ class AnalyticsController extends \chowly\extensions\action\Controller{
 		$analytic = $this->_typeMap[$this->request->class];
 		$order = array('_id' => 'DESC');
 		$limit = 5;
-		$latests = $analytic::all(compact('order', 'limit'));
+		$analytics = $analytic::all(compact('order', 'limit'));
 
-		return compact('latests');
+		$this->_render['template'] = "admin_view_{$this->request->class}";
+		$analytics::mostViewed();
+		return compact('analytics');
 	}
 
 	public function admin_ip(){
