@@ -72,7 +72,7 @@ $expiration = ($offer->expiry) ? $offer->expiry->sec : null;
 	<?php echo ($offer->availability) ? $this->html->link($this->html->image('buydeal-button.png'), array('Offers::buy', 'id'=>$offer->_id), array('id'=>'offer-buy-confirmed', 'escape'=>false)): null; ?>
 	</div>
 </div>
-<div id="offer-buy-popup-bg" style="position: absolute; top: 0px; left: 0px; background-color: #444444; opacity: 0.4; display: none; width: 100%;"></div>
+<div id="offer-buy-popup-bg" style="position: absolute; top: 0px; left: 0px; background-color: #444444; opacity: 0.4; display: none; width: 100%; filter:alpha(opacity=40)"></div>
 <script type="text/javascript">
 var map;
 var geocoder;
