@@ -29,6 +29,7 @@ $shareText = urlencode("Great Ottawa restaurant deals!");
 			<div class="offer-name-ribbon"></div>
 			<ul class="offers-list">
 		<?php endif;?>
+			<?php $url = ($offer->slug) ? array('controller'=>'offers','action'=>'view','slug'=>$offer->slug) : array('controller'=>'offers','action'=>'view','id'=>$offer->_id); ?>
 			<?php $listyle = ($style) ? 'style="background-image: url(/img/dealbg-grey.png);"' : 'style="width: 280px; overflow:hidden;"';?>
 			<li id="offer-<?=$offer->_id;?>" class="offer" <?php echo $listyle?>>
 				<div class="offer-info">
@@ -39,14 +40,11 @@ $shareText = urlencode("Great Ottawa restaurant deals!");
 					</div>
 
 					<p class="offer-remaining"><?=($offer->availability)? "Only {$offer->availability} left!" : 'Sold Out!' ;?></p>
-					<p class="offer-name"><?=$this->html->link($offer->name, array('Offers::view', 'id'=> $offer->_id));?></p>
+					<p class="offer-name"><?=$this->html->link($offer->name, $url);?></p>
 					
 					<p id="offer-countdown-<?php echo $offer->_id;?>" class="offer-countdown"></p>
-					<?php if($offer->slug):?>
-						<?=$this->html->link($this->html->image('view-deal.png'), array('controller'=>'offers','action'=>'view','slug'=>$offer->slug),array('escape'=>false,'class'=>'offer-buy-button'));?>
-					<?php else:?>
-						<?=$this->html->link($this->html->image('view-deal.png'), array('controller'=>'offers','action'=>'view','id'=>$offer->_id),array('escape'=>false,'class'=>'offer-buy-button'));?>
-					<?php endif;?>
+					
+					<?=$this->html->link($this->html->image('view-deal.png'), $url, array('escape'=>false,'class'=>'offer-buy-button'));?>
 				</div>
 			</li>
 		<?php $i++; $style = !$style;?>
