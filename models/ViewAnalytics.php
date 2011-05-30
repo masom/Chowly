@@ -31,19 +31,68 @@ class ViewAnalytics extends \lithium\data\Model{
 		$analytics->save(null, array('safe'=>false, 'fsync'=>false)); // We do not care about loosing analytics data
 	}
 
-	public static function mostViewed(){
-		$map = new MongoCode("function() { emit(this.user_id,1); }");
+	/**
+	 * Returns the top-most viewed pages.
+	 * @param var $limit The amount of items to return. Default to 10. If set to null, returns all page views.
+	 */
+	public static function mostViewed($limit = 10){
+		$db = static::connection();
+		$map = new MongoCode("function(){ 
+			var doc = {
+				'views' : 1,
+				'ip_addresses' : {}
+			};
+			doc.ip_addresses[this.ip_address] = 1;
+			emit(this.offer_id, doc);
+		}");
 		$reduce = new MongoCode("function(k, vals) {
-			var sum = 0;
-			for (var i in vals){
-				sum += vals[i];
-			}
-			return sum;
-		");
-		$out = array("merge" => "eventCounts");
-		$visited = static::mapReduce($map, $reduce, $out);
-		$users = $db->selectCollection($sales['result'])->find();
-		debug($users);die;
+			var views = 0;
+			var ip_addresses = {};
+			vals.forEach(function(doc){
+				views += doc.views;
+				for (var i in doc.ip_addresses){
+					if(typeof(ip_addresses[i]) == 'undefined'){
+						ip_addresses[i] = 0;
+					}
+					ip_addresses[i] += doc.ip_addresses[i];
+				}
+			});
+			return {'views' : views, 'ip_addresses' : ip_addresses};
+		}");
+		$out = array("merge" => "viewMetrics");
+		$mapreduce = 'view_analytics';
+
+		$metrics = $db->connection->command(compact('mapreduce','map','reduce','out'));
+		if (!$metrics['ok']){
+			return false;
+		}
+
+		$cursor = $db->connection->selectCollection($metrics['result'])->find();
+		$cursor->sort(array('views' => 1));
+
+		if ($limit){
+			$cursor->limit($limit);
+		}
+
+		$viewCounts = array();
+		foreach ($cursor as $doc){
+			$viewCounts[(string)$doc['_id']] = $doc['value'];
+		}
+
+		return $viewCounts;
+	}
+
+	/**
+	 * Returns the most viewed items and their details
+	 * @param var $limit Number of items to be returned from the most viewed to less. If set to null, returns all items having a view count
+	 */
+	public static function mostViewedDetails($limit = 10){
+		$mostViewed = static::mostViewed(10);
+
+		$conditions = array('_id' => array_keys($mostViewed));
+		$items = \chowly\models\Offers::all(compact('conditions'));
+
+		return compact('items', 'mostViewed');
 	}
 }
 

@@ -6,12 +6,10 @@
 		<?=$this->html->link("{$this->html->image('silk/add.png', array('style'=>'vertical-align: text-top;'))} Add a venue", array('Venues::add','admin'=>true), array('escape'=>false));?>
 		<table>
 			<thead>
-				<tr><th>Offer</th><th>Name</th><th>Address</th><th>Status</th><th>Actions</th></tr>
+				<tr><th>Name</th><th>Address</th><th>Status</th><th>Actions</th></tr>
 			</thead>
 		<?php foreach($venues as $venue):?>
-			<tr>
-				<td><?=$this->html->link($this->html->image('silk/add.png'), array('Offers::add','id'=>$venue->_id,'admin'=>true), array('escape'=>false));?></td>
-				<td><?=$venue->name;?></td>
+			<tr>				<td><?=$venue->name;?></td>
 				<td><?=$venue->address;?></td>
 				<td><?=$venue->state;?></td>
 				<td>

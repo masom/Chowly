@@ -41,7 +41,8 @@ class AnalyticsController extends \chowly\extensions\action\Controller{
 		$analytics = $analytic::all(compact('order', 'limit'));
 
 		$this->_render['template'] = "admin_view_{$this->request->class}";
-		$analytics::mostViewed();
+
+		$mostViewedDetails = $analytic::mostViewedDetails(10);
 		return compact('analytics');
 	}
 
