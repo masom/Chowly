@@ -1,6 +1,7 @@
 <?php
 $address = explode(",", $venue->address);
 $expiration = ($offer->expiry) ? $offer->expiry->sec : null;
+$available = ($offer->availability && $expiration && ($expiration < time()));
 ?>
 <div id="ribbon">
 	<span><?=$venue->name;?></span>
@@ -22,7 +23,7 @@ $expiration = ($offer->expiry) ? $offer->expiry->sec : null;
 			<?php if ($expiration):?>
 				<li>Expires: <?=date('F, j, Y', $expiration);?></li>
 			<?php endif;?>
-			<li id="offer-buy"><?php echo ($offer->availability) ? $this->html->link($this->html->image('buydeal-button.png'), array('Offers::buy', 'id'=>$offer->_id), array('id'=>'offer-buy-link', 'escape'=>false)): null; ?></li>
+			<li id="offer-buy"><?php echo ($available) ? $this->html->link($this->html->image('buydeal-button.png'), array('Offers::buy', 'id'=>$offer->_id), array('id'=>'offer-buy-link', 'escape'=>false)): null; ?></li>
 		</ul>
 		<div id="share-offer" style="margin-top: 20px; width: 270px; overflow: hidden;">
 			<div id="share-offer-twitter"></div>
