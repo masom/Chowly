@@ -7,7 +7,7 @@
  */
 
 use lithium\core\Libraries;
-use \lithium\core\Environment;
+use lithium\core\Environment;
 /**
  * Optimize default request cycle by loading common classes.  If you're implementing custom
  * request/response or dispatch classes, you can safely remove these.  Actually, you can safely
@@ -49,9 +49,6 @@ Libraries::add('lithium');
  */
 Libraries::add('chowly', array('default' => true));
 
-if (!Environment::is('production')) {
-	//Libraries::add('li3_docs');
-}
 /**
  * Add some plugins
  */
@@ -81,6 +78,5 @@ Libraries::add('swiftmailer', array(
 ));
 
 Libraries::add('li3_facebook', array( 'appId' => 217578628271605, 'secret' => '263ef97b548cd19bdac70c28d0359b69' ));
-// Libraries::add('li3_docs');
 
 ?>

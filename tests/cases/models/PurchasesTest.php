@@ -117,6 +117,7 @@ class PurchasesTest extends \lithium\test\Unit{
 		$offer->starts = new \MongoDate(time());
 		$offer->ends = new \MongoDate(time() + 360);
 		$offer->name = "Test3";
+		$offer->description = "Test Offer";
 		$offer->venue_id = new \MongoId();
 		$offer->cost = 22;
 		$offer->availability = 11;

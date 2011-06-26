@@ -36,6 +36,7 @@ class OffersTest extends \lithium\test\Unit{
 		$offer->starts = new \MongoDate();
 		$offer->ends = new \MongoDate();
 		$offer->venue_id = new \MongoId();
+		$offer->description = ' test offer';
 		$offer->cost = 22;
 		$this->assertFalse($offer->save());
 		
@@ -43,6 +44,7 @@ class OffersTest extends \lithium\test\Unit{
 		$offer->state = Offers::defaultState();
 		$offer->starts = new \MongoDate();
 		$offer->ends = new \MongoDate();
+		$offer->description = 'OfferFactory test offer';
 		$offer->venue_id = new \MongoId();
 		$offer->cost = 22;
 		$this->assertFalse($offer->save());
@@ -56,6 +58,7 @@ class OffersTest extends \lithium\test\Unit{
 		$offer->ends = new \MongoDate();
 		$offer->venue_id = new \MongoId();
 		$offer->cost = 22;
+		$offer->description = 'OfferFactory test offer';
 		$this->assertFalse($offer->save());
 		
 		$offer = Offers::create();
@@ -65,6 +68,7 @@ class OffersTest extends \lithium\test\Unit{
 		$offer->ends = new \MongoDate();
 		$offer->venue_id = new \MongoId();
 		$offer->cost = 22;
+		$offer->description = 'OfferFactory test offer';
 		$offer->availability = 0;
 		$this->assertFalse($offer->save());
 	}
@@ -78,6 +82,7 @@ class OffersTest extends \lithium\test\Unit{
 		$offer->name = "test";
 		$offer->venue_id = new \MongoId();
 		$offer->cost = 22;
+		$offer->description = 'OfferFactory test offer';
 		$offer->availability = 11;
 		$this->assertTrue($offer->save());
 
@@ -89,6 +94,7 @@ class OffersTest extends \lithium\test\Unit{
 		$offer->name = "Test2";
 		$offer->venue_id = new \MongoId();
 		$offer->cost = 22;
+		$offer->description = 'OfferFactory test offer';
 		$offer->availability = 11;
 		$this->assertTrue($offer->save());
 		$good = $offer;
@@ -99,6 +105,7 @@ class OffersTest extends \lithium\test\Unit{
 		$offer->starts = new \MongoDate(time() + 360);
 		$offer->ends = new \MongoDate(time() + 360);
 		$offer->name = "Test3";
+		$offer->description = 'OfferFactory test offer';
 		$offer->venue_id = new \MongoId();
 		$offer->cost = 22;
 		$offer->availability = 11;
@@ -116,6 +123,22 @@ class OffersTest extends \lithium\test\Unit{
 		$this->expectException("/No more inventory./");
 		Offers::rebuildInventory();
 	}
+
+	public function testCreateWithInventory(){
+		$offer = Offers::create();
+		$offer->state = 'published';
+		$offer->starts = new \MongoDate(time());
+		$offer->ends = new \MongoDate(time() + 360);
+		$offer->name = "Test3";
+		$offer->venue_id = new \MongoId();
+		$offer->cost = 22;
+		$offer->description = 'OfferFactory test offer';
+		$offer->availability = 11;
+		$this->assertTrue($offer->createWithInventory());
+		$conditions = array('offer_id' => $offer->_id);
+		$this->assertEqual(11, Inventories::count(compact('conditions')));
+	}
+	
 	public function testRebuildInventorySoldOut(){
 
 		$inventory = Inventories::create();
@@ -127,6 +150,7 @@ class OffersTest extends \lithium\test\Unit{
 		$this->assertEqual(0, Offers::rebuildInventory());
 		
 	}
+
 	public function testReleaseInventory(){
 
 		$this->assertFalse(Offers::releaseInventory(new \MongoId(), new \MongoId()));
@@ -136,10 +160,13 @@ class OffersTest extends \lithium\test\Unit{
 		$offer->createWithInventory();
 
 		//Verify we cannot release inventory that has not been reserved or sold
-		$conditions = array('offer_id' => $offer->_id);
-		$inventory = Inventories::first(compact('conditions'));
 		$this->assertFalse(Offers::releaseInventory(new \MongoId(), $offer->_id));
 
+		$conditions = array('offer_id' => $offer->_id);
+		$inventory = Inventories::first(compact('conditions'));
+		if(!$inventory){
+			return false;
+		}
 		$inventory->state = 'purchased';
 		$inventory->save();
 
@@ -192,19 +219,7 @@ class OffersTest extends \lithium\test\Unit{
 		$this->assertEqual($expected, Offers::rebuildInventory());
 		
 	}
-	public function testCreateWithInventory(){
-		$offer = Offers::create();
-		$offer->state = 'published';
-		$offer->starts = new \MongoDate(time());
-		$offer->ends = new \MongoDate(time() + 360);
-		$offer->name = "Test3";
-		$offer->venue_id = new \MongoId();
-		$offer->cost = 22;
-		$offer->availability = 11;
-		$this->assertTrue($offer->createWithInventory());
-		$conditions = array('offer_id' => $offer->_id);
-		$this->assertEqual(11, Inventories::count(compact('conditions')));
-	}
+
 	public function testReserve(){
 		
 		$offer = $this->_offerFactory();
@@ -235,6 +250,7 @@ class OffersTest extends \lithium\test\Unit{
 		$offer = Offers::create();
 		$this->assertTrue($offer->getErrors() === array());
 	}
+
 	public function testPublishing(){
 		$offer = $this->_offerFactory();
 		$offer->save();
@@ -262,6 +278,7 @@ class OffersTest extends \lithium\test\Unit{
 		$offer->ends = $ends;
 		$offer->name = $name . $this->_offerFactoryCount;
 		$offer->venue_id = $venue_id;
+		$offer->description = 'OfferFactory test offer';
 		$offer->cost = $cost;
 		$offer->availability = $availability;
 		return $offer;

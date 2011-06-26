@@ -90,6 +90,13 @@ class CartsTest extends \lithium\test\Unit{
 		$this->assertTrue($cart->containItem($id));
 		$this->assertFalse($cart->containItem(new \MongoId()));
 	}
+
+	public function testCartUpsert(){
+		$cart = MockCarts::create();
+		$cart->_id = new \MongoId();
+		$cart->addItem(new \MongoId(), new \MongoId());
+	}
+
 	public function testRemoveItems(){
 		$cart = MockCarts::create();
 		$cart->save();

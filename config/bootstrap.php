@@ -20,7 +20,7 @@
  * directory as your application.  If you use the same libraries in multiple applications, you can
  * set this to a shared path on your server.
  */
-define('LITHIUM_LIBRARY_PATH', dirname(dirname(__DIR__)) . '/lithium/libraries');
+define('LITHIUM_LIBRARY_PATH', dirname(dirname(__DIR__)) . '/libraries');
 
 /**
  * This is the path to your application's directory.  It contains all the sub-folders for your

@@ -24,7 +24,7 @@ class OfferTemplates extends \chowly\extensions\data\Model{
 		'_id' => array('type' => 'id'),
 		'name' => array('type' => 'string','null'=>false), // Name of the coupon
 		'description'=>array('type'=>'string'), // Description (if any) of the coupon
-		'limitations'=>array('type'=>'string'), // Limitations regarding usage of the coupon
+		'limitations' => array('type'=>'array', 'array'=>true), // Limitations regarding usage of the coupon
 		'created'=>array('type'=>'date'),
 		'updated'=>array('type'=>'date')
 	);
