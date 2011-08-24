@@ -3,6 +3,6 @@ http://opensource.org/licenses/bsd-license.php The BSD License
 
 Chowly is a Lithium powered "deal selling" site like Groupon and Living Social.
 
-It is not complete, many tests are yet to be written and a payment gateway integration is not provided.
+It is not complete, many tests have yet to be written and a payment gateway integration is not provided.
 
 Some icons (`webroot/img/silk`) by Mark James http://www.famfamfam.com/lab/icons/silk/
