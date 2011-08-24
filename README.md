@@ -7,6 +7,8 @@ It is not complete, many tests have yet to be written and a payment gateway inte
 
 Some icons (`webroot/img/silk`) by Mark James http://www.famfamfam.com/lab/icons/silk/
 
+A alpha/beta can be seen at http://beta.chowly.com
+
 #Thanks
 * Nate Abele
 * Joel Perras
@@ -16,3 +18,9 @@ Some icons (`webroot/img/silk`) by Mark James http://www.famfamfam.com/lab/icons
 * Mitch Pirtle
 
 All the folks on the #li3 freenode channel.
+
+#Technical Details
+Chowly is built using Lithium, jQuery, MongoDB, TCPDF and a few other li3 libraries.
+
+Development started on lithium 0.9+ from January to May 2011.
+
