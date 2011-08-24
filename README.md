@@ -8,16 +8,11 @@ It is not complete, many tests have yet to be written and a payment gateway inte
 Some icons (`webroot/img/silk`) by Mark James http://www.famfamfam.com/lab/icons/silk/
 
 #Thanks
-Nate Abele
-
-Joel Perras
-
-gwoo
-
-tom_m
-
-edude03
-
-Mitch Pirtle
+*Nate Abele
+*Joel Perras
+*gwoo
+*tom_m
+*edude03
+*Mitch Pirtle
 
 All the folks on the #li3 freenode channel.
